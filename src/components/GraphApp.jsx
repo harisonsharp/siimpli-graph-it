@@ -52,6 +52,7 @@ import '../App.css';
 
 const GraphApp = () => {
     const [showGraph, setShowGraph] = useState(false);
+    const [generationId, setGenerationId] = useState(0);
     const [logoImage, setLogoImage] = useState(null);
     const [logoReady, setLogoReady] = useState(false);
     const [mode, setMode] = useState('manual');
@@ -154,6 +155,12 @@ const GraphApp = () => {
 
     const canGenerateGraph = logoReady && graphConfig.xAxis && graphConfig.series.some(s => s.yAxis) && csvData.length > 0;
 
+    const handleGenerateGraph = () => {
+        console.log('Generating graph... ID:', generationId + 1);
+        setShowGraph(true);
+        setGenerationId(prev => prev + 1);
+    };
+
     return (
         <div className="app-container">
             <AppHeader mode={mode} setMode={setMode} />
@@ -188,12 +195,12 @@ const GraphApp = () => {
                                         <div className="graph-controls">
                                             <button
                                                 className="btn btn-primary btn-lg"
-                                                onClick={() => setShowGraph(true)}
+                                                onClick={handleGenerateGraph}
                                                 disabled={!canGenerateGraph}
                                                 title={!logoReady ? 'Loading logo...' : !canGenerateGraph ? 'Please select X and Y axes' : ''}
                                             >
                                                 <BarChart3 size={18} />
-                                                Generate Graph
+                                                Generate Graph ({generationId})
                                                 {!logoReady && <span className="spinner" />}
                                             </button>
 
@@ -232,6 +239,7 @@ const GraphApp = () => {
                         {showGraph && (
                             <section className="app-section">
                                 <GraphRenderer
+                                    key={generationId}
                                     csvData={csvData}
                                     graphConfig={graphConfig}
                                     curveFits={curveFits}

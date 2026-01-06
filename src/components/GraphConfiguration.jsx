@@ -261,7 +261,7 @@ const GraphConfiguration = ({
                                             type="color"
                                             className="form-input form-input-color"
                                             value={series.color || '#000000'}
-                                            onChange={(e) => updateSeries(index, { color: e.target.value })}
+                                            onBlur={(e) => updateSeries(index, { color: e.target.value })}
                                             style={{ width: '50px', padding: '2px', height: '38px' }}
                                         />
                                         <input

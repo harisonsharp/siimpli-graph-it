@@ -90,9 +90,14 @@ const GraphRenderer = ({
 
     // Trigger graph generation ONCE on mount
     useEffect(() => {
-        if (hasGeneratedRef.current) return;
-        hasGeneratedRef.current = true;
-
+        // Prevent double generation (DISABLED FOR NOW)
+        // if (hasGeneratedRef.current) return;
+        // hasGeneratedRef.current = true;
+        console.log('generateGraph object:', {
+            fn: generateGraph,
+            config: graphConfig,
+            dataLength: csvData.length
+        });
         generateGraphRef.current(
             svgRef,
             (result) => onGraphGeneratedRef.current(result),
