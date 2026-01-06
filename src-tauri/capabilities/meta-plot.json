@@ -1,0 +1,83 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "siimpli-graph-it-capability",
+  "description": "Capability for the siimpli-graph-it window, supports temp directory access and opening Excel files.",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:default",
+    "core:path:default",
+    "core:app:default",
+    "core:app:allow-version",
+    "os:default",
+    "process:allow-restart",
+    "core:window:allow-create",
+    "core:webview:allow-create-webview-window",
+    "core:window:allow-show",
+    "core:window:allow-set-focus",
+    "core:window:allow-close",
+    "core:window:allow-set-position",
+    "core:window:allow-set-size",
+    "core:window:allow-set-resizable",
+    "core:window:allow-set-always-on-top",
+    "core:window:allow-get-all-windows",
+    "fs:allow-write-file",
+    "fs:allow-read-file",
+    "core:event:allow-listen",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        {
+          "path": "$RESOURCE/**"
+        },
+        {
+          "path": "$APPDATA/**"
+        },
+        {
+          "path": "$TEMP/**"
+        },
+        {
+          "path": "**"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:allow-appdata-read-recursive",
+      "allow": [
+        {
+          "path": "$APPDATA/**"
+        }
+      ]
+    },
+    {
+      "identifier": "opener:default"
+    },
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "$TEMP/**/*.xlsx"
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-execute",
+      "scope": [
+        {
+          "name": "$RESOURCE/**",
+          "sidecar": true
+        },
+        {
+          "name": "$APPDATA/**",
+          "args": true
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-open"
+    }
+  ]
+}
