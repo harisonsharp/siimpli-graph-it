@@ -46,7 +46,10 @@ export const ConfigProvider = ({ children }) => {
         axisIntercept: 'origin',
         customIntercept: { x: 0, y: 0 },
         graphDimensions: { width: 800, height: 600 },
-        showGuideLines: false
+        showGuideLines: false,
+        showDataTable: false,
+        showStaticTable: false,
+        selectedXValue: null
     });
 
 
@@ -126,7 +129,10 @@ export const ConfigProvider = ({ children }) => {
             axisIntercept: 'origin',
             customIntercept: { x: 0, y: 0 },
             graphDimensions: { width: 800, height: 600 },
-            showGuideLines: false
+            showGuideLines: false,
+            showDataTable: false,
+            showStaticTable: false,
+            selectedXValue: null
         });
     };
 

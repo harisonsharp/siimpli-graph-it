@@ -73,8 +73,10 @@ export function useGraphRenderer({
     logoImage = null,
     logoReady = true,
     getAxisIntercepts,
+    getAxisIntercepts,
     colorSchemes,
-    isBatchMode = false
+    isBatchMode = false,
+    onXValueSelect
 }) {
     /**
      * Parse column identifiers from configuration
@@ -85,6 +87,7 @@ export function useGraphRenderer({
     const parseColumnInformation = useCallback((config) => {
         const graphType = (config?.graphType || 'scatter').toLowerCase();
         const xAxisInfo = parseColumnId(config.xAxis);
+        const xAxis2Info = config.xAxis2 ? parseColumnId(config.xAxis2) : null;
 
         const baseSeries = Array.isArray(config.series) ? config.series : [];
         const seriesInfo = graphType === 'histogram'
@@ -99,7 +102,7 @@ export function useGraphRenderer({
         const colorInfo = parseColumnId(config.colorGrading);
         const contourInfo = graphType === 'histogram' ? null : parseColumnId(config.contouring);
 
-        return { xAxisInfo, seriesInfo, colorInfo, contourInfo, graphType };
+        return { xAxisInfo, xAxis2Info, seriesInfo, colorInfo, contourInfo, graphType };
     }, []);
 
     /**
@@ -136,6 +139,11 @@ export function useGraphRenderer({
         const hasSecondaryAxis = graphConfig.series && graphConfig.series.some(s => s.axisAssignment === 'secondary');
         if (hasSecondaryAxis) {
             rightMargin += 50; // Space for axis ticks and label
+        }
+
+        // 3. Add extra width for Static Table values if enabled
+        if (settings.showStaticTable) {
+            rightMargin += 60; // Extra space for values "123.45"
         }
 
         // Clamp margin to reasonable bounds (min 120, max 450)
@@ -520,7 +528,7 @@ export function useGraphRenderer({
      */
     const generateGraph = useCallback((svgRef, onSuccess, onError, overrides = {}) => {
         try {
-            const targetGraphConfig = overrides.graphConfig || graphConfig;
+            let targetGraphConfig = overrides.graphConfig || graphConfig;
             const targetCsvData = overrides.csvData || csvData;
             const targetGlobalSettings = overrides.globalSettings || globalSettings;
             const targetColorSchemes = overrides.colorSchemes || colorSchemes;
@@ -558,6 +566,37 @@ export function useGraphRenderer({
             // Set initial dimensions from global settings
             svg.attr('width', targetGlobalSettings.graphDimensions.width);
             svg.attr('height', targetGlobalSettings.graphDimensions.height);
+
+            // Handle X-Axis Joining
+            if (targetGlobalSettings.joinXAxis && targetGraphConfig.xAxis2) {
+                // Determine unified column name
+                const unifiedColName = '__unified_x__';
+                const x1Info = parseColumnId(targetGraphConfig.xAxis);
+                const x2Info = parseColumnId(targetGraphConfig.xAxis2);
+
+                // Create a working copy of config to point to unified column
+                // We clone it to avoid mutating original config
+                targetGraphConfig = { ...targetGraphConfig, xAxis: unifiedColName };
+
+                // Preserve label if missing, to avoid showing internal variable name
+                if (!targetGraphConfig.xAxisLabel) {
+                    targetGraphConfig.xAxisLabel = x1Info.columnName;
+                }
+
+                // Populate unified column in data (safe to mutate row objects as they are essentially data records)
+                // We iterate over the targetCsvData and ensure the unified column exists
+                targetCsvData.forEach(row => {
+                    // Start with primary X
+                    let val = row[x1Info.columnName];
+                    // If invalid (undefined/null/empty), try secondary X
+                    if (val === undefined || val === null || val === '') {
+                        val = row[x2Info.columnName];
+                    }
+                    row[unifiedColName] = val;
+                });
+
+                debugLog('[useGraphRenderer] Joined X-Axes:', { x1: x1Info.columnName, x2: x2Info.columnName });
+            }
 
             // Parse column information
             const columnInfo = parseColumnInformation(targetGraphConfig);
@@ -618,44 +657,312 @@ export function useGraphRenderer({
                 }
             );
 
+            // -------------------------------------------------------------------------
+            // Interaction Layer: Data Table on Hover
+            if (targetGlobalSettings.showDataTable || targetGlobalSettings.showStaticTable) {
+                const overlay = g.append("rect")
+                    .attr("class", "overlay")
+                    .attr("width", dimensions.width)
+                    .attr("height", dimensions.height)
+                    .style("fill", "none")
+                    .style("pointer-events", "all");
+
+                // Pre-sort data for efficient lookup
+                const xCol = columnInfo.xAxisInfo.columnName;
+                const sortedData = [...validData].sort((a, b) => +a[xCol] - +b[xCol]);
+                const bisectDate = d3.bisector(d => +d[xCol]).left;
+
+                // 1. Static Table Logic (Persistent)
+                if (targetGlobalSettings.showStaticTable) {
+                    const selectedX = targetGlobalSettings.selectedXValue;
+
+                    if (selectedX !== null && selectedX !== undefined) {
+                        const i = bisectDate(sortedData, selectedX, 1);
+
+                        const hasSecondaryAxis = targetGraphConfig.series && targetGraphConfig.series.some(s => s.axisAssignment === 'secondary');
+                        const legendXOffset = hasSecondaryAxis ? 140 : 60;
+                        const legendX = dimensions.width - dimensions.margin.right + legendXOffset;
+                        const legendHeight = columnInfo.seriesInfo.length * 25;
+                        const tableY = dimensions.margin.top + legendHeight + 40;
+
+                        const rowData = [];
+                        // Header
+                        rowData.push({
+                            label: columnInfo.xAxisInfo.columnName,
+                            value: selectedX,
+                            color: '#333',
+                            isHeader: true
+                        });
+
+                        columnInfo.seriesInfo.forEach(series => {
+                            const yCol = series.yAxisInfo.columnName;
+                            let foundVal = null;
+
+                            let scanIdx = Math.min(i, sortedData.length - 1);
+                            while (scanIdx >= 0 && +sortedData[scanIdx][xCol] > selectedX) {
+                                scanIdx--;
+                            }
+
+                            for (let k = scanIdx; k >= 0; k--) {
+                                const d = sortedData[k];
+                                if (d[yCol] !== undefined && d[yCol] !== null && !isNaN(+d[yCol])) {
+                                    foundVal = d[yCol];
+                                    break;
+                                }
+                            }
+
+                            const seriesColor = ScaleFactory.resolveColor(series.color) ||
+                                (scales.seriesColorScale ? scales.seriesColorScale(yCol) : '#333');
+
+                            rowData.push({
+                                label: series.titleName || yCol,
+                                value: foundVal !== null ? foundVal : "N/A",
+                                color: seriesColor
+                            });
+                        });
+
+                        // Draw Static Table
+                        const staticTableGroup = svg.append("g")
+                            .attr("class", "static-table-group")
+                            .attr("transform", `translate(${legendX}, ${tableY})`);
+
+                        const bg = staticTableGroup.append("rect")
+                            .attr("rx", 4)
+                            .attr("ry", 4)
+                            .style("fill", "rgba(255, 255, 255, 0.95)")
+                            .style("stroke", "#999")
+                            .style("stroke-width", "1px");
+
+                        let maxWidth = 0;
+                        let currentY = 10;
+
+                        staticTableGroup.append("text")
+                            .attr("x", 10)
+                            .attr("y", 0)
+                            .style("font-family", "sans-serif")
+                            .style("font-size", "11px")
+                            .style("font-weight", "bold")
+                            .style("fill", "#666")
+                            .text("Selected Values:");
+
+                        const titleWidth = staticTableGroup.select("text").node().getBBox().width;
+                        maxWidth = Math.max(maxWidth, titleWidth);
+                        currentY += 15;
+
+                        rowData.forEach((row, idx) => {
+                            const textRow = staticTableGroup.append("g")
+                                .attr("transform", `translate(10, ${currentY + 12})`);
+
+                            const labelText = textRow.append("text")
+                                .text(`${row.label}:`)
+                                .style("font-family", "sans-serif")
+                                .style("font-size", "11px")
+                                .style("font-weight", row.isHeader ? "bold" : "normal")
+                                .style("fill", row.color || "#333");
+
+                            const valueText = textRow.append("text")
+                                .text(typeof row.value === 'number' ? row.value.toFixed(2) : row.value)
+                                .style("font-family", "sans-serif")
+                                .style("font-size", "11px")
+                                .style("font-weight", "bold")
+                                .style("fill", row.color || "#333");
+
+                            const dimsLabel = labelText.node().getBBox();
+                            const dimsValue = valueText.node().getBBox();
+                            valueText.attr("x", dimsLabel.width + 5);
+
+                            maxWidth = Math.max(maxWidth, dimsLabel.width + 5 + dimsValue.width);
+                            currentY += 18;
+                        });
+
+                        bg.attr("width", maxWidth + 20)
+                            .attr("height", currentY + 5);
+
+                        // Draw Vertical Marker
+                        g.append("line")
+                            .attr("x1", scales.xScale(selectedX))
+                            .attr("x2", scales.xScale(selectedX))
+                            .attr("y1", 0)
+                            .attr("y2", dimensions.height)
+                            .style("stroke", "#666")
+                            .style("stroke-width", "1px")
+                            .style("stroke-dasharray", "4 4")
+                            .style("pointer-events", "none");
+                    }
+                }
+
+                // Table Group (Hover)
+                const tableGroup = svg.append("g")
+                    .attr("class", "hover-table-group")
+                    .style("display", "none")
+                    .style("pointer-events", "none");
+
+                // Calculate Table Position (Underneath Legend)
+                const hasSecondaryAxis = targetGraphConfig.series && targetGraphConfig.series.some(s => s.axisAssignment === 'secondary');
+                const legendXOffset = hasSecondaryAxis ? 140 : 60;
+                const legendX = dimensions.width - dimensions.margin.right + legendXOffset;
+                const legendHeight = columnInfo.seriesInfo.length * 25;
+                const tableY = dimensions.margin.top + legendHeight + 20; // 20px padding below legend
+
+                overlay.on("mousemove", (event) => {
+                    if (!targetGlobalSettings.showDataTable) return;
+                    // Get mouse X
+                    const [mouseX] = d3.pointer(event);
+                    const x0 = scales.xScale.invert(mouseX);
+
+                    // Find index in sorted data
+                    const i = bisectDate(sortedData, x0, 1);
+                    // We want the point at or before x0.
+                    // bisectLeft gives insertion point.
+                    // If immediate match, fine. If not, filtered logic handles "prev value".
+
+                    // Logic: For EACH series, find the last valid value <= x0
+                    // scan backwards from i
+
+                    const rowData = [];
+                    // Add X Value Header
+                    rowData.push({
+                        label: columnInfo.xAxisInfo.columnName,
+                        value: x0, // Show the exact cursor X or the snapped X? "at a given x-value"
+                        // "For series that don't have a x-value... use last x-value"
+                        // Implies we show the values for that snapped point for each series.
+                        // But the X itself? Maybe just the cursor X.
+                        color: '#333',
+                        isHeader: true
+                    });
+
+                    columnInfo.seriesInfo.forEach(series => {
+                        const yCol = series.yAxisInfo.columnName;
+                        let foundVal = null;
+
+                        // Look backwards from i-1 down to 0
+                        for (let k = i - 1; k >= 0; k--) {
+                            const d = sortedData[k];
+                            if (d[yCol] !== undefined && d[yCol] !== null && !isNaN(+d[yCol])) {
+                                foundVal = d[yCol];
+                                break;
+                            }
+                        }
+
+                        // Resolve color matching the legend logic
+                        const seriesColor = ScaleFactory.resolveColor(series.color) ||
+                            (scales.seriesColorScale ? scales.seriesColorScale(yCol) : '#333');
+
+                        if (foundVal !== null) {
+                            rowData.push({
+                                label: series.titleName || yCol,
+                                value: foundVal,
+                                color: seriesColor
+                            });
+                        } else {
+                            rowData.push({
+                                label: series.titleName || yCol,
+                                value: "N/A",
+                                color: seriesColor
+                            });
+                        }
+                    });
+
+                    // Update Table UI
+                    tableGroup.style("display", null);
+                    tableGroup.attr("transform", `translate(${legendX}, ${tableY})`);
+
+                    // Clear previous
+                    tableGroup.selectAll("*").remove();
+
+                    // Background (styled later)
+                    const bg = tableGroup.append("rect")
+                        .attr("rx", 4)
+                        .attr("ry", 4)
+                        .style("fill", "rgba(255, 255, 255, 0.9)")
+                        .style("stroke", "#ccc")
+                        .style("stroke-width", "1px");
+
+                    let maxWidth = 0;
+                    let currentY = 10;
+
+                    // Render Rows
+                    rowData.forEach((row, idx) => {
+                        const textRow = tableGroup.append("g")
+                            .attr("transform", `translate(10, ${currentY + 12})`);
+
+                        const labelText = textRow.append("text")
+                            .text(`${row.label}:`)
+                            .style("font-family", "sans-serif")
+                            .style("font-size", "11px")
+                            .style("font-weight", row.isHeader ? "bold" : "normal")
+                            .style("fill", row.color || "#333");
+
+                        const valueText = textRow.append("text")
+                            .text(typeof row.value === 'number' ? row.value.toFixed(2) : row.value)
+                            .style("font-family", "sans-serif")
+                            .style("font-size", "11px")
+                            .style("font-weight", "bold")
+                            .style("fill", row.color || "#333");
+
+                        // Measure
+                        const dimsLabel = labelText.node().getBBox();
+                        const dimsValue = valueText.node().getBBox();
+
+                        // Temporarily position (will adjust for alignment if needed, but simple flow is fine)
+                        // Actually, let's align: Label Left, Value Right
+                        // We need two passes or fixed width. 
+                        // Let's just put value after label with space.
+
+                        valueText.attr("x", dimsLabel.width + 5);
+
+                        maxWidth = Math.max(maxWidth, dimsLabel.width + 5 + dimsValue.width);
+                        currentY += 18;
+                    });
+
+                    bg.attr("width", maxWidth + 20)
+                        .attr("height", currentY + 5);
+
+                })
+                    .on("mouseout", () => {
+                        tableGroup.style("display", "none");
+                    })
+                    .on("click", (event) => {
+                        // Click Interaction for Static Table
+                        if (targetGlobalSettings.showStaticTable && !targetIsBatchMode) {
+                            const [mouseX] = d3.pointer(event);
+                            const x0 = scales.xScale.invert(mouseX);
+
+                            if (onXValueSelect) {
+                                onXValueSelect(x0);
+                            }
+                        }
+                    });
+            }
+            // -------------------------------------------------------------------------
+
             // Skip expensive CanvasSizer in batch mode - use fixed dimensions
             if (targetIsBatchMode) {
                 if (onSuccess) onSuccess({ success: true, margin: dimensions.margin });
                 return true;
             }
 
+            let finalDimensions = { width: dimensions.width, height: dimensions.height };
+
             // Dynamic canvas sizing (ensure all content fits) - only for interactive mode
             try {
+                // Initialize sizer with minimal margins since we're measuring the entire SVG content
                 const canvasSizer = new CanvasSizer(svgRef.current, {
-                    margins: dimensions.margin,
+                    margins: { top: 10, right: 10, bottom: 10, left: 10 },
                     minWidth: 400,
                     minHeight: 300,
                     maxWidth: 8192,
                     maxHeight: 8192,
                     expandMode: 'expand',
-                    dpiMultiplier: 1,
+                    dpiMultiplier: 1, // Default, can be adjusted for export
                     debounceMs: 0
                 });
 
-                // Calculate extents from rendered data (fast path)
-                if (columnInfo.graphType !== 'histogram' && columnInfo.seriesInfo.length > 0) {
-                    const extents = graphService.calculateSeriesExtents(
-                        validData,
-                        scales,
-                        columnInfo.xAxisInfo,
-                        columnInfo.seriesInfo,
-                        targetGraphConfig
-                    );
-
-                    if (extents) {
-                        canvasSizer.updateFromData(extents);
-                        canvasSizer.ensureFit();
-                    }
-                } else {
-                    // Fallback to DOM measurement for histogram or complex cases
-                    canvasSizer.updateFromDOM(g.node());
-                    canvasSizer.ensureFit();
-                }
+                // Always use DOM measurement of the ROOT SVG to capture legends, titles, and axes
+                // This ensures "dynamic components" outside the main plot area are included
+                canvasSizer.updateFromDOMSync(svgRef.current);
+                const fitResult = canvasSizer.ensureFit();
+                finalDimensions = { width: fitResult.width, height: fitResult.height };
 
                 // Clean up sizer (we don't need continuous monitoring)
                 canvasSizer.teardown();
@@ -663,7 +970,7 @@ export function useGraphRenderer({
                 debugWarn('[useGraphRenderer] Canvas sizing failed, using default dimensions:', sizingError);
             }
 
-            if (onSuccess) onSuccess({ success: true, margin: dimensions.margin });
+            if (onSuccess) onSuccess({ success: true, margin: dimensions.margin, finalDimensions });
             return true;
         } catch (error) {
             debugWarn('Failed to generate graph:', error);
@@ -689,7 +996,10 @@ export function useGraphRenderer({
         renderContours,
         renderCurveFits,
         renderLegends,
-        isBatchMode
+        renderCurveFits,
+        renderLegends,
+        isBatchMode,
+        onXValueSelect
     ]);
 
     return { generateGraph };

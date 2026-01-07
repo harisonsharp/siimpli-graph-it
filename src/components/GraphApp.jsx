@@ -76,7 +76,7 @@ const GraphApp = () => {
             console.warn('Logo failed to load, continuing without logo');
             setLogoReady(true);
         };
-        img.src = './src/graphs/logo.png';
+        img.src = '/SIIMLogoOffWhiteBackground.png';
     }, []);
 
     const colorSchemes = {
@@ -250,6 +250,7 @@ const GraphApp = () => {
                                     onGraphGenerated={setShowGraph}
                                     svgRef={svgRef}
                                     canvasRef={canvasRef}
+                                    updateGlobalSettings={updateGlobalSettings}
                                 />
                             </section>
                         )}

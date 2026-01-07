@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { useGraphRenderer } from '../hooks/useGraphRenderer.js';
 import { debugWarn } from '@siimpli/graph-it-core';
@@ -58,10 +58,12 @@ const GraphRenderer = ({
     getAxisIntercepts,
     onGraphGenerated,
     svgRef: externalSvgRef,
-    canvasRef: externalCanvasRef
+    canvasRef: externalCanvasRef,
+    updateGlobalSettings
 }) => {
     const internalSvgRef = useRef();
     const internalCanvasRef = useRef();
+    const [dimensions, setDimensions] = useState(globalSettings.graphDimensions);
     const hasGeneratedRef = useRef(false); // Prevent double generation
 
     // Use external refs if provided, otherwise use internal refs
@@ -81,9 +83,10 @@ const GraphRenderer = ({
         logoImage,
         logoReady,
         getAxisIntercepts,
-        colorSchemes: COLOR_SCHEMES
+        colorSchemes: COLOR_SCHEMES,
+        onXValueSelect: (value) => updateGlobalSettings({ selectedXValue: value })
     });
-
+    console.log('generateGraph object:', generateGraph);
     // Store generateGraph in ref to avoid effect re-runs
     const generateGraphRef = useRef(generateGraph);
     generateGraphRef.current = generateGraph;
@@ -100,25 +103,34 @@ const GraphRenderer = ({
         });
         generateGraphRef.current(
             svgRef,
-            (result) => onGraphGeneratedRef.current(result),
+            (result) => {
+                if (result.finalDimensions) {
+                    setDimensions(result.finalDimensions);
+                }
+                onGraphGeneratedRef.current(result);
+            },
             (error) => {
                 debugWarn('Graph generation failed:', error);
                 onGraphGeneratedRef.current(false);
             }
         );
     }, []); // Empty deps - run once on mount
+    console.log('svgref: ', svgRef);
+    console.log('canvasref: ', canvasRef);
+    console.log('dimensions: ', dimensions);
 
     return (
         <div className="graph-container">
             <svg
                 ref={svgRef}
-                viewBox={`0 0 ${globalSettings.graphDimensions.width} ${globalSettings.graphDimensions.height}`}
+                width={dimensions.width}
+                height={dimensions.height}
                 className="graph-canvas"
             />
             <canvas
                 ref={canvasRef}
-                width={globalSettings.graphDimensions.width}
-                height={globalSettings.graphDimensions.height}
+                width={dimensions.width}
+                height={dimensions.height}
                 style={{ display: 'none' }}
             />
         </div>

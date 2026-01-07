@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useConfig } from '../contexts/ConfigContext';
-import { detectTypeConflict, resolveTypeConflict, validateSecondaryAxisTypes } from '@siimpli/graph-it-core';
+import { detectTypeConflict, resolveTypeConflict, validateSecondaryAxisTypes, ScaleFactory } from '@siimpli/graph-it-core';
 
 const GraphConfiguration = ({
     columns,
@@ -131,6 +131,7 @@ const GraphConfiguration = ({
                     </select>
                 </div>
 
+
                 <div className="form-group">
                     <label className="form-label" htmlFor="x-axis-label">X-Axis Label (Optional)</label>
                     <input
@@ -167,6 +168,44 @@ const GraphConfiguration = ({
                             onChange={(e) => updateGraphConfig({ yAxisLabel2: e.target.value })}
                         />
                     </div>
+                )}
+                <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                    <label className="form-label" htmlFor="join-x-axis" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                        <input
+                            id="join-x-axis"
+                            type="checkbox"
+                            checked={globalSettings.joinXAxis || false}
+                            onChange={(e) => updateGlobalSettings({ joinXAxis: e.target.checked })}
+                            style={{ cursor: 'pointer' }}
+                        />
+                        <span>Join X-Axis</span>
+                    </label>
+
+                    <p style={{ margin: '4px 0 0 24px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                        Join multiple X-Axes into a single axis
+                    </p>
+
+                </div>
+                {globalSettings.joinXAxis && (
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="x-axis-column-2">
+                            X-Axis Column to Join
+                            <span style={{ color: 'var(--danger-color)', marginLeft: '4px' }}>*</span>
+                        </label>
+                        <select
+                            id="x-axis-column-2"
+                            className="form-select"
+                            value={graphConfig.xAxis2}
+                            onChange={(e) => updateGraphConfig({ xAxis2: e.target.value })}
+                        >
+                            <option value="">Select a column for X-axis...</option>
+                            {columns.map(col => (
+                                <option key={col.uniqueId} value={col.uniqueId}>
+                                    {col.name} ({col.file})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 )}                <div style={{ gridColumn: '1 / -1' }}>
                     <div style={{
                         display: 'flex',
@@ -188,6 +227,7 @@ const GraphConfiguration = ({
                         </button>
                     </div>
                 </div>
+
 
                 {graphConfig.series.map((series, index) => (
                     <div key={index} className="series-config" style={{ gridColumn: '1 / -1' }}>
@@ -226,6 +266,17 @@ const GraphConfiguration = ({
                                     </select>
                                 </div>
                                 <div className="form-group">
+                                    <label className="form-label" htmlFor={`series-title-name-${index}`}>
+                                        Name (optional)
+                                    </label>
+                                    <input
+                                        id={`series-title-name-${index}`}
+                                        className="form-input"
+                                        value={series.titleName}
+                                        onChange={(e) => updateSeries(index, { titleName: e.target.value })}
+                                    />
+                                </div>
+                                <div className="form-group">
                                     <label className="form-label" htmlFor={`series-axis-assignment-${index}`}>Axis Assignment</label>
                                     <select
                                         id={`series-axis-assignment-${index}`}
@@ -260,8 +311,8 @@ const GraphConfiguration = ({
                                             id={`series-color-${index}`}
                                             type="color"
                                             className="form-input form-input-color"
-                                            value={series.color || '#000000'}
-                                            onBlur={(e) => updateSeries(index, { color: e.target.value })}
+                                            value={ScaleFactory.resolveColor(series.color) || '#000000'}
+                                            onChange={(e) => updateSeries(index, { color: e.target.value })}
                                             style={{ width: '50px', padding: '2px', height: '38px' }}
                                         />
                                         <input
@@ -269,10 +320,16 @@ const GraphConfiguration = ({
                                             className="form-input"
                                             value={series.color || ''}
                                             placeholder="Auto"
+                                            list="color-names"
                                             onChange={(e) => updateSeries(index, { color: e.target.value })}
                                             style={{ flex: 1 }}
                                         />
                                     </div>
+                                    <datalist id="color-names">
+                                        {Object.keys(ScaleFactory.CUSTOM_COLOR_MAP).map(key => (
+                                            <option key={key} value={key} />
+                                        ))}
+                                    </datalist>
                                 </div>
                             </div>
 
@@ -367,6 +424,35 @@ const GraphConfiguration = ({
                                             <span>Show Points</span>
                                         </label>
                                     </div>
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor={`series-stroke-width-${index}`}>
+                                            Stroke Width
+                                        </label>
+                                        <input
+                                            id={`series-stroke-width-${index}`}
+                                            className="form-input"
+                                            value={series.strokeWidth}
+                                            onChange={(e) => updateSeries(index, { strokeWidth: e.target.value })}
+                                        />
+                                    </div>
+
+                                </div>
+                            )}
+                            {series.graphType === 'scatter' && (
+                                <div className="form-row" style={{ marginTop: '8px', padding: '8px', backgroundColor: 'var(--bg-secondary)', borderRadius: '4px' }}>
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor={`series-stroke-width-${index}`}>
+                                            Dot Size
+                                        </label>
+                                        <input
+                                            id={`series-stroke-width-${index}`}
+                                            className="form-input"
+                                            value={series.strokeWidth}
+                                            onChange={(e) => updateSeries(index, { strokeWidth: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="form-group" />
+                                    <div className="form-group" />
                                 </div>
                             )}
                         </div>
@@ -454,12 +540,85 @@ const GraphConfiguration = ({
                         />
                         <span>Show Guide Lines (faint grid)</span>
                     </label>
+
                     <p style={{ margin: '4px 0 0 24px', fontSize: '13px', color: 'var(--text-secondary)' }}>
                         Display faint horizontal and vertical guide lines as visual aids
                     </p>
+
                 </div>
             </div >
+            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                <label className="form-label" htmlFor="show-guide-lines" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input
+                        id="show-guide-lines"
+                        type="checkbox"
+                        checked={globalSettings.showGuideLines || false}
+                        onChange={(e) => updateGlobalSettings({ showGuideLines: e.target.checked })}
+                        style={{ cursor: 'pointer' }}
+                    />
+                    <span>Show Guide Lines (faint grid)</span>
+                </label>
+
+                <p style={{ margin: '4px 0 0 24px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                    Display faint horizontal and vertical guide lines as visual aids
+                </p>
+
+            </div>
+
+            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                <label className="form-label" htmlFor="show-data-table" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input
+                        id="show-data-table"
+                        type="checkbox"
+                        checked={globalSettings.showDataTable || false}
+                        onChange={(e) => updateGlobalSettings({ showDataTable: e.target.checked })}
+                        style={{ cursor: 'pointer' }}
+                    />
+                    <span>Show Data Table</span>
+                </label>
+
+                <p style={{ margin: '4px 0 0 24px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                    Display a table of values at the current cursor position
+                </p>
+            </div>
+
+            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <label className="form-label" htmlFor="show-static-table" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginBottom: 0 }}>
+                        <input
+                            id="show-static-table"
+                            type="checkbox"
+                            checked={globalSettings.showStaticTable || false}
+                            onChange={(e) => updateGlobalSettings({ showStaticTable: e.target.checked })}
+                            style={{ cursor: 'pointer' }}
+                        />
+                        <span>Show Static Table (for Export)</span>
+                    </label>
+
+                    {globalSettings.showStaticTable && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <label className="form-label" htmlFor="selected-x-value" style={{ marginBottom: 0 }}>
+                                X Value:
+                            </label>
+                            <input
+                                id="selected-x-value"
+                                type="number"
+                                step="any"
+                                className="form-input"
+                                style={{ width: '100px', padding: '2px 8px' }}
+                                value={globalSettings.selectedXValue !== null ? globalSettings.selectedXValue : ''}
+                                onChange={(e) => updateGlobalSettings({ selectedXValue: e.target.value === '' ? null : parseFloat(e.target.value) })}
+                                placeholder="Click graph"
+                            />
+                        </div>
+                    )}
+                </div>
+                <p style={{ margin: '4px 0 0 24px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                    Display a persistent table below the legend. Click graph or enter value to update.
+                </p>
+            </div>
         </div >
+
     );
 };
 
@@ -472,6 +631,7 @@ GraphConfiguration.propTypes = {
     graphConfig: PropTypes.shape({
         title: PropTypes.string,
         xAxis: PropTypes.string,
+        xAxis2: PropTypes.string,
         xAxisLabel: PropTypes.string,
         yAxisLabel: PropTypes.string,
         yAxisLabel2: PropTypes.string,
@@ -492,7 +652,10 @@ GraphConfiguration.propTypes = {
     }).isRequired,
     globalSettings: PropTypes.shape({
         colorScheme: PropTypes.string,
-        showGuideLines: PropTypes.bool
+        showGuideLines: PropTypes.bool,
+        showDataTable: PropTypes.bool,
+        showStaticTable: PropTypes.bool,
+        selectedXValue: PropTypes.number
     }).isRequired,
     updateGraphConfig: PropTypes.func.isRequired,
     updateGlobalSettings: PropTypes.func.isRequired
