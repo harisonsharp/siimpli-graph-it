@@ -143,6 +143,16 @@ const GraphApp = () => {
         return { min: extent[0], max: extent[1] };
     }, [graphConfig.xAxis, csvData]);
 
+    const validData = useMemo(() => {
+        if (!graphConfig.xAxis || csvData.length === 0) return [];
+
+        const xAxisInfo = parseColumnId(graphConfig.xAxis);
+        return csvData.filter(d =>
+            d[xAxisInfo.columnName] !== undefined &&
+            !isNaN(+d[xAxisInfo.columnName])
+        );
+    }, [graphConfig.xAxis, csvData]);
+
     // Memoize series info for curve fitting
     const seriesInfo = useMemo(() => {
         return graphConfig.series
@@ -184,6 +194,7 @@ const GraphApp = () => {
                                         </p>
                                     </div>
                                     <GraphConfiguration
+                                        data={validData}
                                         columns={columns}
                                         graphConfig={graphConfig}
                                         globalSettings={globalSettings}

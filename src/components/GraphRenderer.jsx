@@ -120,7 +120,7 @@ const GraphRenderer = ({
     console.log('dimensions: ', dimensions);
 
     return (
-        <div className="graph-container">
+        <div className="graph-container" style={{ overflow: 'auto', maxWidth: '100%', maxHeight: '100%' }}>
             <svg
                 ref={svgRef}
                 width={dimensions.width}

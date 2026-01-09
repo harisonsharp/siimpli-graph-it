@@ -33,6 +33,7 @@ import { DEFAULT_GRAPH_CONFIG, DEFAULT_CURVE_FIT, CURVE_FIT_COLORS, DEFAULT_SERI
  *
  * @relatedFiles All components - Provides centralized state to entire application
  */
+import { debugLog, debugWarn } from '@siimpli/graph-it-core';
 
 const ConfigContext = createContext();
 
@@ -55,7 +56,7 @@ export const ConfigProvider = ({ children }) => {
 
     const updateGraphConfig = (updates) => {
         if (!updates || typeof updates !== 'object') {
-            console.warn('Invalid updates provided to updateGraphConfig');
+            debugWarn('Invalid updates provided to updateGraphConfig');
             return;
         }
         setGraphConfig(prev => ({ ...prev, ...updates }));
@@ -82,13 +83,26 @@ export const ConfigProvider = ({ children }) => {
         }));
     };
 
+    const moveSeries = (fromIndex, toIndex) => {
+        if (fromIndex === toIndex) return;
+        setGraphConfig(prev => {
+            const newSeries = [...prev.series];
+            const [movedSeries] = newSeries.splice(fromIndex, 1);
+            newSeries.splice(toIndex, 0, movedSeries);
+            return {
+                ...prev,
+                series: newSeries
+            };
+        });
+    };
+
     const updateCurveFit = (index, field, value) => {
         if (typeof index !== 'number' || index < 0 || index >= curveFits.length) {
-            console.warn('Invalid index provided to updateCurveFit');
+            debugWarn('Invalid index provided to updateCurveFit');
             return;
         }
         if (!field || typeof field !== 'string') {
-            console.warn('Invalid field provided to updateCurveFit');
+            debugWarn('Invalid field provided to updateCurveFit');
             return;
         }
         setCurveFits(prev => prev.map((fit, i) =>
@@ -108,13 +122,13 @@ export const ConfigProvider = ({ children }) => {
 
     const updateGlobalSettings = (updates) => {
         if (!updates || typeof updates !== 'object') {
-            console.warn('Invalid updates provided to updateGlobalSettings');
+            debugWarn('Invalid updates provided to updateGlobalSettings');
             return;
         }
         const stack = (new Error()).stack;
         setGlobalSettings(prev => {
             const next = { ...prev, ...updates };
-            console.info('[ConfigContext] setGlobalSettings -> next:', next, 'from:', prev, 'stack:', stack);
+            debugLog('[ConfigContext] setGlobalSettings -> next:', next, 'from:', prev, 'stack:', stack);
             return next;
         });
     };
@@ -144,6 +158,7 @@ export const ConfigProvider = ({ children }) => {
         addSeries,
         removeSeries,
         updateSeries,
+        moveSeries,
         updateCurveFit,
         addCurveFit,
         removeCurveFit,
