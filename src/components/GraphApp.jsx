@@ -76,7 +76,7 @@ const GraphApp = () => {
             console.warn('Logo failed to load, continuing without logo');
             setLogoReady(true);
         };
-        img.src = '/SIIMLogoOffWhiteBackground.png';
+        img.src = '/siimpli-graph-it-logo.png';
     }, []);
 
     const colorSchemes = {

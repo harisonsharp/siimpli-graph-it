@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { CoordinateService } from '@siimpli/graph-it-core';
+import { CoordinateService, debugLog, debugWarn } from '@siimpli/graph-it-core';
 import { SvgPlottingService } from '@siimpli/graph-it-core';
 /**
  * @fileoverview React hook for interactive coordinate plotting and point validation.

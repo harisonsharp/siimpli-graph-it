@@ -47,7 +47,9 @@ import {
     debugLog,
     debugWarn,
     DataTableRenderer,
-    LegendRenderer
+    LegendRenderer,
+    UnifiedTableRenderer,
+    BiasTableRenderer
 } from '@siimpli/graph-it-core';
 
 
@@ -683,24 +685,55 @@ export function useGraphRenderer({
             const contourLegend = renderContours(g, svg, validData, scales, columnInfo, targetGraphConfig, targetGlobalSettings, graphService) || null;
             const curveLegend = renderCurveFits(g, targetCurveFits, scales, dimensions, columnInfo, graphService, axisInfo) || { legendItems: [] };
 
-            renderLegends(
-                svg,
-                validData,
-                scales,
-                columnInfo,
-                targetGraphConfig,
-                dimensions,
-                targetGlobalSettings,
-                graphService,
-                {
-                    contour: contourLegend,
-                    curve: curveLegend,
-                    axisInfo
+            // -------------------------------------------------------------------------
+            // Render Legends OR Unified Table (mutually exclusive when unified is enabled)
+            // -------------------------------------------------------------------------
+            if (targetGlobalSettings.showUnifiedTable && targetGlobalSettings.showStaticTable) {
+                // Unified table mode: combines legend markers, names, and values
+                UnifiedTableRenderer.drawUnifiedTable(
+                    svg,
+                    validData,
+                    columnInfo,
+                    scales,
+                    targetGraphConfig,
+                    targetGlobalSettings,
+                    dimensions
+                );
+
+                // Render Bias Table if enabled (positioned to the right of unified table)
+                if (targetGlobalSettings.showBiasTable && targetGlobalSettings.biasTableData) {
+                    const unifiedTableWidth = 365; // Approximate width of unified table
+                    BiasTableRenderer.drawBiasTable(
+                        svg,
+                        targetGlobalSettings.biasTableData,
+                        dimensions,
+                        targetGlobalSettings,
+                        unifiedTableWidth
+                    );
                 }
-            );
+            } else {
+                // Standard mode: separate legend and data table
+                renderLegends(
+                    svg,
+                    validData,
+                    scales,
+                    columnInfo,
+                    targetGraphConfig,
+                    dimensions,
+                    targetGlobalSettings,
+                    graphService,
+                    {
+                        contour: contourLegend,
+                        curve: curveLegend,
+                        axisInfo
+                    }
+                );
+            }
 
             // -------------------------------------------------------------------------
-            // Interaction Layer: Data Table on Hover
+            // Interaction Layer: ALWAYS render for click-to-select functionality
+            // This provides the overlay that captures clicks to update selectedXValue
+            // -------------------------------------------------------------------------
             if (targetGlobalSettings.showDataTable || targetGlobalSettings.showStaticTable) {
                 DataTableRenderer.renderInteractionLayer(
                     g,
@@ -709,12 +742,19 @@ export function useGraphRenderer({
                     scales,
                     columnInfo,
                     targetGraphConfig,
-                    targetGlobalSettings,
+                    // Keep showStaticTable true for click handling; suppress visual via flag
+                    {
+                        ...targetGlobalSettings,
+                        // When unified table is active, suppress the DataTableRenderer's static table visual
+                        // but keep the interaction layer for click handling
+                        hideStaticTableVisual: targetGlobalSettings.showUnifiedTable === true
+                    },
                     dimensions,
                     { onXValueSelect },
                     targetIsBatchMode
                 );
             }
+            // -------------------------------------------------------------------------
             // -------------------------------------------------------------------------
 
             // Skip expensive CanvasSizer in batch mode - use fixed dimensions

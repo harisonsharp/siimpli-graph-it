@@ -1,0 +1,6 @@
+sources of metal prices:
+Spot Price
+Gold: Kitco.com, "London AM Fix" London Bullion Market Association, 10:30 am GMT @ 1st business day of month, oct 2025 - jan 2026
+Silver: Kitco.com, "London AM Fix" London Bullion Market Association, 10:30 am GMT @ 1st business day of month, oct 2025 - jan 2026
+
+

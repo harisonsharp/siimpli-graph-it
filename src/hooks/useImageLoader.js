@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { ImageExportService } from '@siimpli/graph-it-core';
-import { FilenameParsingService } from '@siimpli/graph-it-core';
+import { ImageExportService, debugLog, debugWarn } from '@siimpli/graph-it-core';
+import { FileNameParsingService } from '@siimpli/graph-it-core';
 /**
  * @fileoverview React hook for loading and managing graph image files with filename parsing.
  * Handles PNG file selection, blob URL management, and coordinate system data extraction
@@ -16,7 +16,7 @@ import { FilenameParsingService } from '@siimpli/graph-it-core';
  *
  * @requires react - React hooks for state and lifecycle management
  * @requires ImageExportService.js - Service for image file I/O operations
- * @requires FilenameParsingService.js - Utility for extracting metadata from filenames
+ * @requires FileNameParsingService.js - Utility for extracting metadata from filenames
  *
  * @param {Function} showError - Error display callback function
  * @returns {Object} Hook state and methods for image loading operations
@@ -71,7 +71,7 @@ export const useImageLoader = (showError) => {
                 return;
             }
 
-            const parsed = FilenameParsingService.parseGraphFilename(imageData.filePath);
+            const parsed = FileNameParsingService.parseGraphFilename(imageData.filePath);
             setDebugInfo({
                 filename: imageData.filePath,
                 parsed

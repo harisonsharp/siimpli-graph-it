@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { FileService } from '@siimpli/graph-it-core';
+import { FileService, debugLog, debugWarn } from '@siimpli/graph-it-core';
 /**
  * @fileoverview React hook for managing CSV file uploads and data state coordination.
  * Handles multi-file data management, column extraction, and graph configuration

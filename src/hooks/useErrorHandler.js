@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { debugLog, debugWarn } from '@siimpli/graph-it-core';
 /**
  * @fileoverview React hook providing centralized error state management and user notifications.
  * Manages error display with automatic timeout functionality for consistent

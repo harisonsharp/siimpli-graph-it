@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { readTextFile, readDir, writeFile } from '@tauri-apps/plugin-fs';
-import { parseConfigFile, determineGraphType, resolveColumn } from '@siimpli/graph-it-core';
+import { parseConfigFile, determineGraphType, resolveColumn, debugLog, debugWarn } from '@siimpli/graph-it-core';
 import { parseCSV } from '@siimpli/graph-it-core';
 import { useError } from '../contexts/ErrorContext.jsx';
 /**

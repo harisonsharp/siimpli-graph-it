@@ -839,6 +839,76 @@ const GraphConfiguration = ({
                 <p style={{ margin: '4px 0 0 24px', fontSize: '13px', color: 'var(--text-secondary)' }}>
                     Display a persistent table below the legend. Click graph or enter value to update.
                 </p>
+
+                {globalSettings.showStaticTable && (
+                    <label className="form-label" htmlFor="show-unified-table" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginTop: '8px', marginLeft: '24px' }}>
+                        <input
+                            id="show-unified-table"
+                            type="checkbox"
+                            checked={globalSettings.showUnifiedTable || false}
+                            onChange={(e) => updateGlobalSettings({ showUnifiedTable: e.target.checked })}
+                            style={{ cursor: 'pointer' }}
+                        />
+                        <span>Unified Table (Legend + Values)</span>
+                    </label>
+                )}
+
+                {globalSettings.showStaticTable && globalSettings.showUnifiedTable && (
+                    <div style={{ marginTop: '8px', marginLeft: '24px' }}>
+                        <label className="form-label" htmlFor="show-bias-table" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                            <input
+                                id="show-bias-table"
+                                type="checkbox"
+                                checked={globalSettings.showBiasTable || false}
+                                onChange={(e) => updateGlobalSettings({ showBiasTable: e.target.checked })}
+                                style={{ cursor: 'pointer' }}
+                            />
+                            <span>Show Bias Table</span>
+                        </label>
+
+                        {globalSettings.showBiasTable && (
+                            <div style={{ marginTop: '8px', marginLeft: '24px' }}>
+                                <label className="form-label" htmlFor="bias-table-file" style={{ marginBottom: '4px', display: 'block' }}>
+                                    Bias CSV File
+                                </label>
+                                <input
+                                    id="bias-table-file"
+                                    type="file"
+                                    accept=".csv"
+                                    className="form-input"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onload = (event) => {
+                                                const text = event.target.result;
+                                                // Parse CSV
+                                                const lines = text.split('\n').filter(l => l.trim());
+                                                if (lines.length > 0) {
+                                                    const headers = lines[0].split(',').map(h => h.trim());
+                                                    const rows = lines.slice(1).map(line => {
+                                                        const values = line.split(',').map(v => v.trim());
+                                                        const row = {};
+                                                        headers.forEach((h, i) => { row[h] = values[i]; });
+                                                        return row;
+                                                    });
+                                                    updateGlobalSettings({ biasTableData: rows, biasTableFile: file.name });
+                                                }
+                                            };
+                                            reader.readAsText(file);
+                                        }
+                                    }}
+                                    style={{ padding: '8px' }}
+                                />
+                                {globalSettings.biasTableFile && (
+                                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                                        Loaded: {globalSettings.biasTableFile}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
             {/*  two new form groups: a checkbox for "dual units" and two selects for the units to convert to and from */}
             <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
