@@ -496,6 +496,7 @@ export function useGraphRenderer({
             const legendOffset = hasSecondaryAxis ? 140 : 60; // Push legend further right if dual axis
 
             LegendRenderer.drawSeriesLegend(
+                config,
                 svg,
                 validData,
                 seriesInfo,

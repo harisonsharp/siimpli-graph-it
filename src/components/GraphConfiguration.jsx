@@ -473,18 +473,7 @@ const GraphConfiguration = ({
 
                                 {series.graphType === 'bar' && (
                                     <div className="form-row" style={{ marginTop: '8px', padding: '8px', backgroundColor: 'var(--bg-secondary)', borderRadius: '4px' }}>
-                                        <div className="form-group">
-                                            <label className="form-label" htmlFor={`series-bar-mode-${index}`}>Bar Mode</label>
-                                            <select
-                                                id={`series-bar-mode-${index}`}
-                                                className="form-select"
-                                                value={series.barMode || 'group'}
-                                                onChange={(e) => updateSeries(index, { barMode: e.target.value })}
-                                            >
-                                                <option value="group">Grouped</option>
-                                                <option value="stack">Stacked</option>
-                                            </select>
-                                        </div>
+
 
                                         <div className="form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-light)', paddingTop: '8px', marginTop: '8px' }}>
                                             <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
@@ -667,7 +656,21 @@ const GraphConfiguration = ({
                         )}
                     </div>
                 ))}
-
+                {graphConfig.series.some(s => s.graphType == 'bar') && (
+                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                        <label className="form-label" htmlFor="bar-type">Bar Type</label>
+                        <select
+                            id="bar-type"
+                            className="form-select"
+                            value={globalSettings.barType}
+                            onChange={(e) => updateGraphConfig({ barMode: e.target.value })}
+                        >
+                            <option value="group">Grouped</option>
+                            <option value="stack">Stacked</option>
+                            <option value="stack-proportional">Stacked Proportional</option>
+                        </select>
+                    </div>
+                )}
                 <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                     <label className="form-label" htmlFor="color-scheme">Color Scheme</label>
                     <select
