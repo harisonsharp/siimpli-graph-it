@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { BarChart3, Download, TrendingUp } from 'lucide-react';
+import { BarChart3, Download, TrendingUp, FileCode2 } from 'lucide-react';
 import * as d3 from 'd3';
 import { parseColumnId, calculateAxisIntercepts, performCurveFitting } from '@siimpli/graph-it-core';
 import { useConfig } from '../contexts/ConfigContext.jsx';
@@ -64,7 +64,7 @@ const GraphApp = () => {
 
     const { graphConfig, curveFits, globalSettings, updateGraphConfig, updateCurveFit, updateGlobalSettings, addCurveFit, removeCurveFit } = useConfig();
     const { handleError, showSuccess } = useError();
-    const { csvFiles, csvData, columns, removeFile, handleFileUpload } = useFileManager(updateGraphConfig);
+    const { csvFiles, csvData, columns, removeFile, handleFileUpload } = useFileManager(graphConfig, updateGraphConfig);
 
     useEffect(() => {
         const img = new Image();
@@ -164,6 +164,117 @@ const GraphApp = () => {
     }, [graphConfig.series]);
 
     const canGenerateGraph = logoReady && graphConfig.xAxis && graphConfig.series.some(s => s.yAxis) && csvData.length > 0;
+    const canExportConfig = csvFiles.length > 0 && graphConfig.xAxis && graphConfig.series.some(s => s.yAxis);
+
+    const exportConfigAsJSON = useCallback(async () => {
+        if (!canExportConfig) {
+            handleError(new Error('Incomplete configuration'), 'Load at least one CSV and select axes before exporting JSON');
+            return;
+        }
+
+        const sanitizeDatasetId = (fileName = '', fallbackIndex = 0) => {
+            const slug = fileName
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            return slug || `dataset-${fallbackIndex + 1}`;
+        };
+
+        const buildDatasetBindings = () => {
+            if (!columns.length && !csvFiles.length) return [];
+
+            const grouped = new Map();
+
+            columns.forEach((col) => {
+                const fileKey = col.file || 'dataset';
+                if (!grouped.has(fileKey)) {
+                    grouped.set(fileKey, []);
+                }
+                grouped.get(fileKey).push({
+                    id: col.uniqueId || `${fileKey}::${col.name || 'column'}`,
+                    name: col.name || col.uniqueId || 'Column',
+                    type: col.type || col.dataType,
+                    unit: col.unit || col.units,
+                    file: col.file
+                });
+            });
+
+            csvFiles.forEach((file) => {
+                if (grouped.has(file.name)) return;
+                const headerColumns = (file.headers || []).map((header) => ({
+                    id: `${file.name}::${header}`,
+                    name: header,
+                    file: file.name
+                }));
+                grouped.set(file.name, headerColumns);
+            });
+
+            return Array.from(grouped.entries()).map(([fileName, cols], index) => ({
+                id: sanitizeDatasetId(fileName, index),
+                file: fileName,
+                columns: cols.filter(Boolean).map((col, colIndex) => ({
+                    id: col.id || `${fileName || 'dataset'}::column-${colIndex + 1}`,
+                    name: col.name || `Column ${colIndex + 1}`,
+                    type: col.type,
+                    unit: col.unit
+                }))
+            }));
+        };
+
+        try {
+            const datasetBindings = buildDatasetBindings();
+            const graphPayload = JSON.parse(JSON.stringify(graphConfig));
+            const globalPayload = JSON.parse(JSON.stringify({
+                ...globalSettings,
+                graphDimensions: globalSettings.graphDimensions || { width: 800, height: 600 }
+            }));
+
+            const configPayload = {
+                version: '1.0.0',
+                metadata: {
+                    generatedAt: new Date().toISOString(),
+                    source: 'GraphApp UI'
+                },
+                ...(datasetBindings.length ? { dataBindings: { datasets: datasetBindings } } : {}),
+                graph: graphPayload,
+                global: globalPayload
+            };
+
+            const jsonString = JSON.stringify(configPayload, null, 2);
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const filename = `graph-config-${timestamp}.json`;
+
+            const supportsFilePicker = typeof window !== 'undefined' && window.showSaveFilePicker;
+
+            if (supportsFilePicker) {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: filename,
+                    types: [
+                        {
+                            description: 'JSON Configuration',
+                            accept: { 'application/json': ['.json'] }
+                        }
+                    ]
+                });
+                const writable = await handle.createWritable();
+                await writable.write(jsonString);
+                await writable.close();
+            } else {
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+            showSuccess('Configuration JSON saved');
+        } catch (error) {
+            handleError(error, 'Failed to export configuration JSON');
+        }
+    }, [canExportConfig, columns, csvFiles, graphConfig, globalSettings, handleError, showSuccess]);
 
     const handleGenerateGraph = () => {
         console.log('Generating graph... ID:', generationId + 1);
@@ -216,10 +327,21 @@ const GraphApp = () => {
                                             </button>
 
                                             {showGraph && (
-                                                <button className="btn btn-success" onClick={exportAsPNG}>
-                                                    <Download size={16} />
-                                                    Export as PNG
-                                                </button>
+                                                <>
+                                                    <button className="btn btn-success" onClick={exportAsPNG}>
+                                                        <Download size={16} />
+                                                        Export as PNG
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-secondary"
+                                                        onClick={exportConfigAsJSON}
+                                                        disabled={!canExportConfig}
+                                                        title={!canExportConfig ? 'Load data and select axes to export JSON' : ''}
+                                                    >
+                                                        <FileCode2 size={16} />
+                                                        Export Config JSON
+                                                    </button>
+                                                </>
                                             )}
 
                                             <button

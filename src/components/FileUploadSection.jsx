@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Upload, FileText, X } from 'lucide-react';
 
 /**
@@ -34,15 +34,23 @@ import { Upload, FileText, X } from 'lucide-react';
 const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
     const fileInputRef = useRef();
 
+    // Reset the hidden input whenever the file list changes so identical files can be re-selected
+    useEffect(() => {
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    }, [csvFiles.length]);
+
     // Drag-and-drop functionality removed
 
-    const handleFileChange = (event) => {
-        const files = event.target.files;
-        if (!files || files.length === 0) {
+    const handleFileChange = async (event) => {
+        const target = event.target;
+        const files = target.files ? Array.from(target.files) : [];
+        if (files.length === 0) {
             alert('No files selected.');
             return;
         }
-        for (let file of files) {
+        for (const file of files) {
             if (!file.name.toLowerCase().endsWith('.csv')) {
                 alert(`Invalid file type: ${file.name}`);
                 return;
@@ -52,7 +60,11 @@ const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
                 return;
             }
         }
-        onFileUpload(files);
+        try {
+            await onFileUpload(files);
+        } finally {
+            target.value = '';
+        }
     };
 
     // Drag-and-drop handlers removed

@@ -16,17 +16,18 @@ import { FileService, debugLog, debugWarn } from '@siimpli/graph-it-core';
  * @requires react - useState and useCallback hooks for state management
  * @requires FileService.js - Service class for file loading and processing operations
  *
+ * @param {Object} graphConfig - Current graph configuration state
  * @param {Function} updateGraphConfig - Callback to update graph configuration settings
  * @returns {Object} File management state and handler functions
  *
  * @example
- * const { csvFiles, handleFileUpload } = useFileManager(updateConfig);
+ * const { csvFiles, handleFileUpload } = useFileManager(graphConfig, updateConfig);
  * await handleFileUpload(selectedFiles);
  *
  * @relatedFiles useFileProcessing.js, FileService.js, useGraphGeneration.js
  */
 
-export const useFileManager = (updateGraphConfig) => {
+export const useFileManager = (graphConfig, updateGraphConfig) => {
     const [csvFiles, setCsvFiles] = useState([]);
     const [csvData, setCsvData] = useState([]);
     const [columns, setColumns] = useState([]);
@@ -35,29 +36,19 @@ export const useFileManager = (updateGraphConfig) => {
         setCsvFiles(prev => prev.filter(file => file.name !== fileName));
         setCsvData(prev => prev.filter(data => data._sourceFile !== fileName));
         setColumns(prev => prev.filter(col => col.file !== fileName));
-
-        updateGraphConfig({
-            xAxis: '',
-            yAxis: '',
-            colorGrading: '',
-            contouring: '',
-            yAxis2: ''
-
-        });
-    }, [updateGraphConfig]);
+    }, []);
 
     const handleFileUpload = async (files) => {
         const fileArray = Array.from(files);
 
         // Remove existing files with same names
-        fileArray.forEach(file => removeFile(file.name));
+        // fileArray.forEach(file => removeFile(file.name));
 
         const { newFiles, newData, allColumns } = await FileService.loadFiles(fileArray);
 
         setCsvFiles(prev => [...prev, ...newFiles]);
         setCsvData(prev => [...prev, ...newData]);
         setColumns(prev => [...prev, ...allColumns]);
-        updateGraphConfig({ xAxis: '', yAxis: '', colorGrading: '', contouring: '', yAxis2: '' });
     };
 
     return {

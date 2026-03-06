@@ -1,0 +1,294 @@
+report_id,year,effective_date,company,study_type,concentrate_id,concentrate_name,concentrate_type,tc_usd_per_dmt,cu_rc_usd_per_lb,zn_rc_usd_per_lb,ag_rc_usd_per_oz,au_rc_usd_per_oz,cu_grade_pct,zn_grade_pct,ag_grade_gpt,au_grade_gpt,moisture_pct,cu_payability_pct,zn_payability_pct,ag_payability_pct,au_payability_pct
+2001-000004187 Manhattan Minerals Corp-f1-00403738_1-3-1,2001,2001-01-01,Manhattan Minerals Corp,PFS,1,copper_concentrate,copper,90,0.09,,,,24,,,,8,85,,,
+2004-000020335 Quadra Mining Ltd-f1-00615516_1-1-1,2004,2004-01-31,Quadra Mining Ltd,PEA,1,copper_gold_concentrate,copper,94.99716155,0.095,,0.4,6,25,,,,9,96.5,,90,93
+2005-000002331 European Minerals Corporation-f1-00743984_2-18-1,2005,2005-01-01,European Minerals Corporation,FS,1,copper_gold_concentrate,copper,50,0.05,,,2,17,,,20,,,,,
+2005-000005784 Tiberon Minerals Ltd-f1-00805816_1-3-1,2005,2005-07-19,Tiberon Minerals Ltd,FS,2,copper_concentrate,copper,61.3,,,,,26.9,,,4,8,96.5,,,92
+2005-000021569 International Royalty Corporation-f1-00727186_2-1-1,2005,2004-01-01,International Royalty Corporation,FS,2,copper_concentrate,copper,,,,,,,,,,,,,,
+2005-000022756 TEAL Exploration & Mining Incorporated-f1-00833672_1-10-1,2005,2005-09-16,TEAL Exploration & Mining Incorporated,PEA,1,copper_concentrate,copper,,,,,,26,,,,,,,,
+2005-000022756 TEAL Exploration & Mining Incorporated-f1-00833672_1-10-1,2005,2005-09-16,TEAL Exploration & Mining Incorporated,PEA,2,copper_concentrate,copper,,,,,,,,,,,,,,
+2006-000024169 Moly Mines Limited-f1-00988596_1-1-1,2006,2006-07-31,Moly Mines Limited,PFS,2,copper_concentrate,copper,,,,,,25,,,,,,,,
+2007-000000389 LionOre Mining International Ltd-f1-01065965_1-1-1,2007,2007-03-05,LionOre Mining International Ltd,PFS,1,nickel_copper_concentrate,copper,,12,,,,,,,0.16,,,,,
+2007-000002154 Karmin Exploration Inc-f1-01174686_1-1-1,2007,2007-09-31,Karmin Exploration Inc,PEA,1,copper_concentrate,copper,120,0.12,,0.3,4,25,,629,5,8.5,,,100,100
+2007-000003026 North American Palladium Ltd-f1-01172644_2-1-1,2007,2007-08-09,North American Palladium Ltd,PEA,1,nickel_copper_concentrate,copper,,0.16,,,15.87,10,,,2.8,,85,,,85
+2007-000003031 Dia Bras Exploration Inc-f1-01180256_1-1-1,2007,2007-11-09,Dia Bras Exploration Inc,PEA,1,copper_concentrate,copper,,,,,,,,,,,92.3,,,
+2007-000003448 Sherwood Copper Corporation-f1-01199204_1-1-1,2007,2007-11-30,Sherwood Copper Corporation,PFS,1,copper_gold_concentrate,copper,70,0.07,,0.4,6,41,,,30.4,8.5,96,,,
+2007-000003479 Corriente Resources Inc-f1-01198157_2-1-1,2007,2007-10-30,Corriente Resources Inc,PEA,1,copper_concentrate,copper,75,0.075,,,,29.5,,48,0.8,8,96.5,,90,90
+2007-000003684 Tyler Resources Inc-f1-01180358_2-1-1,2007,2007-11-08,Tyler Resources Inc,PEA,1,copper_concentrate,copper,80,0.08,,,,25,,,,,96.5,,95,95
+2007-000005733 Sabina Silver Corporation-f1-01060126_1-1-1,2007,2007-03-01,Sabina Silver Corporation,PEA,1,copper_concentrate,copper,120,0.133634173,,0.5,8,31,1.27,5425,18,6,97,,99,97
+2007-000007781 Independent Nickel Corp-f1-01195133_1-1-1,2007,2007-12-05,Independent Nickel Corp,PFS,1,nickel_copper_concentrate,copper,239.3617021,,,,,7.54,,,,6,85,,,
+2007-000008959 Terrane Metals Corp-f1-01173997_5-1-1,2007,2007-10-29,Terrane Metals Corp,PEA,1,copper_gold_concentrate,copper,85,0.085,,0.6,8,27.33,,106.68,46.38,8,,,90,97.5
+2007-000011318 Canadian Royalties Inc-f1-01127192_4-1-1,2007,2007-06-29,Canadian Royalties Inc,FS,2,copper_concentrate,copper,,,,,,29.6,,,,,,,,
+2007-000013559 Metco Resources Inc-f1-01129924_4-1-1,2007,2007-07-17,Metco Resources Inc,PFS,2,copper_concentrate,copper,,,,,,23,,,,7,,,,
+2007-000020615 Asian Mineral Resources Limited-f1-01157195_1-1-1,2007,2007-01-01,Asian Mineral Resources Limited,FS,1,nickel_copper_concentrate,copper,,,,,,,,,,8,,,,
+2007-000020780 First Nickel Inc-f1-01145570_1-1-1,2007,2007-08-17,First Nickel Inc,FS,2,copper_concentrate,copper,,,,,,,,,,,,,,
+2007-000026138 Marengo Mining Limited-f1-01180022_1-1-1,2007,2007-01-01,Marengo Mining Limited,PEA,1,copper_concentrate,copper,,,,,,17.8,,,,,,,,
+2008-000003479 Corriente Resources Inc-f1-01263617_1-1-1,2008,2008-04-03,Corriente Resources Inc,FS,1,copper_gold_concentrate,copper,75,0.08,,,6,29.5,,58,4.9,9.2,96.5,,,95
+2008-000003532 International Minerals Corporation-f1-01235618_1-1-1,2008,2008-03-26,International Minerals Corporation,PFS,1,copper_gold_concentrate,copper,,,,,,18,,,2,,,,,
+2008-000009698 Virgin Metals Inc-f1-01320310_2-1-1,2008,2008-07-28,Virgin Metals Inc,PFS,2,copper_concentrate,copper,,,,,,23,,,,10,,,,
+2008-000010999 Odyssey Resources Limited-f1-01228059_1-1-1,2008,2007-01-01,Odyssey Resources Limited,PEA,1,copper_concentrate,copper,90,0.09,,,,42,,12.3,,,,,95,
+2008-000012057 Gold Reserve Inc-f1-01244276_1-1-1,2008,2008-03-31,Gold Reserve Inc,FS,1,copper_concentrate,copper,0.06,0.09,,,3.11,24,,99,90,,83.3,,,81.6
+2008-000013559 Metco Resources Inc-f1-01234033_1-1-1,2008,2008-03-21,Metco Resources Inc,PFS,2,copper_concentrate,copper,,,,,,23,7,361,2.6,,,,,
+2008-000020132 Cogitore Resources Inc-f1-01357048_1-1-1,2008,2008-10-24,Cogitore Resources Inc,FS,1,copper_concentrate,copper,,,,,,20.6,13.7,2522,82.6,,,,,
+2008-000020823 Equinox Minerals Limited-f1-01282420_1-1-1,2008,2008-01-01,Equinox Minerals Limited,FS,1,copper_concentrate,copper,,,,,,40.2,,,0.68,7.3,,,,
+2008-000020823 Equinox Minerals Limited-f1-01282420_1-1-1,2008,2008-01-02,Equinox Minerals Limited,FS,2,copper_concentrate,copper,,,,,,29.1,,,1.11,7.4,,,,
+2008-000021569 International Royalty Corporation-f1-01332223_2-1-1,2008,2008-10-19,International Royalty Corporation,FS,3,copper_concentrate,copper,,,,,,21,,,,,,,,
+2008-000023811 First Metals Inc-f1-01253557_1-1-1,2008,2008-04-07,First Metals Inc,PFS,1,copper_concentrate,copper,,,,,,27.2,,,,,95.5,,,
+2008-000024059 ATW Venture Corp-f1-01283919_2-1-1,2008,2008-06-13,ATW Venture Corp,FS,1,copper_gold_concentrate,copper,,,,,,24.4,,114,36,10.8,,,,
+2008-000027145 Tiger Resources Limited-f1-01332326_3-1-1,2008,2008-10-07,Tiger Resources Limited,FS,1,copper_concentrate,copper,,,,,,25,,,,,,,,
+2008-000027145 Tiger Resources Limited-f1-01332326_3-1-1,2008,2008-10-07,Tiger Resources Limited,FS,2,copper_concentrate,copper,,,,,,95,,,,,95,,,
+2009-000004130 KINBAURI GOLD CORP-f1-01384831_1-1-1,2009,2009-03-06,KINBAURI GOLD CORP,PEA,1,copper_concentrate,copper,83.89845,0.08352,,,4.65885,28,,,145.35,18,96.4,,,97.5
+2009-000004130 KINBAURI GOLD CORP-f1-01406401_2-1-1,2009,2009-03-06,KINBAURI GOLD CORP,PEA,1,copper_gold_concentrate,copper,,,,,,28,,,145.35,,96.4,,,97.5
+2009-000004690 Pacific Booker Minerals Inc-f1-01387376_1-1-1,2009,2009-03-12,Pacific Booker Minerals Inc,FS,1,copper_gold_concentrate,copper,85,0.085,,,7,25.1,,75,9,8,100,,,96.5
+2009-000005733 Sabina Gold & Silver Corp-f1-01519262_1-1-1,2009,2009-12-23,Sabina Gold & Silver Corp,PEA,1,copper_concentrate,copper,85,0.174,,0.7,10,23.5,,,,6,97,,99,97
+2009-000008483 Anatolia Minerals Development Limited-f1-01484170_1-1-1,2009,2009-07-31,Anatolia Minerals Development Limited,PEA,1,copper_gold_concentrate,copper,,,,,,25.2,,23,24.4,,,,,
+2009-000009161 Silver Wheaton Corp-f1-01495164_3-1-1,2009,2009-09-09,Silver Wheaton Corp,FS,1,copper_gold_concentrate,copper,90,0.09,,0.4,6,12,,,,,80,,,
+2009-000010193 Chariot Resources Limited-f1-01415384_1-2-1,2009,2009-06-08,Chariot Resources Limited,FS,1,copper_concentrate,copper,87,0.087,,0.35,5,37.8,,335,0.7,,96.5,,90,90
+2009-000022676 Selkirk Metals Corp-f1-01483120_1-1-1,2009,2004-08-01,Selkirk Metals Corp,FS,1,copper_gold_concentrate,copper,50,0.05,,0.4,6,26,,,90.1,,96.5,,90,97.75
+2009-000022676 Selkirk Metals Corp-f1-01483123_2-1-1,2009,2004-12-16,Selkirk Metals Corp,FS,1,copper_gold_concentrate,copper,,,,,,27,,42,17.3,,,,,
+2009-000024169 Moly Mines Limited-f1-01465727_1-1-1,2009,2009-08-25,Moly Mines Limited,FS,2,copper_concentrate,copper,,,,,,25.1,,,,,,,,
+2009-000025114 Mirabela Nickel Limited-f1-01377993_1-1-1,2009,2009-01-01,Mirabela Nickel Limited,FS,1,nickel_copper_concentrate,copper,,,,,,3.5,,,,9.8,,,,
+2009-000025132 Coro Mining Corp-f1-01424004_1-1-1,2009,2008-06-18,Coro Mining Corp,PEA,1,copper_concentrate,copper,70,0.07,,,,26,,,,9,97,,,
+2009-000025279 Copper Mountain Mining Corporation-f1-01463573_2-1-1,2009,2009-08-21,Copper Mountain Mining Corporation,FS,1,copper_concentrate,copper,75,0.075,,0.45,6,30,,,,8,96.5,,90,95
+2009-000025710 Polar Star Mining Corporation-f1-01437997_1-1-1,2009,2009-05-08,Polar Star Mining Corporation,PEA,1,copper_gold_concentrate,copper,83.33333333,,,,6,,,,,10,,,,
+2010-000002244 Goldbrook Ventures Inc-f1-01564000_1-1-1,2010,2010-02-22,Goldbrook Ventures Inc,FS,2,copper_concentrate,copper,111.9565217,0.1,,,,29.8,,,,8,97,,,
+2010-000002331 Orsu Metals Corporation-f1-01585902_3-1-1,2010,2010-05-25,Orsu Metals Corporation,PEA,1,copper_concentrate,copper,83.33333333,0.075,,,,21.7,3.81,28.5,1.215,10,96.7,,,
+2010-000002331 Orsu Metals Corporation-f1-01681071_4-1-1,2010,2010-12-24,Orsu Metals Corporation,PEA,1,copper_concentrate,copper,77.5,0.0775,,,6,19,,,54,8,96.5,,,97
+2010-000002968 Kinross Gold Corporation-f1-01592433_2-2-1,2010,2010-02-18,Kinross Gold Corporation,FS,1,copper_concentrate,copper,,,,,,27.4,,136.5,52.7,,,,,
+2010-000002968 Kinross Gold Corporation-f1-01592433_2-2-1,2010,2010-02-18,Kinross Gold Corporation,FS,2,copper_concentrate,copper,,,,,,60,,,,,,,,
+2010-000003339 Noront Resources Ltd-f1-01648442_3-1-1,2010,2010-09-09,Noront Resources Ltd,PEA,1,nickel_copper_concentrate,copper,,,,,,4.78,,13.13,0.77,,90,,85,90
+2010-000003879 Andean American Mining Corp-f1-01605633_1-1-1,2010,2010-01-01,Andean American Mining Corp,FS,1,copper_concentrate,copper,,,,,,23.11,,,,,,,,
+2010-000003958 OPAWICA EXPLORATIONS INC-f1-01622819_1-1-1,2010,2010-08-16,OPAWICA EXPLORATIONS INC,PEA,2,copper_gold_concentrate,copper,52.63157895,,,,,14.64,,,12.5718,5,99,,,99
+2010-000004373 NWM Mining Corporation ( Columbia Metals Corporation)-f1-01608627_1-1-1,2010,2010-07-08,NWM Mining Corporation ( Columbia Metals Corporation),PFS,1,copper_concentrate,copper,,,,,,,,,,,,,,
+2010-000004818 New Gold Inc-f1-01544679_1-1-1,2010,2009-12-31,New Gold Inc,FS,1,copper_gold_concentrate,copper,82,0.082,,0.35,6,28.32,,52.05,20.3,8,96.4,,90,97.3
+2010-000007875 Skeena Resources Limited-f1-01523375_1-1-1,2010,2009-10-31,Skeena Resources Limited,PEA,1,copper_concentrate,copper,78.65168539,0.07,,,5,25,,,21.24,11,96.5,,,95
+2010-000008250 Northland Resources S.A-f1-01601835_4-1-1,2010,2010-06-28,Northland Resources S.A,PEA,2,copper_gold_concentrate,copper,40,0.04,,,5,25,,,5.43,,96,,,81.58
+2010-000008329 Antares Minerals Inc. ( Planet Ventures Inc.)-f1-01632733_2-1-1,2010,2010-09-02,Antares Minerals Inc. ( Planet Ventures Inc.),PEA,1,copper_concentrate,copper,55,0.06,,0.4,5,28,,,,,96.5,,95,92.5
+2010-000008534 Canadian Arrow Mines Limited-f1-01653446_1-1-1,2010,2010-09-05,Canadian Arrow Mines Limited,PEA,1,nickel_copper_concentrate,copper,225,0.2,,,15,,,,,,90,,,80
+2010-000011649 Lithic Resources Ltd-f1-01636583_2-1-1,2010,2010-09-17,Lithic Resources Ltd,PEA,2,copper_concentrate,copper,50,0.05,,,,32,,3000,21,10,96.6,,,
+2010-000013309 La Mancha Resources Inc-f1-01648019_1-1-1,2010,2010-10-22,La Mancha Resources Inc,PEA,1,copper_concentrate,copper,55.55555556,0.5,,,4,32,,,22,10,96.5,,,100
+2010-000020780 First Nickel Inc-f1-01646757_2-7-1,2010,2010-11-02,First Nickel Inc,FS,2,copper_concentrate,copper,,,,,,31.5,,45.29,1.22,,,,,
+2010-000022586 Donner Metals Ltd-f1-01646195_1-1-1,2010,2010-09-21,Donner Metals Ltd,FS,2,copper_concentrate,copper,55,0.055,,,,22.44,6.045,216.5,1.6,,,,,
+2010-000025297 Sandstorm Resources Ltd-f1-01643054_3-1-1,2010,2010-10-05,Sandstorm Resources Ltd,FS,1,copper_gold_concentrate,copper,,,,,,29.1,0.96,83.01,14.66,8,,,,
+2010-000026091 Franco-Nevada Corporation-f1-01600792_2-1-1,2010,2010-05-12,Franco-Nevada Corporation,FS,1,copper_gold_concentrate,copper,80,0.08,,0.45,6,24.45,3.57,89,40.85,8,95.9,,95,97.5
+2010-000027145 Tiger Resources Limited-f1-01606870_1-1-1,2010,2010-07-14,Tiger Resources Limited,FS,1,copper_concentrate,copper,,,,,,25,,,,,,,,
+2010-000030145 Rio Alto Mining Limited-f1-01650939_1-1-1,2010,2010-07-31,Rio Alto Mining Limited,FS,1,copper_gold_concentrate,copper,78,0.07,,,8,28,,33,7.13,,96.5,,,96.5
+2010-000030584 EMED Mining Public Limited-f1-01647178_2-1-1,2010,2010-10-18,EMED Mining Public Limited,PFS,1,copper_concentrate,copper,85.4,0.085,,,,22,,100,0.5,10,95,,,
+2010-000030613 Pretium Resources Inc-f1-01650710_1-1-1,2010,2010-10-28,Pretium Resources Inc,PEA,1,copper_gold_concentrate,copper,85,0.09,,0.45,8,22,,146,93.3,9,99,,90,97.5
+2011a-000002432 Pan American Silver Corp-f1-01687065_1-1-1,,2011-01-14,Pan American Silver Corp,PEA,1,copper_concentrate,copper,166.6666667,,,0.5,,10.09,,36696,,10,,,96.5,
+2011a-000005689 Capstone Mining Corp-f1-01723434_2-1-1,,2010-12-15,Capstone Mining Corp,PFS,1,copper_concentrate,copper,40,0.04,,0.4,5,39,,,,8,96.75,,100,100
+2011a-000005689 Capstone Mining Corp-f1-01747108_3-1-1,,2011-05-12,Capstone Mining Corp,PEA,1,copper_concentrate,copper,0.24,,,,6,30.7,,,,,85,,,65
+2011a-000005795 Bard Ventures Ltd-f1-01704876_1-1-1,,2011-01-21,Bard Ventures Ltd,PEA,2,copper_concentrate,copper,,0.2,,,,,,,,8,85,,,
+2011a-000005815 Norsemont Mining Inc-f1-01699802_1-1-1,,2011-02-21,Norsemont Mining Inc,FS,1,copper_concentrate,copper,65,0.07,,0.4,1.2,28.5,,,,,96.5,,90,98
+2011a-000006237 First Quantum Minerals Ltd-f1-01744661_1-1-1,,2011-05-12,First Quantum Minerals Ltd,FS,1,copper_concentrate,copper,0.142,0.085,,,,28,,,,9,,,,
+2011a-000008991 Geovic Mining Corp-f1-01754938_1-1-1,,2010-12-31,Geovic Mining Corp,FS,1,nickel_copper_concentrate,copper,,,,,,,,,,15,,,,
+2011a-000013177 Candente Copper Corp-f1-01707357_1-1-1,,2011-01-18,Candente Copper Corp,PFS,1,copper_concentrate,copper,,,,,,30,,73,3,,,,,
+2011a-000020335 Quadra FNX Mining Ltd-f1-01756742_2-1-1,,2011-06-08,Quadra FNX Mining Ltd,FS,1,copper_concentrate,copper,,,,,,30.34,,,3.3,9,,,,
+2011a-000020823 Equinox Minerals Limited-f1-01709025_1-1-1,,2011-03-07,Equinox Minerals Limited,FS,1,copper_concentrate,copper,70,0.07,,,,25,,76.7,1.92,,,,,
+2011a-000022748 Explorator Resources Inc-f1-01705689_1-1-1,,2011-01-20,Explorator Resources Inc,PEA,1,copper_gold_concentrate,copper,65,0.065,,,,29,,,5,,96.55,,,95
+2011a-000024683 Ventana Gold Corp-f1-01648578_1-19-1,,2010-11-08,Ventana Gold Corp,PEA,1,copper_concentrate,copper,60,0.3,,0.6,10,16.2,,1960,246,,96.5,,90,96
+2011a-000026050 Josephine Mining Corp. ( Green Park Capital Corp.)-f1-01717587_1-1-1,,2010-05-17,Josephine Mining Corp. ( Green Park Capital Corp.),PEA,1,copper_concentrate,copper,80.17107867,0.08,,,2,28.2,4.8,3,1.31,10,95.2,,77,97
+2011a-000027349 Fire River Gold Corp-f1-01710622_1-1-1,,2011-02-25,Fire River Gold Corp,PEA,1,copper_concentrate,copper,,,,,0.75,16.6,,277,450,,,,,99.875
+2011b-000000880 NovaGold Resources Inc-f1-01801094_1-1-1,,2011-07-27,NovaGold Resources Inc,PFS,1,copper_concentrate,copper,70,0.07,,0.4,6,28,,205,12.4,8,96.5,,90,90
+2011b-000008176 Buchans Minerals Corporation-f1-01784373_1-1-1,,2011-08-11,Buchans Minerals Corporation,PEA,2,copper_concentrate,copper,,0.04901335,,,,24.1,,37.8,,8,96.5,,,
+2011b-000008301 Trevali Resources Corp-f1-01720656_1-6-1,,2010-10-18,Trevali Resources Corp,PEA,2,copper_concentrate,copper,85,0.085,,0.35,,20.13,8.18,300,,8,,,95,
+2011b-000012509 Thompson Creek Metals Company Inc-f1-01811366_3-1-1,,2009-10-13,Thompson Creek Metals Company Inc,FS,1,copper_concentrate,copper,70,0.07,,0.6,8,26.45,,80.3,43.66,9,,,90,97.5
+2011b-000025328 OceanaGold Corporation-f1-01778474_1-1-1,,2011-07-29,OceanaGold Corporation,FS,1,copper_gold_concentrate,copper,80,0.08,,,6,27.5,,,40.7,10,96.7,,,97.5
+2011b-000030669 Ivanhoe Australia Limited-f1-01816075_1-1-2,,2011-10-10,Ivanhoe Australia Limited,PFS,2,copper_concentrate,copper,,,,,,,,80,4,,,,,
+2012-000001691 HudBay Minerals Inc-f1-01977687_3-1-1,2012,2012-10-15,HudBay Minerals Inc,FS,1,copper_concentrate,copper,80,0.07,,0.45,4.5,26.8,3.3,219,2.1,9,96.5,,97,97
+2012-000001767 Dundee Precious Metals Inc-f1-01959503_2-1-1,2012,2012-09-07,Dundee Precious Metals Inc,PEA,1,copper_concentrate,copper,185,0.115,,0.45,4.5,16.5,,,25,8,94,,90,93
+2012-000001787 Teck Resources Limited-f1-01921315_3-1-1,2012,2012-04-24,Teck Resources Limited,FS,1,copper_concentrate,copper,70,0.07,,,,26.5,,60,0.75,8,96.5,,,
+2012-000002331 Orsu Metals Corporation-f1-01880475_1-1-1,2012,2012-03-27,Orsu Metals Corporation,FS,1,copper_concentrate,copper,,,,,,27.9,,,,,,,,
+2012-000002549 Ivanhoe Mines Ltd-f1-01884950_1-1-1,2012,2012-03-29,Ivanhoe Mines Ltd,PFS,1,copper_gold_concentrate,copper,70,0.07,,,5,30,,63.9,10.21,9,96.5,,90,
+2012-000002894 Abacus Mining & Exploration Corp-f1-01846955_1-1-1,2012,2012-01-06,Abacus Mining & Exploration Corp,FS,1,copper_concentrate,copper,68,0.068,,,5,25,,,15.6,8.5,96.5,,,97.5
+2012-000003219 Petaquilla Minerals Ltd-f1-01963633_2-1-1,2012,2012-09-24,Petaquilla Minerals Ltd,PFS,1,copper_gold_concentrate,copper,75,0.075,,,,25,,,6,,,,,
+2012-000003339 Noront Resources Ltd-f1-01971248_1-1-1,2012,2012-09-04,Noront Resources Ltd,FS,1,nickel_copper_concentrate,copper,150,,,,,5.7,,13,1,1,75,,,74.2
+2012-000004818 New Gold Inc-f1-01877712_2-1-1,2012,2012-03-23,New Gold Inc,FS,1,copper_concentrate,copper,,,,,,29.6,,,,8,,,,
+2012-000005760 Sunridge Gold Corp-f1-01923758_4-1-1,2012,2012-05-01,Sunridge Gold Corp,PFS,1,copper_concentrate,copper,65,0.07,,2.5,18,25.5,,307,9.4,10,97,,90,90
+2012-000005801 Exeter Resource Corporation-f1-01849096_1-1-1,2012,2012-01-16,Exeter Resource Corporation,PFS,1,copper_concentrate,copper,85,0.085,,0.5,6,26,,90,40,8.5,96.5,,90,97.5
+2012-000008330 Queenston Mining Inc-f1-01883856_1-1-1,2012,2012-02-16,Queenston Mining Inc,PEA,1,copper_gold_concentrate,copper,125.4138658,0.070231765,,,10.03310926,18.6,,,,8,90,,,95
+2012-000008502 Entree Gold Inc-f1-01883217_2-1-1,2012,2012-03-29,Entree Gold Inc,PFS,1,copper_concentrate,copper,,,,,,30.48,,63.9,10.21,,,,,
+2012-000008808 Aura Minerals Inc-f1-01971153_3-1-1,2012,2012-09-04,Aura Minerals Inc,FS,1,copper_concentrate,copper,80,0.08,,,6,24.5,,,3.34,10,95.7,,,74.8
+2012-000010252 Wallbridge Mining Company Limited-f1-01988819_7-1-1,2012,2012-10-08,Wallbridge Mining Company Limited,PFS,1,copper_concentrate,copper,306.4516129,0.55,,,15,20.6,,,11.7,7,88,,,80
+2012-000014092 SnipGold Corp-f1-01913548_1-1-1,2012,2012-05-07,SnipGold Corp,PEA,1,copper_concentrate,copper,,,,,,27,,,,,,,,
+2012-000016269 China Gold International Resources Corp. Ltd-f1-01985227_1-1-1,2012,2012-11-12,China Gold International Resources Corp. Ltd,PFS,1,copper_concentrate,copper,,,,,,31.96,,351.7,16.65,13,83.8,,,
+2012-000016934 VMS Ventures Inc-f1-01906981_1-1-1,2012,2012-04-02,VMS Ventures Inc,PFS,1,copper_concentrate,copper,81.52173913,0.075,,0.5,5,24,,24.93,1.84,8,95.8,,90,96.5
+2012-000025178 White Tiger Gold Ltd-f1-01987605_3-1-1,2012,2012-07-01,White Tiger Gold Ltd,PFS,1,copper_gold_concentrate,copper,80,0.08,,,,24,,,86.53,,95.8,,,96
+2012-000026619 Crazy Horse Resources Inc-f1-01867920_1-1-1,2012,2012-02-28,Crazy Horse Resources Inc,PEA,1,copper_concentrate,copper,0.087,0.05,,,,27,,,,,91,,63,60
+2012-000026619 Crazy Horse Resources Inc-f1-01922019_3-1-1,2012,2012-12-06,Crazy Horse Resources Inc,PFS,1,copper_concentrate,copper,50,0.05,,0.45,6,24,,48,7.2,9,95.9,,33.2,85.6
+2012-000027022 Barrick North America Finance LLC-f1-01879995_1-1-6,2012,2011-12-31,Barrick North America Finance LLC,FS,1,copper_concentrate,copper,,0.3,,,,58.5,0.26,,,,96.5,,,
+2012-000030669 Ivanhoe Australia Limited-f1-01915126_1-1-1,2012,2012-04-16,Ivanhoe Australia Limited,FS,2,copper_concentrate,copper,55,0.055,,,,20,,,,,,,,
+2012-000030669 Ivanhoe Australia Limited-f1-01980326_3-1-1,2012,2012-11-02,Ivanhoe Australia Limited,PFS,1,copper_gold_concentrate,copper,55,0.055,,,5,24,,,0.5,9,95.8,,,94
+2012-000031148 Serabi Gold plc-f1-01929507_2-1-1,2012,2012-06-28,Serabi Gold plc,PEA,1,copper_gold_concentrate,copper,161.2903226,0.272155746,,,4.97656,26,,,,7,95,,,98
+2012-000033030 Intergeo MMC Ltd-f1-01908033_1-1-1,2012,2011-12-01,Intergeo MMC Ltd,PEA,1,nickel_copper_concentrate,copper,,,,,,3.08,,,1.81,2,,,,
+2012-000033594 IMX Resources Limited-f1-01981915_5-1-1,2012,2012-11-05,IMX Resources Limited,PEA,1,nickel_copper_concentrate,copper,,,,,,4.2,,,,8,,,,
+2013-000005717 Belvedere Resources Ltd-f1-02118272_1-1-1,2013,2013-10-02,Belvedere Resources Ltd,PEA,1,copper_concentrate,copper,63,0.063,,,5,22.5,,,82,,95,,,
+2013-000005760 Sunridge Gold Corp-f1-02080601_3-1-1,2013,2013-05-16,Sunridge Gold Corp,FS,1,copper_concentrate,copper,70,0.07,,,,25,,268,8.3,10,97,,,97
+2013-000023668 McEwen Mining Inc. ( US Gold Corporation)-f1-02129007_3-1-1,2013,2013-08-01,McEwen Mining Inc. ( US Gold Corporation),PEA,1,copper_concentrate,copper,80,,,,,99.99,,,,,100,,,99.7
+2013-000023892 Northern Freegold Resources Ltd-f1-02043058_2-1-1,2013,2013-04-09,Northern Freegold Resources Ltd,PEA,1,copper_concentrate,copper,,,,,,,,,,,,,,
+2013-000023892 Northern Freegold Resources Ltd-f1-02043058_2-1-1,2013,2013-04-09,Northern Freegold Resources Ltd,PEA,3,copper_concentrate,copper,,,,,,,,,,,,,,
+2013-000024909 Rambler Metals and Mining plc-f1-02134785_1-1-1,2013,2011-11-01,Rambler Metals and Mining plc,PEA,1,copper_concentrate,copper,,,,,,28,,,,8,96,,,
+2013-000026910 Primero Mining Corp-f1-02039971_1-1-1,2013,2012-05-11,Primero Mining Corp,FS,1,copper_concentrate,copper,,,,,,55.5,3.3,12400,34.3,,73,,73,
+2013-000029557 Yellowhead Mining Inc-f1-02012574_1-1-1,2013,2012-03-29,Yellowhead Mining Inc,FS,1,copper_concentrate,copper,60,0.06,,,,25.5,,70.98,1.79,8,96.5,,90,90
+2013-000031165 Mawson West Limited-f1-02149069_1-1-1,2013,2013-12-12,Mawson West Limited,PFS,1,copper_concentrate,copper,,,,,,60,,1768,,10,,,,
+2014-000003827 Wildcat Silver Corporation-f1-02155649_1-1-1,2014,2013-12-10,Wildcat Silver Corporation,PFS,1,copper_concentrate,copper,77.16176965,0.07,,,,61,,,,,98,,,
+2014-000004588 Continental Precious Minerals Inc-f1-02168893_1-1-1,2014,2014-02-06,Continental Precious Minerals Inc,PEA,1,copper_concentrate,copper,,,,,,,,,,,,,,
+2014-000007869 Mercator Minerals Ltd-f1-02157936_1-1-1,2014,2012-11-08,Mercator Minerals Ltd,PEA,1,copper_concentrate,copper,80,0.08,,,,27,,,,7,96.3,,,91
+2014-000008250 Northland Resources S.A-f1-02180596_1-1-1,2014,2014-01-24,Northland Resources S.A,FS,2,copper_gold_concentrate,copper,83.33333333,0.075,,,6,25,,,7.1,10,96.65,,,
+2014-000008301 Trevali Mining Corporation-f1-02208589_1-2-1,2014,2014-05-13,Trevali Mining Corporation,PEA,2,copper_concentrate,copper,,,,,,20,,394,3.1,,95,,,
+2014-000009131 Euromax Resources Ltd-f1-02234956_2-1-1,2014,2014-06-05,Euromax Resources Ltd,PFS,1,copper_concentrate,copper,75,0.075,,,5,24,,,,10,95.83,,,97
+2014-000011649 InZinc Mining Ltd-f1-02204980_1-1-1,2014,2014-03-17,InZinc Mining Ltd,PEA,2,copper_concentrate,copper,70,0.07,,,,29,,180,16,,,,,
+2014-000023735 Duluth Metals Limited-f1-02265653_2-1-1,2014,2014-08-20,Duluth Metals Limited,PFS,1,copper_concentrate,copper,108.6956522,0.1,,,,25,,60,2.7,8,99,,,
+2014-000028675 Discovery Ventures Inc-f1-02215154_1-1-1,2014,2014-05-26,Discovery Ventures Inc,PEA,1,copper_concentrate,copper,220,0.22,,1,10,24,,300,120,8,96.5,,90,97.5
+2014-000031165 Mawson West Limited-f1-02295404_1-1-1,2014,2014-11-30,Mawson West Limited,FS,3,copper_concentrate,copper,65,0.065,,,,28,,,,8,95,,,
+2014-000034516 Chieftain Metals Corp-f1-02288920_1-1-1,2014,2014-10-20,Chieftain Metals Corp,FS,1,copper_concentrate,copper,150,0.15,,0.5,6,21,5.1,1300,22,8,96.5,,90,95
+2015-000004264 Global Minerals Ltd-f1-02302451_1-1-1,2015,2014-12-12,Global Minerals Ltd,PEA,1,copper_concentrate,copper,133.3333333,0.12,,0.6,,27.8,,6570,,10,96,,95,
+2015-000008483 Alacer Gold Corp-f1-02326985_1-2-1,2015,2015-03-27,Alacer Gold Corp,FS,1,copper_concentrate,copper,65,0.065,,,,46.7,,,,10,96,,,
+2015-000019503 Panoro Minerals Ltd-f1-02413208_2-1-1,2015,2015-09-22,Panoro Minerals Ltd,PEA,1,copper_concentrate,copper,85,0.085,,0.5,5,27,,130,11.5,8,96.3,,88,94
+2015-000027965 Ecuador Gold and Copper Corp-f1-02358631_1-1-1,2015,2015-05-19,Ecuador Gold and Copper Corp,PEA,1,copper_concentrate,copper,,,,,,,,,,,,,,
+2015-000031453 Pilot Gold Inc-f1-02308581_1-1-1,2015,2014-12-20,Pilot Gold Inc,PEA,1,copper_gold_concentrate,copper,92,0.092,,,7,30.6,,50.6,19.7,12,96,,,96
+2016-000000204 GoldQuest Mining Corp-f1-02552025_1-1-1,2016,2016-09-27,GoldQuest Mining Corp,PFS,1,copper_concentrate,copper,90,0.085,,,5,13,,39.8,45.5,8,96.5,,90,97.5
+2016-000002894 Abacus Mining & Exploration Corporation-f1-02446208_1-1-1,2016,2016-02-19,Abacus Mining & Exploration Corporation,FS,1,copper_concentrate,copper,80,0.08,,0.5,5,25,,30,16.4,8,96,,90,96.5
+2016-000002899 NGEx Resources Inc-f1-02445738_1-1-1,2016,2016-02-12,NGEx Resources Inc,PEA,1,copper_concentrate,copper,85,0.085,,0.3,5,29,,70.3,10.4,8,96.5,,90,95.5
+2016-000008502 Entree Gold Inc-f1-02463061_1-1-1,2016,2016-03-29,Entree Gold Inc,FS,1,copper_concentrate,copper,2,,,,,23,,,,7,,,,
+2016-000009131 Euromax Resources Ltd-f1-02445372_1-1-1,2016,2016-02-16,Euromax Resources Ltd,FS,1,copper_gold_concentrate,copper,91.39784946,0.085,,0.4,5,24,,110,28,7,95.83,,,97
+2016-000016002 Gold Reach Resources Ltd-f1-02457915_1-1-1,2016,2016-01-01,Gold Reach Resources Ltd,PEA,1,copper_concentrate,copper,100,0.05,,0.5,5,27,,,,8,96,,96,96
+2016-000022162 Golden Dawn Minerals Inc-f1-02487437_2-1-1,2016,2016-03-24,Golden Dawn Minerals Inc,PEA,2,copper_gold_concentrate,copper,80,0.0005,,,5,23,,,97,10,95,,,95.5
+2016-000023269 INV Metals Inc-f1-02528799_1-1-1,2016,2016-08-29,INV Metals Inc,PFS,2,copper_concentrate,copper,150,0.15,,0.3,7,30,,1577,111,10,96.5,,75,80
+2016-000024066 AQM Copper Inc-f1-02506315_1-1-1,2016,2016-01-01,AQM Copper Inc,PFS,1,copper_concentrate,copper,90,0.09,,,4,28,,,2.9,9.5,96.9,,,90
+2016-000030617 K92 Mining Inc-f1-02541048_1-4-1,2016,2016-11-25,K92 Mining Inc,PEA,1,copper_gold_concentrate,copper,270,,,,,20,,,250,,97,,90,97.7
+2016-000032332 Reservoir Minerals Inc-f1-02487035_1-1-1,2016,2016-03-31,Reservoir Minerals Inc,PEA,2,copper_concentrate,copper,90,0.09,,,,55.3,,,4.6,,96.75,,,
+2016-000032332 Reservoir Minerals Inc-f1-02487035_1-1-1,2016,2016-03-31,Reservoir Minerals Inc,PEA,3,copper_concentrate,copper,220,0.22,,,,37,,,7.6,,96.5,,,
+2016-000032588 Toachi Mining Inc-f1-02455144_1-1-1,2016,2016-01-14,Toachi Mining Inc,PEA,2,copper_concentrate,copper,,,,,,32.7,1.7,376.4,31.6,,,,,
+2016-000034365 RTG Mining Inc-f1-02478329_1-1-1,2016,2016-05-02,RTG Mining Inc,FS,1,copper_concentrate,copper,97.35,0.09735,,,,30,,200,20,9,,,,
+2016-000036217 Heron Resources Limited-f1-02509900_1-1-1,2016,2016-07-19,Heron Resources Limited,FS,3,copper_concentrate,copper,90,0.09,,,,24,2.3,125,0.89,10.8,96.6,,90,90
+2017-000001691 Hudbay Minerals Inc. ( HudBay Minerals Inc.)-f1-02604944_1-1-2,2017,2017-03-30,Hudbay Minerals Inc. ( HudBay Minerals Inc.),FS,1,copper_concentrate,copper,80.46870264,0.08,,0.5,,34.3,,323,2.1,8,96.5,,90.5,100
+2017-000001787 Teck Resources Limited-f1-02587903_1-1-1,2017,2017-02-03,Teck Resources Limited,FS,1,copper_concentrate,copper,90,0.09,,,,27,,47.8,,10,96.5,,,
+2017-000004947 Yorbeau Resources Inc-f1-02711026_2-1-1,2017,2017-12-06,Yorbeau Resources Inc,PEA,1,copper_concentrate,copper,100,0.09,,0.7,5,25,,437,5.47,8,96,,92,82
+2017-000005955 Serengeti Resources Inc-f1-02613342_2-1-1,2017,2017-04-03,Serengeti Resources Inc,PEA,1,copper_gold_concentrate,copper,,,,,,24,,,,,,,,
+2017-000005967 Amerigo Resources Ltd-f1-02603294_1-1-1,2017,2016-12-31,Amerigo Resources Ltd,PEA,1,copper_concentrate,copper,135.8241758,0.09735,,,,30.26,,54,,9,,,,
+2017-000006221 Fortuna Silver Mines Inc-f1-02689529_1-1-1,2017,2017-10-31,Fortuna Silver Mines Inc,FS,1,copper_concentrate,copper,,,,,,65.5,,188,0.2,50,,,,
+2017-000007875 Skeena Resources Limited-f1-02630480_1-1-1,2017,2017-04-20,Skeena Resources Limited,PEA,1,copper_gold_concentrate,copper,85,0.085,,0.4,5,22,0.184,82,28.2,8,96.5,,98.5,98.5
+2017-000008301 Trevali Mining Corporation-f1-02690655_5-2-1,2017,2017-10-26,Trevali Mining Corporation,PEA,3,copper_concentrate,copper,,,,,,20,2.02,154,,,95,,95,
+2017-000010750 Geologix Explorations Inc-f1-02587974_1-1-1,2017,2017-01-19,Geologix Explorations Inc,PEA,1,copper_concentrate,copper,97.35,0.097,,0.5,5,25.7,,,32.8,8,96.5,,90,97.5
+2017-000020880 Rosita Mining Corporation-f1-02613447_2-1-1,2017,2017-03-06,Rosita Mining Corporation,PEA,1,copper_concentrate,copper,,,,,,,,,,,,,,
+2017-000022162 Golden Dawn Minerals Inc-f1-02592894_2-12-1,2017,2017-05-05,Golden Dawn Minerals Inc,PEA,1,copper_gold_concentrate,copper,80,0.05,,,5,23,,,97,10,95,,,95.5
+2017-000037372 AuRico Metals Inc-f1-02649947_1-1-1,2017,2017-07-14,AuRico Metals Inc,FS,1,copper_gold_concentrate,copper,80,0.08,,0.4,6,22,,87.5,40,8,95.5,,90,97
+2017-000042760 Mason Resources Corp-f1-02625112_1-1-1,2017,2017-03-03,Mason Resources Corp,PEA,1,copper_concentrate,copper,80,0.08,,1,10,30,,36,1.65,8,96.67,,97,97
+2017-000043429 Ero Copper Corp-f1-02673886_1-1-2,2017,2017-06-01,Ero Copper Corp,FS,1,copper_concentrate,copper,78.5,0.0785,,,,26,,,,10,96,,,
+2018-000005277 Polymet Mining Corp-f1-02745589_1-1-1,2018,2018-03-26,Polymet Mining Corp,FS,1,copper_concentrate,copper,85,,,,,27,,,,10.4,96.5,,,
+2018-000005833 Nautilus Minerals Inc-f1-02734259_1-1-1,2018,2018-01-01,Nautilus Minerals Inc,PEA,1,copper_concentrate,copper,86.42,0.1,,40,5,27.5,,,,10,95,,30,50
+2018-000008808 Aura Minerals Inc-f1-02820570_1-1-1,2018,2018-01-31,Aura Minerals Inc,FS,1,copper_concentrate,copper,167,,,,,23.1,,202,12.4,,96.5,,90,90
+2018-000008846 Great Panther Silver Limited-f1-02795635_3-1-1,2018,2018-07-13,Great Panther Silver Limited,PEA,3,copper_concentrate,copper,85,0.085,,,,23.21,,9046.47,15.29,8,96.5,,90,95
+2018-000009698 Minera Alamos Inc-f1-02858872_2-1-1,2018,2018-07-13,Minera Alamos Inc,PEA,2,copper_concentrate,copper,80,0.08,,0.5,6,18,,1255,122.2,,96.5,,90,95.5
+2018-000013198 Nevada Copper Corp-f1-02830221_1-1-1,2018,2018-08-17,Nevada Copper Corp,FS,1,copper_concentrate,copper,75,0.075,,0.5,30,26,,50,2.6,10,96.5,,90,90
+2018-000017006 Aquila Resources Inc-f1-02820553_2-1-1,2018,2018-08-30,Aquila Resources Inc,FS,2,copper_concentrate,copper,86.95652174,0.08,,,,22,,,,8,96.5,,,
+2018-000030584 Atalaya Mining plc-f1-02774440_1-1-1,2018,2017-09-01,Atalaya Mining plc,PFS,1,copper_concentrate,copper,104.3956044,0.1,,,,29.7,,54.2,,9,96.5,,,
+2018-000033050 Trilogy Metals Inc. ( NovaCopper Inc.)-f1-02754710_1-1-1,2018,2018-02-20,Trilogy Metals Inc. ( NovaCopper Inc.),PFS,1,copper_concentrate,copper,76.92307692,0.07,,,,30.3,,240,0.35,9,90,,,
+2018-000034410 East Africa Metals Inc-f1-02785058_3-1-1,2018,2018-04-30,East Africa Metals Inc,PEA,1,copper_gold_concentrate,copper,90,0.08,,0.5,5,26.8,,78.2,166.8,8,96.5,,92,97.5
+2018-000045695 Solaris Copper Inc-f1-02803347_1-1-1,2018,2018-06-20,Solaris Copper Inc,PEA,1,copper_concentrate,copper,108,0.1075,,,,26.7,,,,,96.5,,90,95
+2019-000006237 First Quantum Minerals Ltd-f1-02894315_1-1-1,2019,2018-12-31,First Quantum Minerals Ltd,FS,1,copper_concentrate,copper,90,0.09,,,,26.8,,,,9,96.15,,90,90
+2019-000008483 Alacer Gold Corp-f1-02898115_1-2-1,2019,2019-03-26,Alacer Gold Corp,PFS,1,copper_concentrate,copper,90,0.09,,0.5,5,29.9,3.91,174,10.1,12,,,,
+2019-000008483 Alacer Gold Corp-f1-02898115_1-2-1,2019,2019-03-26,Alacer Gold Corp,PFS,3,copper_concentrate,copper,95,0.09,,0.5,5,28.1,4.94,358,13,12,,,,
+2019-000009850 New Age Metals Inc-f1-02948903_1-1-1,2019,2019-06-27,New Age Metals Inc,PEA,1,copper_concentrate,copper,,,,,,15.5,,,,8,85,,,87
+2019-000012585 Americas Silver Corporation-f1-02918824_1-1-1,2019,2019-04-03,Americas Silver Corporation,PFS,3,copper_concentrate,copper,,,,,,23.8,,,,,95,,95,
+2019-000023827 Constantine Metal Resources Ltd-f1-02941623_3-1-1,2019,2019-06-03,Constantine Metal Resources Ltd,PEA,1,copper_concentrate,copper,86,0.086,,0.75,6,24.5,,521,3.17,8,97,,90,90
+2019-000040502 Adventus Mining Corporation-f1-02931067_1-1-1,2019,2019-05-02,Adventus Mining Corporation,PEA,1,copper_concentrate,copper,80,0.08,,0.5,5,22.4,,320,23.6,,,,,
+2020-000002899 Josemaria Resources Inc-f1-03131257_1-1-1,2020,2020-09-28,Josemaria Resources Inc,FS,1,copper_concentrate,copper,78.22,0.078,,,5,27,,71.65,14.22,10.9,96.3,,90,97
+2020-000005643 American CuMo Mining Corporation-f1-03069094_1-1-1,2020,2020-01-01,American CuMo Mining Corporation,PEA,1,copper_concentrate,copper,75,0.08,,,,23,,,,10,96.5,,90,
+2020-000006237 First Quantum Minerals Ltd-f1-03144495_3-1-1,2020,2020-01-01,First Quantum Minerals Ltd,PFS,1,copper_concentrate,copper,90,0.09,,,,25.3,,,4.5,10,96.2,,,90
+2020-000008938 THEMAC Resources Group Limited-f1-03043389_1-1-1,2020,2018-12-11,THEMAC Resources Group Limited,FS,1,copper_concentrate,copper,85,0.085,,0.5,6,28,,4.078,0.15,8,96.5,,90,94
+2020-000025279 Copper Mountain Mining Corporation-f1-03054525_1-1-1,2020,2020-01-31,Copper Mountain Mining Corporation,FS,1,copper_concentrate,copper,62,0.062,,,5,28,,,3,9,96.5,,,92
+2020-000027371 Auryn Resources Inc-f1-03065923_1-1-1,2020,2020-05-29,Auryn Resources Inc,PEA,1,copper_concentrate,copper,90,,,,,28,,3384,555,,96,,70,98
+2020-000033002 Wolfden Resources Corporation-f1-03112624_1-2-1,2020,2020-09-14,Wolfden Resources Corporation,PEA,1,copper_concentrate,copper,,,,,,24.8,,1059,6.19,20,95,,,
+2020-000033595 Ivanhoe Mines Ltd-f1-03036222_1-1-1,2020,2020-03-25,Ivanhoe Mines Ltd,PFS,1,copper_concentrate,copper,86.95652174,0.08,,,,57.32,,,,8,97.73,,,
+2020-000050542 Adriatic Metals plc-f1-03121124_1-1-1,2020,2020-04-30,Adriatic Metals plc,PEA,1,copper_concentrate,copper,85,,,,,6.6,10.5,3070,12.3,9,,,95,95
+2021-000003031 Sierra Metals Inc. ( Dia Bras Exploration Inc.)-f1-03283949_2-1-1,2021,2019-12-31,Sierra Metals Inc. ( Dia Bras Exploration Inc.),PEA,1,copper_concentrate,copper,69,,,0.35,6,25,,570,6.8,8,96,,90,92
+2021-000005627 Azarga Metals Corp-f1-03262529_1-1-1,2021,2021-07-31,Azarga Metals Corp,PEA,1,copper_concentrate,copper,115,,,,,26,,1672,,8,98,,97,
+2021-000005627 Azarga Metals Corp-f1-03262529_1-1-1,2021,2021-07-31,Azarga Metals Corp,PEA,2,copper_concentrate,copper,21,0.07,,0.5,,68,,6642,,8,98,,97,
+2021-000008215 Talon Metals Corp-f1-03172265_1-1-1,2021,2021-01-08,Talon Metals Corp,PEA,2,copper_concentrate,copper,,,,,,29.9,,,5.88,,,,,
+2021-000008433 Metallum Resources Inc-f1-03288400_1-1-1,2021,2021-09-15,Metallum Resources Inc,FS,2,copper_concentrate,copper,99.5023621,0.090785293,,0.378272053,4.713269784,26,,413,3.2,10,96,,90,94
+2021-000017753 Imperial Metals Corporation-f1-03312274_1-1-1,2021,2021-06-30,Imperial Metals Corporation,PFS,1,copper_concentrate,copper,56,0.056,,,,24.4,,71,23.8,8,96.5,,90,
+2021-000020511 COPPER FOX METALS INC-f1-03296960_3-1-1,2021,2021-09-10,COPPER FOX METALS INC,PEA,1,copper_concentrate,copper,90,0.09,,0.5,5,28,,63.1,14.1,9,96.5,,90,97
+2021-000025928 Excelsior Mining Corp-f1-03277590_1-2-1,2021,2021-09-09,Excelsior Mining Corp,PEA,1,copper_concentrate,copper,83.77563562,,,,,9.4,,4.18,,,,,,
+2021-000026107 Mexican Gold Mining Corp-f1-03280410_1-1-1,2021,2021-09-18,Mexican Gold Mining Corp,PEA,1,copper_concentrate,copper,65,0.065,,0.4,5,21.7,,88,33.5,8,95,,40,94
+2021-000029998 Falco Resources Ltd. ( Falco Pacific Resource Group Inc.)-f1-03212353_1-1-1,2021,2021-03-18,Falco Resources Ltd. ( Falco Pacific Resource Group Inc.),FS,1,copper_concentrate,copper,,,,,,16,3.5,520,71.5,9.7,92.5,,85.9,97.2
+2021-000030536 Braveheart Resources Inc-f1-03176084_1-1-1,2021,2021-01-21,Braveheart Resources Inc,PEA,1,copper_concentrate,copper,85,0.085,,,,30,,57,0.77,10,96.5,,,
+2021-000030536 Braveheart Resources Inc-f1-03176084_1-1-1,2021,2021-01-21,Braveheart Resources Inc,PEA,2,nickel_copper_concentrate,copper,175,0.1,,,,2,,19,0.26,10,75,,,
+2021-000031522 Rockcliff Metals Corporation-f1-03163342_1-1-1,2021,2021-01-12,Rockcliff Metals Corporation,PEA,1,copper_concentrate,copper,62,0.062,,0.5,5,31.3,1.23,,,,96.5,,90,90
+2021-000032328 NorthIsle Copper and Gold Inc-f1-03190061_1-1-1,2021,2021-02-04,NorthIsle Copper and Gold Inc,PEA,1,copper_gold_concentrate,copper,,,,,,25.4,,,15.9,8,96.5,,95,97.5
+2021-000037111 Kutcho Copper Corp. ( Desert Star Resources Ltd.)-f1-03321014_1-1-1,2021,2021-11-08,Kutcho Copper Corp. ( Desert Star Resources Ltd.),FS,1,copper_concentrate,copper,80,0.08,,0.5,5,27.5,9.83,378,3.24,9,96.6,,90,94
+2021-000040502 Adventus Mining Corporation-f1-03316924_1-1-1,2021,2021-10-26,Adventus Mining Corporation,FS,1,copper_concentrate,copper,80,0.08,,0.5,5,27.2,,268.39,12.55,10,96.5,,90,96
+2021-000043429 Ero Copper Corp-f1-03301311_3-1-1,2021,2021-08-31,Ero Copper Corp,FS,1,copper_concentrate,copper,21,0.02,,,,29.5,,,,10,96.3,,,
+2021-000050209 1246778 B.C. LTD-f1-03239369_1-1-1,2021,2021-03-31,1246778 B.C. LTD,PEA,1,copper_concentrate,copper,59.5,0.0595,,0.4,5,35,,108,12,8,95,,77,77
+2021-000053528 Hot Chili Limited-f1-03295692_2-3-1,2021,2021-10-29,Hot Chili Limited,PFS,1,copper_gold_concentrate,copper,108.6956522,0.1,,,,25,,,3.1,8,96,,,90
+2022-000001610 Eldorado Gold Corporation-f1-03361638_2-1-1,2022,2022-01-22,Eldorado Gold Corporation,FS,1,copper_gold_concentrate,copper,82,0.082,,,6,26,,,27,9,96.15,,,97
+2022-000003031 Sierra Metals Inc. ( Dia Bras Exploration Inc.)-f1-03346722_1-1-1,2022,2021-03-31,Sierra Metals Inc. ( Dia Bras Exploration Inc.),PEA,1,copper_concentrate,copper,80,0.08,,0.35,6,29.8,7.6,615.6,2.3,8,96.5,,90,90
+2022-000003116 GCM Mining Corp. ( Gran Colombia Gold Corp.)-f1-03326418_1-1-1,2022,2021-12-01,GCM Mining Corp. ( Gran Colombia Gold Corp.),PEA,1,copper_concentrate,copper,60,0.06,,0.45,4.5,21,,180,56,,99,,90,97
+2022-000003801 Yamana Gold Inc-f1-03436836_1-1-2,2022,2019-06-30,Yamana Gold Inc,PFS,1,copper_concentrate,copper,80,0.08,,0.4,4.5,28,,82,5,9.5,96.5,,90,90
+2022-000005208 Altaley Mining Corporation-f1-03371916_1-1-1,2022,2022-02-23,Altaley Mining Corporation,PFS,3,copper_concentrate,copper,,,,,,10,,,125,,,,,
+2022-000005697 Aris Gold Corporation ( Caldas Gold Corp.)-f1-03352739_1-1-1,2022,2021-01-01,Aris Gold Corporation ( Caldas Gold Corp.),FS,1,copper_concentrate,copper,268.1318681,0.16,,0.7,7.5,15.03,,1663,300,9,93.01,,95.87,97.25
+2022-000007531 Seabridge Gold Inc-f1-03417745_1-1-1,2022,2022-08-08,Seabridge Gold Inc,PFS,1,copper_concentrate,copper,95,0.095,,0.5,7,24,,180,65,9,96.5,,90,
+2022-000007860 Torex Gold Resources Inc-f1-03362904_1-1-1,2022,2022-03-16,Torex Gold Resources Inc,FS,1,copper_gold_concentrate,copper,80,0.08,,0.4,5,25,1.73,660,60,8.5,96.5,,90,98.25
+2022-000007860 Torex Gold Resources Inc-f1-03362904_1-1-1,2022,2022-03-16,Torex Gold Resources Inc,FS,2,copper_concentrate,copper,,0.36,,,,42.6,,,,50,,,,
+2022-000008072 Spruce Ridge Resources Ltd-f1-03366701_1-1-1,2022,2022-03-09,Spruce Ridge Resources Ltd,PEA,1,copper_concentrate,copper,85,0.085,,,5,25.1,,,0.23,8,96.5,,,
+2022-000013177 Candente Copper Corp-f1-03350454_1-1-1,2022,2022-02-08,Candente Copper Corp,PEA,1,copper_concentrate,copper,75,0.075,,0.5,5,26,,78,3.4,,96.5,,98,98
+2022-000022452 Envirogold Global Limited-f1-03447441_1-1-1,2022,2022-09-30,Envirogold Global Limited,PEA,2,copper_concentrate,copper,,,,,,,,,,,95,,,
+2022-000023684 Western Copper and Gold Corporation-f1-03417801_1-1-1,2022,2022-06-13,Western Copper and Gold Corporation,FS,1,copper_concentrate,copper,,,,,,28,,120,25,,96.5,,95,97.5
+2022-000030266 Cordoba Minerals Corp-f1-03325638_1-1-1,2022,2022-01-11,Cordoba Minerals Corp,PFS,1,copper_gold_concentrate,copper,76.92307692,0.07,,0.3,5,20,,,,9,96.5,,75,96.5
+2022-000031522 Rockcliff Metals Corporation-f1-03340402_1-1-1,2022,2022-02-01,Rockcliff Metals Corporation,PEA,1,copper_concentrate,copper,99.8,0.08,,,,31.3,,,4.91,,96.5,,87,87
+2022-000031900 Magna Mining Inc-f1-03352191_1-1-1,2022,2022-01-31,Magna Mining Inc,FS,2,copper_concentrate,copper,80,0.08,,,,29,,,0.99,8,96.6,,,
+2022-000032247 Tartisan Nickel Corp-f1-03427839_1-1-1,2022,2022-07-06,Tartisan Nickel Corp,PEA,2,copper_concentrate,copper,250,,,,,24,,,,10,96,,,
+2022-000033469 Royalty North Partners Ltd-f1-03410772_1-1-1,2022,2021-02-28,Royalty North Partners Ltd,FS,1,copper_concentrate,copper,90,0.09,,,6.5,23.7,,,115,10,95.8,,,98
+2022-000040073 Kuya Silver Corporation-f1-03400179_2-1-1,2022,2022-04-09,Kuya Silver Corporation,PEA,3,copper_concentrate,copper,290.7193833,0.08,,0.5,5,20,6,180,5,9,96.5,,90,92
+2023-000001604 Lumina Gold Corp-f1-03546687_1-1-1,2023,2023-04-07,Lumina Gold Corp,PFS,1,copper_gold_concentrate,copper,58,0.07285,,0.4,7.5,21.8,,134,137,8,96.5,,90,98
+2023-000001691 Hudbay Minerals Inc. ( HudBay Minerals Inc.)-f1-06024854_1-1-1,2023,2023-07-01,Hudbay Minerals Inc. ( HudBay Minerals Inc.),PFS,1,copper_concentrate,copper,75,0.075,,,,25,,,,9,96.5,,90,90
+2023-000003151 Northern Dynasty Minerals Ltd-f1-06024040_2-4-1,2023,2023-08-21,Northern Dynasty Minerals Ltd,PEA,1,copper_gold_concentrate,copper,70,0.07,,0.6,7,26,,101.8,20.2,8,96.15,,90,97
+2023-000003353 Excellon Resources Inc-f1-03481561_1-1-1,2023,2022-03-31,Excellon Resources Inc,PEA,3,copper_concentrate,copper,75,,,0.75,,23.9,,1740,,10.2,96.5,,90,
+2023-000005955 NorthWest Copper Corp. ( _Serengeti Resources Inc._)-f1-03493519_1-1-1,2023,2023-01-04,NorthWest Copper Corp. ( _Serengeti Resources Inc._),PEA,1,copper_gold_concentrate,copper,75,0.075,,0.4,5,,,,,8,96,,70,97.5
+2023-000008633 Los Andes Copper Ltd-f1-03518173_1-1-1,2023,2023-02-20,Los Andes Copper Ltd,PFS,1,copper_concentrate,copper,85,0.085,,,,24.1,,55,,15,96.5,,90,
+2023-000009850 New Age Metals Inc-f1-06008684_1-3-1,2023,2023-06-29,New Age Metals Inc,PEA,1,copper_concentrate,copper,85,0.085,,0.5,5,13,,57.1,5.9,20,91,,0,82
+2023-000016002 Surge Copper Corp-f1-06001766_1-1-1,2023,2023-06-12,Surge Copper Corp,PEA,1,copper_concentrate,copper,75,0.08,,,,26,,240,2,10,96.5,,90,90
+2023-000020073 CERRO DE PASCO RESOURCES INC. ( Genius Properties Ltd.)-f1-03518451_1-1-1,2023,2023-01-31,CERRO DE PASCO RESOURCES INC. ( Genius Properties Ltd.),PEA,2,copper_concentrate,copper,128,,,,,20.83,13.64,433.82,,8,96.4,,90,
+2023-000024140 Highland Copper Company Inc-f1-03521951_1-1-1,2023,2023-03-06,Highland Copper Company Inc,FS,1,copper_concentrate,copper,65,0.065,,0.5,,24.7,954.2,48.1,0.2,9,96.5,,90,
+2023-000024140 Highland Copper Company Inc-f1-06024747_2-1-1,2023,2023-07-12,Highland Copper Company Inc,PEA,1,copper_concentrate,copper,65,0.065,,0.5,,30.5,,142.25,,9,96.5,,90,
+2023-000024464 Nickel Creek Platinum Corp-f1-06033570_1-1-1,2023,2023-09-20,Nickel Creek Platinum Corp,PFS,3,copper_concentrate,copper,70,,,,,25.6,,,,8,95,,,
+2023-000026264 Ascendant Resources Inc-f1-06003352_1-1-1,2023,2023-07-24,Ascendant Resources Inc,FS,3,copper_concentrate,copper,31.61290323,0.03,,0.4,5,20,,,,7,96.5,,90,90
+2023-000030584 Atalaya Mining plc-f1-03508573_1-1-1,2023,2022-10-31,Atalaya Mining plc,PEA,1,copper_concentrate,copper,0.45,,,,,23,,,,8,,,,
+2023-000031036 GoldMining Inc. ( Brazil Resources Inc.)-f1-06024533_3-1-1,2023,2023-07-24,GoldMining Inc. ( Brazil Resources Inc.),PEA,1,copper_concentrate,copper,76.08695652,0.07,,,2,24.5,,175,75,8,96,,92,97
+2023-000031822 Granite Creek Copper Ltd-f1-03500584_1-1-1,2023,2022-02-25,Granite Creek Copper Ltd,PEA,1,copper_concentrate,copper,0.08,0.06,,0.31,4.26,40,,134.4,11,,,,,
+2023-000033050 Trilogy Metals Inc-f1-03491294_1-1-1,2023,2023-01-20,Trilogy Metals Inc,FS,1,copper_concentrate,copper,80,0.08,,0.5,5,30.3,,161,3.4,6,96.5,,90,90
+2023-000036463 Faraday Copper Corp. ( Copperbank Resources Corp.)-f1-03549937_1-1-1,2023,2023-05-03,Faraday Copper Corp. ( Copperbank Resources Corp.),PEA,1,copper_concentrate,copper,80,0.08,,0.4,,30,,45,0.6,8,96.5,,95,
+2024-000005620 Troilus Gold Corp-f1-1_1-.pdf (eec5103ff2cd9904),2024,2024-05-14,Troilus Gold Corp,FS,1,copper_gold_concentrate,copper,77,0.077,,0.5,5,13.3,,229,80,8,96.6,,97,98
+2024-000006237 First Quantum Minerals Ltd-f1-06086044_1-1-1,2024,2023-09-30,First Quantum Minerals Ltd,FS,1,copper_concentrate,copper,,,,,,99.9,,,,,100,,,
+2024-000007638 Southern Silver Exploration Corp-f1-06158987_1-1-1,2024,2024-06-04,Southern Silver Exploration Corp,PEA,3,copper_concentrate,copper,,,,,,27,,,,8.5,90,,90,90
+2024-000010678 Trigon Metals Inc-f1-06098799_1-1-1,2024,2024-02-29,Trigon Metals Inc,FS,1,copper_concentrate,copper,75,0.075,,0.5,,26,,129,,8.04,96.5,,90,
+2024-000013177 Alta Copper Corp-f1-06144797_1-1-1,2024,2024-05-31,Alta Copper Corp,PEA,1,copper_concentrate,copper,75,0.075,,,,26,,,,9,96.5,,90,93
+2024-000024599 Sama Resources Inc-f1-_1-Ressources Sama Inc-06125382 -1-.pdf (2f7b76c4a9b34af4),2024,2024-03-21,Sama Resources Inc,PEA,2,copper_concentrate,copper,114.1304348,,,,,26,,,1.42,8,,,,
+2024-000026117 Oroco Resource Corp-f1-06173815_1-1-1,2024,2024-08-15,Oroco Resource Corp,PEA,1,copper_concentrate,copper,75,0.075,,0.5,5,26.6,,,,9,96.2,,90,70.2
+2024-000030266 Cordoba Minerals Corp-f1-06064213_1-3-1,2024,2023-12-18,Cordoba Minerals Corp,FS,1,copper_concentrate,copper,80,0.08,,0.4,5,22,,114,6.3,8,95.45,,90,93.5
+2024-000043090 SolGold plc-f1-06095451_1-1-1,2024,2023-12-31,SolGold plc,PFS,1,copper_gold_concentrate,copper,79,0.079,,0.5,5,25,,66,13,11,96.6,,97,98
+2024-000045664 P2 Gold Inc-f1-06153816_1-1-1,2024,2024-05-17,P2 Gold Inc,PEA,2,copper_concentrate,copper,,,,,,21.1,,,,,,,,
+2024-000054671 Aardvark 2 Capital Corp-f1-06206632_1-1-1,2024,2024-05-24,Aardvark 2 Capital Corp,PEA,1,copper_concentrate,copper,93,0.093,,0.35,3.85,23,,,,8,97,,90,96
+2024-000054684 Capstone Copper Corp-f1-06183998_1-1-1,2024,2024-07-31,Capstone Copper Corp,FS,1,copper_concentrate,copper,70,0.07,,,5,26.4,,27,3,9,96.55,,,90
+2025-000000923 Barrick Gold Corporation-f1-06241751_1-1-2,2025,2024-12-31,Barrick Gold Corporation,FS,1,copper_concentrate,copper,50,0.05,,,,27.8,,,,10,96.55,,,
+2025-000001767 DPM Metals Inc-f2-1_1-.pdf (30f36a91a40a0e04),2025,2025-05-28,DPM Metals Inc,FS,1,copper_gold_concentrate,copper,125,,,0.5,5,8.8,,531.7,28.1,,88.7,,90,96
+2025-000003116 Aris Mining Corporation-f1-06335076_1-1-1,2025,2025-08-18,Aris Mining Corporation,PFS,1,copper_concentrate,copper,100,0.08,,0.5,10,18,,1711,385,9,96.5,,96,96
+2025-000003116 Aris Mining Corporation-f1-06351776_2-1-1,2025,2025-10-21,Aris Mining Corporation,PEA,1,copper_concentrate,copper,50,0.05,,1,8,20.1,,154,112,10,96.5,,93,95
+2025-000003212 Taseko Mines Limited-f1-06308885_1-1-1,2025,2025-06-15,Taseko Mines Limited,PFS,1,copper_concentrate,copper,,,,,,25.5,,116,1.7,8,96.1,,90,90
+2025-000005247 Koryx Copper Inc. ( Deep-South Resources Inc.)-f1-06345472_1-1-1,2025,2025-09-04,Koryx Copper Inc. ( Deep-South Resources Inc.),PEA,1,copper_concentrate,copper,60,0.06,,,,21,,,,10,97.5,,,
+2025-000008811 Foran Mining Corporation-f1-06252011_1-1-1,2025,2024-11-16,Foran Mining Corporation,FS,1,copper_concentrate,copper,30,0.03,,0.45,5,28.1,,227,9.2,9,98,,90,98
+2025-000020943 Cornish Metals Inc-f1-06343317_1-3-1,2025,2025-09-29,Cornish Metals Inc,PEA,2,copper_concentrate,copper,,,,,,,,,,,,,,
+2025-000025425 Blue Moon Metals Inc-f1-06337712_3-1-1,2025,2025-03-03,Blue Moon Metals Inc,PEA,2,copper_concentrate,copper,30,0.03,,0.5,5,26.5,7.02,484,8.42,8,96.5,,90,96
+2025-000027022 Barrick North America Finance LLC-f1-06241783_1-1-2,2025,2024-12-31,Barrick North America Finance LLC,FS,1,copper_concentrate,copper,85,0.09,,,6,27,,35,9,8,96.5,,,94
+2025-000029249 GoGold Resources Inc-f1-06247278_1-1-1,2025,2025-01-14,GoGold Resources Inc,FS,1,copper_concentrate,copper,,,,,,61,10,,,50,70,,,
+2025-000029999 St. Augustine Gold and Copper Limited-f1-06316071_1-1-1,2025,2025-07-10,St. Augustine Gold and Copper Limited,PFS,1,copper_concentrate,copper,70,0.07,,,5,25,,,39.4,10,96.5,,92,97.5
+2025-000030394 US Copper Corp-f1-06225836_1-1-1,2025,2024-12-16,US Copper Corp,PEA,1,copper_concentrate,copper,96.9064611,0.08,,0.3,,25.5,,,,9,99,,90,98
+2025-000032328 NorthIsle Copper and Gold Inc-f1-06266759_1-1-1,2025,2025-02-12,NorthIsle Copper and Gold Inc,PEA,1,copper_concentrate,copper,48.95447234,0.048954472,,,4.475837471,22.4,,22.8,15.1,9,96.5,,,97.5
+2025-000033050 Trilogy Metals Inc-f1-06240435_1-1-1,2025,2025-01-15,Trilogy Metals Inc,PEA,1,copper_concentrate,copper,80,0.08,,,,29.5,1.16,,,6,96.5,,,
+2025-000039579 BMC Minerals Ltd-f1-06266600_1-1-1,2025,2025-03-01,BMC Minerals Ltd,FS,1,copper_concentrate,copper,,,,,,25,,,,9,,,,
+2025-000040264 Meridian Mining UK Societas-f1-1_1-.pdf (df544cd50a3c82ad),2025,2025-03-10,Meridian Mining UK Societas,PFS,1,copper_gold_concentrate,copper,70,0.07,,0.5,5,24.8,0.746,59,12.7,7.5,95.97,,97,98
+2025-000044770 Xanadu Mines Ltd-f1-06229361_1-1-1,2025,2025-01-13,Xanadu Mines Ltd,PFS,1,copper_gold_concentrate,copper,75,0.075,,,4.5,21.714,,,12.7295,8,96.5,,,97
+2025-000050838 Railtown Capital Corp-f1-06349033_1-1-1,2025,2025-07-15,Railtown Capital Corp,PEA,1,copper_concentrate,copper,75,0.075,,,,65,,,,8,96.5,,,
+2025-000053244 Canadian Copper Inc-f1-06307870_1-1-1,2025,2025-07-07,Canadian Copper Inc,PEA,2,copper_concentrate,copper,65,0.065,,,,22,,,,8,96.5,,90,
+2025-000053528 Hot Chili Limited-f1-06283329_1-1-1,2025,2025-03-27,Hot Chili Limited,PFS,1,copper_concentrate,copper,54.5,0.0545,,0.48,4.75,25.6,,23.1,3.82,8,96,,90,92
+2025-000106960 Cygnus Metals Limited-f2-1_1-.pdf (d9b45b1f65d8bd88),2025,2025-01-01,Cygnus Metals Limited,PEA,1,copper_concentrate,copper,70,0.07,,,6,,,,,8,96.5,,,95
