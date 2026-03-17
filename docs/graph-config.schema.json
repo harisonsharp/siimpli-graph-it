@@ -1,0 +1,466 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://siimpli.ai/schemas/graph-config-1.0.0.schema.json",
+  "title": "GraphApp Configuration",
+  "description": "Schema describing the JSON payload exported from the Siimpli GraphApp UI. It captures graph settings, dataset bindings, and global rendering toggles so that headless pipelines can recreate any graph without the interactive UI.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "metadata", "graph", "global"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the configuration payload.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "dataBindings": {
+      "type": "object",
+      "description": "Optional declaration of CSV datasets and their columns to help downstream tooling resolve identifiers.",
+      "required": ["datasets"],
+      "additionalProperties": false,
+      "properties": {
+        "datasets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/datasetBinding"
+          }
+        }
+      }
+    },
+    "graph": {
+      "$ref": "#/$defs/graphConfig"
+    },
+    "global": {
+      "$ref": "#/$defs/globalSettings"
+    }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generatedAt", "source"],
+      "properties": {
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO-8601 timestamp representing when the export was performed."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier describing what produced the configuration (for example \"GraphApp UI\")."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional free-form notes about the graph."
+        }
+      }
+    },
+    "datasetBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "file", "columns"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "description": "URL-safe identifier for the dataset (auto-generated from the file name)."
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Backing CSV file name."
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/datasetColumn"
+          }
+        }
+      }
+    },
+    "datasetColumn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique identifier for the column (typically <column>::<file>)."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-friendly column label."
+        },
+        "type": {
+          "type": "string",
+          "description": "Optional primitive type hint (number, string, date, etc.)."
+        },
+        "unit": {
+          "type": "string",
+          "description": "Optional measurement unit abbreviation."
+        }
+      }
+    },
+    "graphConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["xAxis", "series"],
+      "properties": {
+        "projectName": {
+          "type": "string",
+          "description": "Optional project headline rendered above the graph title."
+        },
+        "title": {
+          "type": "string",
+          "description": "Graph title override. Left blank to auto-generate."
+        },
+        "xAxis": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Column identifier bound to the X axis."
+        },
+        "xAxis2": {
+          "type": "string",
+          "description": "Secondary X axis column used when joining multiple axes."
+        },
+        "joinColumns": {
+          "type": "array",
+          "description": "Ordered list of additional X-axis columns used for join mode.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "xAxisLabel": {
+          "type": "string",
+          "description": "Label displayed under the X axis."
+        },
+        "yAxisLabel": {
+          "type": "string",
+          "description": "Primary Y axis label."
+        },
+        "yAxisLabel2": {
+          "type": "string",
+          "description": "Secondary Y axis label for dual-axis charts."
+        },
+        "yAxis2": {
+          "type": "string",
+          "description": "Optional column identifier bound to the secondary axis."
+        },
+        "series": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/seriesConfig"
+          }
+        },
+        "graphType": {
+          "type": "string",
+          "enum": ["scatter", "line", "bar", "histogram"],
+          "description": "Legacy chart type toggle. Individual series types take precedence."
+        },
+        "barMode": {
+          "type": "string",
+          "enum": ["group", "stack", "stack-proportional"],
+          "description": "Layout mode applied to bar series."
+        },
+        "colorGrading": {
+          "type": "string",
+          "description": "Column identifier used for continuous color grading."
+        },
+        "contouring": {
+          "type": "string",
+          "description": "Column identifier whose values feed the contour renderer."
+        },
+        "contouringTarget": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index of the series used when drawing isolines."
+        },
+        "colorScheme": {
+          "type": "string",
+          "enum": ["green-red", "warm-cool", "rainbow"],
+          "description": "Preferred palette for color grading and contours."
+        },
+        "widthMultiplier": {
+          "type": "number",
+          "minimum": 0.1,
+          "description": "Scale factor applied to the base canvas width."
+        },
+        "heightMultiplier": {
+          "type": "number",
+          "minimum": 0.1,
+          "description": "Scale factor applied to the base canvas height."
+        },
+        "axisIntercept": {
+          "type": "string",
+          "enum": ["origin", "minimum", "custom"],
+          "description": "Determines where the axes intersect when rendering."
+        },
+        "customIntercept": {
+          "$ref": "#/$defs/intercept"
+        },
+        "dualUnits": {
+          "type": "boolean",
+          "description": "Enables dual-unit conversion and labeling."
+        },
+        "dualYAxis": {
+          "type": "boolean",
+          "description": "Forces rendering of a secondary axis even when no secondary series exist."
+        },
+        "scaleFactor": {
+          "type": "number",
+          "description": "Numeric multiplier applied when dual units are enabled."
+        },
+        "fromUnits": {
+          "description": "Source unit for dual-unit conversion.",
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 0
+            },
+            {
+              "type": "string",
+              "enum": ["USD$/dmt", "USD$/lbs", "USD$/oz"]
+            }
+          ]
+        },
+        "toUnits": {
+          "description": "Target unit for dual-unit conversion.",
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 0
+            },
+            {
+              "type": "string",
+              "enum": ["USD$/dmt", "USD$/lbs", "USD$/oz"]
+            }
+          ]
+        },
+        "selectedXValue": {
+          "type": ["number", "null"],
+          "description": "Last X value selected via the interaction layer."
+        }
+      }
+    },
+    "seriesConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["graphType", "yAxis"],
+      "properties": {
+        "yAxis": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Column identifier bound to the series' Y axis."
+        },
+        "axisAssignment": {
+          "type": "string",
+          "enum": ["primary", "secondary"],
+          "description": "Determines which axis (left/right) renders the series."
+        },
+        "graphType": {
+          "type": "string",
+          "enum": ["scatter", "line", "bar", "histogram"],
+          "description": "Visualization style for the series."
+        },
+        "titleName": {
+          "type": "string",
+          "description": "Legend label override."
+        },
+        "color": {
+          "type": "string",
+          "description": "CSS color, named color, or HEX value applied to the series."
+        },
+        "strokeWidth": {
+          "type": ["number", "string"],
+          "description": "Stroke/point size expressed in pixels."
+        },
+        "showConfidenceInterval": {
+          "type": "boolean",
+          "description": "Whether a 95% confidence band should be drawn for bar charts."
+        },
+        "confidenceLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99,
+          "description": "Confidence percentage displayed when intervals are enabled."
+        },
+        "curveType": {
+          "type": "string",
+          "enum": [
+            "curveLinear",
+            "curveMonotoneX",
+            "curveStep",
+            "curveStepAfter",
+            "curveStepBefore",
+            "curveBasis",
+            "curveNatural"
+          ],
+          "description": "D3 curve factory applied to line charts."
+        },
+        "lineStyle": {
+          "type": "string",
+          "enum": ["solid", "dashed", "dotted", "dash-dot"],
+          "description": "Stroke dash pattern for line charts."
+        },
+        "showPoints": {
+          "type": "boolean",
+          "description": "Toggles point markers on line charts."
+        },
+        "filter": {
+          "type": "boolean",
+          "description": "Enables filtering of the plotted dataset."
+        },
+        "filterColumn": {
+          "type": "string",
+          "description": "Column that provides the values evaluated by the filter."
+        },
+        "filterType": {
+          "type": "string",
+          "enum": ["equals", "not-equals", "greater-than", "less-than", "unique"],
+          "description": "Filter operator applied before plotting the series."
+        },
+        "filterValue": {
+          "description": "Comparison value used by non-unique filters.",
+          "type": ["string", "number", "boolean", "null"]
+        },
+        "uniqueValues": {
+          "type": "array",
+          "description": "Distinct values extracted when the \"unique\" filter mode is selected.",
+          "items": {
+            "type": ["string", "number", "boolean", "null"]
+          }
+        },
+        "symbolMap": {
+          "type": "object",
+          "description": "Maps unique filter values to symbol identifiers for scatter plots.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "excludeEmptyValues": {
+          "type": "boolean",
+          "description": "Removes blank values when using the unique filter mode."
+        }
+      }
+    },
+    "intercept": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number",
+          "description": "Custom X interception point."
+        },
+        "y": {
+          "type": "number",
+          "description": "Custom Y interception point for the primary axis."
+        },
+        "y2": {
+          "type": "number",
+          "description": "Custom Y interception point for the secondary axis."
+        }
+      }
+    },
+    "graphDimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": {
+          "type": "number",
+          "minimum": 100,
+          "description": "Total canvas width in pixels."
+        },
+        "height": {
+          "type": "number",
+          "minimum": 100,
+          "description": "Total canvas height in pixels."
+        }
+      }
+    },
+    "tableRow": {
+      "type": "object",
+      "description": "Flexible record extracted from a CSV row.",
+      "additionalProperties": {
+        "type": ["string", "number", "boolean", "null"]
+      }
+    },
+    "globalSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["colorScheme", "axisIntercept", "customIntercept", "graphDimensions", "showGuideLines", "showDataTable", "showStaticTable", "selectedXValue"],
+      "properties": {
+        "colorScheme": {
+          "type": "string",
+          "enum": ["green-red", "warm-cool", "rainbow"],
+          "description": "Palette used for color gradients when the graph config does not override it."
+        },
+        "axisIntercept": {
+          "type": "string",
+          "enum": ["origin", "minimum", "custom"],
+          "description": "Default intercept behavior for the interactive canvas."
+        },
+        "customIntercept": {
+          "$ref": "#/$defs/intercept"
+        },
+        "graphDimensions": {
+          "$ref": "#/$defs/graphDimensions"
+        },
+        "showGuideLines": {
+          "type": "boolean",
+          "description": "Displays faint crosshair guide lines under the cursor."
+        },
+        "showDataTable": {
+          "type": "boolean",
+          "description": "Enables the floating data probe when hovering over the graph."
+        },
+        "showStaticTable": {
+          "type": "boolean",
+          "description": "Locks a static data table beneath the legend/export output."
+        },
+        "selectedXValue": {
+          "type": ["number", "null"],
+          "description": "Current X coordinate used by the static table."
+        },
+        "joinXAxis": {
+          "type": "boolean",
+          "description": "When true, multiple X columns are merged into a single axis."
+        },
+        "barType": {
+          "type": "string",
+          "enum": ["group", "stack", "stack-proportional"],
+          "description": "Default rendering for bar charts when no per-graph override exists."
+        },
+        "showUnifiedTable": {
+          "type": "boolean",
+          "description": "Swaps the legend for the unified table (legend + values)."
+        },
+        "showBiasTable": {
+          "type": "boolean",
+          "description": "Appends the bias table next to the unified table."
+        },
+        "biasTableData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tableRow"
+          },
+          "description": "Parsed rows from the bias CSV upload."
+        },
+        "biasTableFile": {
+          "type": "string",
+          "description": "File name of the bias table source."
+        }
+      }
+    }
+  }
+}
