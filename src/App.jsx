@@ -1,7 +1,6 @@
 import React from 'react';
 import GraphApp from './components/GraphApp.jsx';
-import { ConfigProvider } from './contexts/ConfigContext.jsx';
-import { ErrorProvider } from './contexts/ErrorContext.jsx';
+import { ConfigProvider, ErrorProvider } from '@siimpli/graph-it-core';
 import "./App.css";
 
 function App() {

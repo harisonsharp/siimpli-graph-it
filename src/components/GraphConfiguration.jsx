@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useConfig } from '../contexts/ConfigContext';
-import { debugLog, MathUtils, detectTypeConflict, resolveTypeConflict, SymbolFactory, validateSecondaryAxisTypes, ScaleFactory } from '@siimpli/graph-it-core';
+import { useConfig, debugLog, MathUtils, detectTypeConflict, resolveTypeConflict, SymbolFactory, validateSecondaryAxisTypes, ScaleFactory } from '@siimpli/graph-it-core';
 
 const GraphConfiguration = ({
     data,
