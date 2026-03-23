@@ -312,7 +312,7 @@ const GraphApp = () => {
 
                                     <div className="card-footer">
                                         <div className="graph-controls">
-                                            <button
+                                            <button type="button"
                                                 className="btn btn-primary btn-lg"
                                                 onClick={handleGenerateGraph}
                                                 disabled={!canGenerateGraph}
@@ -325,12 +325,12 @@ const GraphApp = () => {
 
                                             {showGraph && (
                                                 <>
-                                                    <button className="btn btn-success" onClick={exportAsPNG}>
+                                                    <button className="btn btn-success" type="button" onClick={exportAsPNG}>
                                                         <Download size={16} />
                                                         Export as PNG
                                                     </button>
                                                     <button
-                                                        className="btn btn-secondary"
+                                                        className="btn btn-secondary" type="submit"
                                                         onClick={exportConfigAsJSON}
                                                         disabled={!canExportConfig}
                                                         title={!canExportConfig ? 'Load data and select axes to export JSON' : ''}
@@ -342,7 +342,7 @@ const GraphApp = () => {
                                             )}
 
                                             <button
-                                                className="btn btn-secondary"
+                                                className="btn btn-secondary" type="button"
                                                 onClick={() => setShowCurveFitting(!showCurveFitting)}
                                             >
                                                 <TrendingUp size={16} />

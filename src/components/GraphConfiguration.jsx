@@ -147,6 +147,37 @@ const GraphConfiguration = ({
         updateSeries(index, updates);
     };
 
+    const hasSecondaryAxis = graphConfig.dualUnits || graphConfig.series.some(s => s.axisAssignment === 'secondary');
+
+    const getStaticScale = (axisKey) => {
+        const axisScale = graphConfig.staticScales?.[axisKey];
+        return {
+            enabled: axisScale?.enabled || false,
+            min: axisScale?.min ?? '',
+            max: axisScale?.max ?? '',
+            step: axisScale?.step ?? ''
+        };
+    };
+
+    const updateStaticScale = (axisKey, updates) => {
+        const currentScale = getStaticScale(axisKey);
+        updateGraphConfig({
+            staticScales: {
+                ...(graphConfig.staticScales || {}),
+                [axisKey]: {
+                    ...currentScale,
+                    ...updates
+                }
+            }
+        });
+    };
+
+    const parseNumericInput = (value) => {
+        if (value === '') return '';
+        const parsed = Number.parseFloat(value);
+        return Number.isFinite(parsed) ? parsed : '';
+    };
+
     const hasBarSeries = graphConfig.series.some(s => s.graphType === 'bar');
 
     return (
@@ -564,7 +595,7 @@ const GraphConfiguration = ({
 
                                     </div>
                                 )}
-                                {series.graphType === 'scatter' && (
+                                {(!series.graphType || series.graphType === 'scatter') && (
                                     <div className="form-row" style={{ marginTop: '8px', padding: '8px', backgroundColor: 'var(--bg-secondary)', borderRadius: '4px' }}>
                                         <div className="form-group">
                                             <label className="form-label" htmlFor={`series-stroke-width-${index}`}>
@@ -712,6 +743,75 @@ const GraphConfiguration = ({
                             />
                         </div>
                     </div>
+                </div>
+
+                <div className="form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-light)', paddingTop: '16px', marginTop: '8px' }}>
+                    <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '12px', color: 'var(--text-color)' }}>Static Axis Scales</h4>
+                    <p style={{ margin: '0 0 12px 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        Define fixed numeric min/max/step values per axis.
+                    </p>
+                    {[
+                        { key: 'x', label: 'X Axis' },
+                        { key: 'y', label: 'Primary Y Axis' },
+                        ...(hasSecondaryAxis ? [{ key: 'y2', label: 'Secondary Y Axis' }] : [])
+                    ].map(axis => {
+                        const axisScale = getStaticScale(axis.key);
+                        return (
+                            <div key={axis.key} style={{ marginBottom: '12px', padding: '10px', border: '1px solid var(--border-light)', borderRadius: '6px' }}>
+                                <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={axisScale.enabled}
+                                        onChange={(e) => updateStaticScale(axis.key, { enabled: e.target.checked })}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                    <span>{axis.label}</span>
+                                </label>
+
+                                {axisScale.enabled && (
+                                    <div className="form-row" style={{ marginTop: '8px' }}>
+                                        <div className="form-group">
+                                            <label className="form-label" htmlFor={`static-scale-${axis.key}-min`}>Minimum</label>
+                                            <input
+                                                id={`static-scale-${axis.key}-min`}
+                                                type="number"
+                                                step="any"
+                                                className="form-input"
+                                                value={axisScale.min}
+                                                onChange={(e) => updateStaticScale(axis.key, { min: parseNumericInput(e.target.value) })}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label" htmlFor={`static-scale-${axis.key}-max`}>Maximum</label>
+                                            <input
+                                                id={`static-scale-${axis.key}-max`}
+                                                type="number"
+                                                step="any"
+                                                className="form-input"
+                                                value={axisScale.max}
+                                                onChange={(e) => updateStaticScale(axis.key, { max: parseNumericInput(e.target.value) })}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label" htmlFor={`static-scale-${axis.key}-step`}>Step</label>
+                                            <input
+                                                id={`static-scale-${axis.key}-step`}
+                                                type="number"
+                                                step="any"
+                                                min="0"
+                                                className="form-input"
+                                                value={axisScale.step}
+                                                onChange={(e) => updateStaticScale(axis.key, { step: parseNumericInput(e.target.value) })}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                    <p style={{ margin: '8px 0 0 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        TODO: Add static scale support for categorical and date-time axes.
+                    </p>
                 </div>
 
                 <div className="form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-light)', paddingTop: '16px', marginTop: '8px' }}>
@@ -992,6 +1092,26 @@ GraphConfiguration.propTypes = {
         colorGrading: PropTypes.string,
         contouring: PropTypes.string,
         axisIntercept: PropTypes.string,
+        staticScales: PropTypes.shape({
+            x: PropTypes.shape({
+                enabled: PropTypes.bool,
+                min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+                max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+                step: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+            }),
+            y: PropTypes.shape({
+                enabled: PropTypes.bool,
+                min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+                max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+                step: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+            }),
+            y2: PropTypes.shape({
+                enabled: PropTypes.bool,
+                min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+                max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+                step: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+            })
+        }),
         customIntercept: PropTypes.shape({
             x: PropTypes.number,
             y: PropTypes.number,

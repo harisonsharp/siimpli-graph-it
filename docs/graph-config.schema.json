@@ -89,9 +89,7 @@
       "required": ["id", "name"],
       "properties": {
         "id": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Unique identifier for the column (typically <column>::<file>)."
+          "$ref": "#/$defs/columnReference"
         },
         "name": {
           "type": "string",
@@ -122,12 +120,10 @@
           "description": "Graph title override. Left blank to auto-generate."
         },
         "xAxis": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Column identifier bound to the X axis."
+          "$ref": "#/$defs/columnReference"
         },
         "xAxis2": {
-          "type": "string",
+          "$ref": "#/$defs/columnReference",
           "description": "Secondary X axis column used when joining multiple axes."
         },
         "joinColumns": {
@@ -154,6 +150,10 @@
         "yAxis2": {
           "type": "string",
           "description": "Optional column identifier bound to the secondary axis."
+        },
+        "staticScales": {
+          "$ref": "#/$defs/staticScales",
+          "description": "Optional static numeric scale overrides for X/Y axes."
         },
         "series": {
           "type": "array",
@@ -258,8 +258,7 @@
       "required": ["graphType", "yAxis"],
       "properties": {
         "yAxis": {
-          "type": "string",
-          "minLength": 1,
+          "$ref": "#/$defs/columnReference",
           "description": "Column identifier bound to the series' Y axis."
         },
         "axisAssignment": {
@@ -370,6 +369,72 @@
           "description": "Custom Y interception point for the secondary axis."
         }
       }
+    },
+    "axisStaticScale": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "When true, min/max/step define a static numeric scale for the axis."
+        },
+        "min": {
+          "type": "number",
+          "description": "Minimum numeric value shown on the axis."
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum numeric value shown on the axis."
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Tick interval for the axis."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            },
+            "required": ["enabled"]
+          },
+          "then": {
+            "required": ["min", "max", "step"]
+          }
+        }
+      ],
+      "description": "Numeric-only static scale configuration. TODO: extend to categorical and date-time axes."
+    },
+    "staticScales": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/axisStaticScale"
+        },
+        "y": {
+          "$ref": "#/$defs/axisStaticScale"
+        },
+        "y2": {
+          "$ref": "#/$defs/axisStaticScale"
+        }
+      }
+    },
+    "columnReference": {
+      "type": "string",
+      "description": "Column identifier: either 'colname::file.csv' or '[datasetIndex][columnIndex]'.",
+      "anyOf": [
+        {
+          "pattern": "^.+::.+$"
+        },
+        {
+          "pattern": "^\\[\\d+\\]\\[\\d+\\]$"
+        }
+      ]
     },
     "graphDimensions": {
       "type": "object",
