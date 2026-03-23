@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/haris/Work/Siim2025/siimpli-graph-it-headless/src -type f \\\\\\(-name *.js -o -name *.ts \\\\\\))",
+      "Bash(find /c/Users/haris/Work/Siim2025/mine_analytics/script_manager/src -type f \\\\\\(-name *.js -o -name *.jsx \\\\\\))",
+      "Bash(grep -r \"update-content\\\\|emit\\\\|invoke\" /c/Users/haris/Work/Siim2025/mine_analytics/script_manager/src/components --include=*.jsx --include=*.js)"
+    ]
+  }
+}
