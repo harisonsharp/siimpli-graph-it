@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { BarChart3, Download, TrendingUp, FileCode2 } from 'lucide-react';
+import { BarChart3, Download, TrendingUp, FileCode2, Upload } from 'lucide-react';
 import * as d3 from 'd3';
 import { parseColumnId, calculateAxisIntercepts, performCurveFitting, useConfig, useError, ExportService } from '@siimpli/graph-it-core';
 import { useFileManager } from '../hooks/useFileManager.js';
@@ -273,6 +273,57 @@ const GraphApp = () => {
         }
     }, [canExportConfig, columns, csvFiles, graphConfig, globalSettings, handleError, showSuccess]);
 
+    const importConfigFromJSON = useCallback(async () => {
+        const supportsFilePicker = typeof window !== 'undefined' && window.showOpenFilePicker;
+
+        let jsonString;
+        try {
+            if (supportsFilePicker) {
+                const [handle] = await window.showOpenFilePicker({
+                    types: [{ description: 'JSON Configuration', accept: { 'application/json': ['.json'] } }],
+                    multiple: false
+                });
+                const file = await handle.getFile();
+                jsonString = await file.text();
+            } else {
+                jsonString = await new Promise((resolve, reject) => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.json,application/json';
+                    input.onchange = async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) { reject(new Error('No file selected')); return; }
+                        resolve(await file.text());
+                    };
+                    input.oncancel = () => reject(new Error('Cancelled'));
+                    input.click();
+                });
+            }
+        } catch (error) {
+            if (error.name !== 'AbortError' && error.message !== 'Cancelled') {
+                handleError(error, 'Failed to open file');
+            }
+            return;
+        }
+
+        let config;
+        try {
+            config = JSON.parse(jsonString);
+        } catch {
+            handleError(new Error('Invalid JSON'), 'The selected file is not valid JSON');
+            return;
+        }
+
+        if (!config.version || !config.graph || !config.global) {
+            handleError(new Error('Invalid config'), 'JSON does not match the expected graph config schema (missing version, graph, or global)');
+            return;
+        }
+
+        updateGraphConfig(config.graph);
+        updateGlobalSettings(config.global);
+        showSuccess('Configuration imported successfully');
+    }, [updateGraphConfig, updateGlobalSettings, handleError, showSuccess]);
+
     const handleGenerateGraph = () => {
         console.log('Generating graph... ID:', generationId + 1);
         setShowGraph(true);
@@ -321,6 +372,14 @@ const GraphApp = () => {
                                                 <BarChart3 size={18} />
                                                 Generate Graph ({generationId})
                                                 {!logoReady && <span className="spinner" />}
+                                            </button>
+
+                                            <button
+                                                className="btn btn-secondary" type="button"
+                                                onClick={importConfigFromJSON}
+                                            >
+                                                <Upload size={16} />
+                                                Import Config JSON
                                             </button>
 
                                             {showGraph && (
