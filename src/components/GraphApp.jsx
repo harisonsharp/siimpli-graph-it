@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { BarChart3, Download, TrendingUp, FileCode2, Upload } from 'lucide-react';
 import * as d3 from 'd3';
-import { parseColumnId, calculateAxisIntercepts, performCurveFitting, useConfig, useError, ExportService } from '@siimpli/graph-it-core';
+import { parseColumnId, calculateAxisIntercepts, performCurveFitting, useConfig, useError, ExportService } from '@harisonsharp/graph-it-core';
 import { useFileManager } from '../hooks/useFileManager.js';
 import AppHeader from './AppHeader.jsx';
 import FileUploadSection from './FileUploadSection.jsx';

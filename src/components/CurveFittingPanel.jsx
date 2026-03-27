@@ -1,6 +1,6 @@
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
-import {ScaleFactory} from'@siimpli/graph-it-core';
+import {ScaleFactory} from'@harisonsharp/graph-it-core';
 /**
  * @fileoverview Interactive UI panel for configuring and controlling mathematical curve fitting operations.
  * Provides form controls for polynomial order, fit ranges, custom equations, confidence bands,

@@ -3,7 +3,7 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { FolderOpen, Play, CheckCircle, AlertCircle, Settings2 } from 'lucide-react';
 import { useFileProcessing } from '../hooks/useFileProcessing.js';
 import { useBatchGraphRenderer } from '../hooks/useBatchGraphRenderer.js';
-import { useError, useConfig, BatchProcessingService } from '@siimpli/graph-it-core';
+import { useError, useConfig, BatchProcessingService } from '@harisonsharp/graph-it-core';
 /**
  * @fileoverview Simplified batch processing component for automated graph generation.
  * UI-focused component that delegates business logic to BatchProcessingService.

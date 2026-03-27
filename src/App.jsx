@@ -1,6 +1,6 @@
 import React from 'react';
 import GraphApp from './components/GraphApp.jsx';
-import { ConfigProvider, ErrorProvider } from '@siimpli/graph-it-core';
+import { ConfigProvider, ErrorProvider } from '@harisonsharp/graph-it-core';
 import "./App.css";
 
 function App() {

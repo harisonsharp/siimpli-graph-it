@@ -1,7 +1,7 @@
 {
   "name": "siimpli-graph-it",
   "private": true,
-  "version": "0.3.62",
+  "version": "0.3.63",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@siimpli/graph-it-core": "file:../siimpli-graph-it-core",
+    "@harisonsharp/graph-it-core": "^0.3.63",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-dialog": "^2.4.2",
     "@tauri-apps/plugin-fs": "^2.4.4",

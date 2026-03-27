@@ -54,7 +54,7 @@ function isAxisOrLabel(el) {
 
 // ---------------------------------------------------------------------------
 // Axis tick formatter
-// Mirrors axisUtils.js formatNumber from @siimpli/graph-it-core.
+// Mirrors axisUtils.js formatNumber from @harisonsharp/graph-it-core.
 // Replicated here because the function is not exported from the package.
 // ---------------------------------------------------------------------------
 

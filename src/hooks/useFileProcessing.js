@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { readTextFile, readDir, writeFile } from '@tauri-apps/plugin-fs';
-import { parseConfigFile, determineGraphType, resolveColumn, debugLog, debugWarn, parseCSV, useError } from '@siimpli/graph-it-core';
+import { parseConfigFile, determineGraphType, resolveColumn, debugLog, debugWarn, parseCSV, useError } from '@harisonsharp/graph-it-core';
 /**
  * @fileoverview React hook for processing CSV data files and configuration management.
  * Provides comprehensive file I/O operations including CSV parsing, configuration file handling,

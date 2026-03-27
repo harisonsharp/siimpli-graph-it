@@ -9,7 +9,7 @@
  * @module useGraphRenderer
  * @requires react - useCallback hook for memoization
  * @requires d3 - Data visualization library
- * @requires @siimpli/graph-it-core - SiimpliGraphIt core library
+ * @requires @harisonsharp/graph-it-core - SiimpliGraphIt core library
  *
  * @exports useGraphRenderer
  *
@@ -50,7 +50,7 @@ import {
     LegendRenderer,
     UnifiedTableRenderer,
     BiasTableRenderer
-} from '@siimpli/graph-it-core';
+} from '@harisonsharp/graph-it-core';
 
 
 /**

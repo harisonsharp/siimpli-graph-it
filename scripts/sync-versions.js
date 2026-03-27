@@ -24,8 +24,8 @@ export async function syncVersions(options = {}) {
     const version = corePackage.version;
 
     headlessPackage.version = version;
-    if (headlessPackage.dependencies && '@siimpli/graph-it-core' in headlessPackage.dependencies) {
-        headlessPackage.dependencies['@siimpli/graph-it-core'] = version;
+    if (headlessPackage.dependencies && '@harisonsharp/graph-it-core' in headlessPackage.dependencies) {
+        headlessPackage.dependencies['@harisonsharp/graph-it-core'] = version;
     }
 
     await fs.writeFile(headlessPackagePath, JSON.stringify(headlessPackage, null, 2) + '\n', 'utf8');

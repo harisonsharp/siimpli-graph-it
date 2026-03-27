@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useConfig, debugLog, MathUtils, detectTypeConflict, resolveTypeConflict, SymbolFactory, validateSecondaryAxisTypes, ScaleFactory } from '@siimpli/graph-it-core';
+import { useConfig, debugLog, MathUtils, detectTypeConflict, resolveTypeConflict, SymbolFactory, validateSecondaryAxisTypes, ScaleFactory } from '@harisonsharp/graph-it-core';
 
 const GraphConfiguration = ({
     data,

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-import { CoordinateService, debugLog, debugWarn } from '@siimpli/graph-it-core';
-import { SvgPlottingService } from '@siimpli/graph-it-core';
+import { CoordinateService, debugLog, debugWarn } from '@harisonsharp/graph-it-core';
+import { SvgPlottingService } from '@harisonsharp/graph-it-core';
 /**
  * @fileoverview React hook for interactive coordinate plotting and point validation.
  * Manages user input for coordinate values, point plotting operations, and real-time

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { ImageExportService, debugLog, debugWarn } from '@siimpli/graph-it-core';
-import { FileNameParsingService } from '@siimpli/graph-it-core';
+import { ImageExportService, debugLog, debugWarn } from '@harisonsharp/graph-it-core';
+import { FileNameParsingService } from '@harisonsharp/graph-it-core';
 /**
  * @fileoverview React hook for loading and managing graph image files with filename parsing.
  * Handles PNG file selection, blob URL management, and coordinate system data extraction

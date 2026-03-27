@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Upload, FileText, X } from 'lucide-react';
-import { useError } from '@siimpli/graph-it-core';
+import { useError } from '@harisonsharp/graph-it-core';
 
 /**
  * @fileoverview CSV file upload interface component with drag-and-drop support and file management.

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useGraphRenderer } from './useGraphRenderer.js';
-import { adaptBatchConfig, debugLog, debugWarn } from '@siimpli/graph-it-core';
+import { adaptBatchConfig, debugLog, debugWarn } from '@harisonsharp/graph-it-core';
 
 /**
  * @fileoverview Wrapper hook that adapts legacy batch generation calls to the

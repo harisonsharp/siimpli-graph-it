@@ -13,7 +13,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { debugWarn } from '@siimpli/graph-it-core';
+import { debugWarn } from '@harisonsharp/graph-it-core';
 import * as d3 from 'd3';
 import { Move, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
 import { useGraphRenderer } from '../hooks/useGraphRenderer.js';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ImageExportService } from '@siimpli/graph-it-core';
+import { ImageExportService } from '@harisonsharp/graph-it-core';
 import { useImageLoader } from '../hooks/useImageLoader.js';
 import { useErrorHandler } from '../hooks/useErrorHandler.js';
 import { usePlotting } from '../hooks/usePlotting.js';
