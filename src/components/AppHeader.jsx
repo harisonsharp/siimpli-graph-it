@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { BarChart3, Settings, Eye } from 'lucide-react';
+import { BarChart3, Layers, Eye } from 'lucide-react';
 
 /**
  * @fileoverview Main navigation header component providing mode switching functionality for the data visualization application.
@@ -34,9 +34,10 @@ const AppHeader = ({ mode, setMode }) => {
 
     return (
         <header className="app-header">
-            <h1 className="app-title">Graph Generator</h1>
+            <h1 className="app-title">SiimpliGraph</h1>
             <div className="mode-tabs">
                 <button
+                    type="button"
                     className={`mode-tab ${mode === 'manual' ? 'mode-tab-active' : ''}`}
                     onClick={() => setMode('manual')}
                 >
@@ -44,13 +45,15 @@ const AppHeader = ({ mode, setMode }) => {
                     Manual Mode
                 </button>
                 <button
+                    type="button"
                     className={`mode-tab ${mode === 'batch' ? 'mode-tab-active' : ''}`}
                     onClick={() => setMode('batch')}
                 >
-                    <Settings size={16} />
+                    <Layers size={16} />
                     Batch Mode
                 </button>
                 <button
+                    type="button"
                     className={`mode-tab ${mode === 'decoder' ? 'mode-tab-active' : ''}`}
                     onClick={() => setMode('decoder')}
                 >

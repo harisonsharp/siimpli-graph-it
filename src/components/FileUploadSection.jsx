@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Upload, FileText, X } from 'lucide-react';
+import { useError } from '@siimpli/graph-it-core';
 
 /**
  * @fileoverview CSV file upload interface component with drag-and-drop support and file management.
@@ -33,6 +34,7 @@ import { Upload, FileText, X } from 'lucide-react';
 
 const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
     const fileInputRef = useRef();
+    const { handleError } = useError();
 
     // Reset the hidden input whenever the file list changes so identical files can be re-selected
     useEffect(() => {
@@ -41,22 +43,17 @@ const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
         }
     }, [csvFiles.length]);
 
-    // Drag-and-drop functionality removed
-
     const handleFileChange = async (event) => {
         const target = event.target;
         const files = target.files ? Array.from(target.files) : [];
-        if (files.length === 0) {
-            alert('No files selected.');
-            return;
-        }
+        if (files.length === 0) return;
         for (const file of files) {
             if (!file.name.toLowerCase().endsWith('.csv')) {
-                alert(`Invalid file type: ${file.name}`);
+                handleError(new Error(`Invalid file type: ${file.name}`), `"${file.name}" is not a CSV file. Please select .csv files only.`);
                 return;
             }
             if (file.size > 10 * 1024 * 1024) {
-                alert(`File too large: ${file.name}`);
+                handleError(new Error(`File too large: ${file.name}`), `"${file.name}" exceeds the 10 MB size limit.`);
                 return;
             }
         }
@@ -67,59 +64,17 @@ const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
         }
     };
 
-    // Drag-and-drop handlers removed
     const handleClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
     };
     return (
-        <>
-            <style>{`
-            .file-upload-section {
-                transition: box-shadow 0.3s, transform 0.3s, border 0.3s;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-                border-radius: 12px;
-                border: 2px solid transparent;
-                padding: 32px 24px 24px 24px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-            }
-            .file-upload-content {
-                width: 100%;
-                text-align: center;
-            }
-            .file-upload-text {
-                font-size: 1.1rem;
-                color: #333;
-                margin: 12px 0 4px 0;
-                line-height: 1.5;
-            }
-            .file-upload-content strong {
-                font-weight: 600;
-                color: #1976d2;
-            }
-            .file-upload-content p {
-                margin: 8px 0;
-            }
-            .file-upload-section:hover {
-                box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-                transform: translateY(-2px) scale(1.03);
-                background: linear-gradient(90deg, #e3f2fd 0%, #fce4ec 100%);
-                border: 2px solid #1976d2;
-            }
-            .file-upload-section:active {
-                transform: scale(0.98);
-                border: 2px solid #d81b60;
-            }
-        `}</style>
-            <section className="app-section">
+        <section className="app-section">
                 <div className="card">
                     <div className="card-header">
                         <h2 className="card-title">Upload CSV Files</h2>
-                        <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                        <p className="card-subtitle">
                             Upload one or more CSV files to begin creating your graph visualization
                         </p>
                     </div>
@@ -134,7 +89,6 @@ const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
                             }}
                             role="button"
                             tabIndex={0}
-                            style={{ cursor: 'pointer' }}
                         >
                             <input
                                 type="file"
@@ -145,15 +99,41 @@ const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
                                 onChange={handleFileChange}
                             />
                             <div className="file-upload-content">
-                                <Upload size={56} style={{ color: 'var(--primary-color)', marginBottom: '16px', transition: 'transform 0.3s' }} />
+                                <Upload size={40} className="file-upload-icon" />
                                 <p className="file-upload-text">
                                     <strong>Click to select CSV files</strong>
                                 </p>
-                                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '8px' }}>
-                                    Supports multiple file selection • Maximum file size: 10MB
+                                <p className="file-upload-hint">
+                                    Multiple files supported &nbsp;·&nbsp; 10 MB max per file
                                 </p>
                             </div>
                         </div>
+
+                        {csvFiles.length === 0 && (
+                            <ol className="upload-workflow-steps">
+                                <li className="upload-workflow-step">
+                                    <span className="upload-workflow-step__num">1</span>
+                                    <div>
+                                        <strong>Upload CSV</strong>
+                                        <span>Columns are detected automatically from headers</span>
+                                    </div>
+                                </li>
+                                <li className="upload-workflow-step">
+                                    <span className="upload-workflow-step__num">2</span>
+                                    <div>
+                                        <strong>Configure axes</strong>
+                                        <span>Map columns to X and Y axes, set chart type and labels</span>
+                                    </div>
+                                </li>
+                                <li className="upload-workflow-step">
+                                    <span className="upload-workflow-step__num">3</span>
+                                    <div>
+                                        <strong>Export</strong>
+                                        <span>Download a publication-ready PNG or save the config for batch use</span>
+                                    </div>
+                                </li>
+                            </ol>
+                        )}
                         {csvFiles.length > 0 && (
                             <div className="file-list">
                                 <h3>
@@ -162,7 +142,7 @@ const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
                                 {csvFiles.map((file, index) => (
                                     <div key={index} className="file-item">
                                         <div className="file-item-info">
-                                            <FileText size={24} style={{ color: 'var(--success-color)' }} />
+                                            <FileText size={24} className="file-item-icon" />
                                             <div>
                                                 <div className="file-item-name">{file.name}</div>
                                                 <div className="file-item-size">
@@ -184,8 +164,7 @@ const FileUploadSection = ({ csvFiles, onFileUpload, onRemoveFile }) => {
                         )}
                     </div>
                 </div>
-            </section>
-        </>
+        </section>
     );
 };
 

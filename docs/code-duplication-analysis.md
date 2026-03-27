@@ -245,7 +245,7 @@ Copy repository correctly imports from @siimpli/graph-it-core in:
 **Common Imports:**
 ```javascript
 // Constants
-DEFAULT_GRAPH_CONFIG, DEFAULT_CURVE_FIT, DEFAULT_SERIES_CONFIG, CURVE_FIT_COLORS
+DEFAULT_GRAPH_CONFIG, DEFAULT_CURVE_FIT, DEFAULT_SERIES_CONFIG, 
 
 // Utils
 debugLog, debugWarn, parseCSV, parseConfigFile, determineGraphType,

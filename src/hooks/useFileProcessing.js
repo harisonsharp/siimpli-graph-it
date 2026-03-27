@@ -106,6 +106,11 @@ export const useFileProcessing = () => {
             yAxis2: resolveColumn(data, config.yAxis2),
             colorGrading: resolveColumn(data, config.colorGrading),
             contouring: resolveColumn(data, config.contouring),
+            pdfLinking: config.pdfLinking ? {
+                ...config.pdfLinking,
+                nameField: resolveColumn(data, config.pdfLinking.nameField),
+                fileType: config.pdfLinking.fileType === 'json' ? 'json' : 'pdf'
+            } : config.pdfLinking,
         };
     }, []);
 

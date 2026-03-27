@@ -8,7 +8,6 @@
   "permissions": [
     "dialog:allow-open",
     "dialog:allow-save",
-    "dialog:default",
     "core:path:default",
     "core:app:default",
     "core:app:allow-version",
@@ -26,30 +25,24 @@
     "core:window:allow-get-all-windows",
     "fs:allow-write-file",
     "fs:allow-read-file",
+    "fs:allow-read-dir",
     "core:event:allow-listen",
     {
       "identifier": "fs:scope",
       "allow": [
-        {
-          "path": "$RESOURCE/**"
-        },
-        {
-          "path": "$APPDATA/**"
-        },
-        {
-          "path": "$TEMP/**"
-        },
-        {
-          "path": "**"
-        }
-      ]
-    },
-    {
-      "identifier": "fs:allow-appdata-read-recursive",
-      "allow": [
-        {
-          "path": "$APPDATA/**"
-        }
+        { "path": "$RESOURCE/**" },
+        { "path": "$APPDATA/**" },
+        { "path": "$TEMP/**" },
+        { "path": "**" }
+      ],
+      "deny": [
+        { "path": "$HOME/.ssh/**" },
+        { "path": "$HOME/.gnupg/**" },
+        { "path": "$HOME/.aws/**" },
+        { "path": "$HOME/.config/gcloud/**" },
+        { "path": "$HOME/.azure/**" },
+        { "path": "$APPCONFIG/Microsoft/Credentials/**" },
+        { "path": "$APPCONFIG/Microsoft/Protect/**" }
       ]
     },
     {
@@ -58,9 +51,10 @@
     {
       "identifier": "opener:allow-open-path",
       "allow": [
-        {
-          "path": "$TEMP/**/*.xlsx"
-        }
+        { "path": "**/*.pdf" },
+        { "path": "**/*.PDF" },
+        { "path": "**/*.json" },
+        { "path": "**/*.JSON" }
       ]
     },
     {
@@ -69,10 +63,6 @@
         {
           "name": "$RESOURCE/**",
           "sidecar": true
-        },
-        {
-          "name": "$APPDATA/**",
-          "args": true
         }
       ]
     },

@@ -128,26 +128,34 @@ const GraphApp = () => {
     const dataRange = useMemo(() => {
         if (!graphConfig.xAxis || csvData.length === 0) return { min: 0, max: 100 };
 
-        const xAxisInfo = parseColumnId(graphConfig.xAxis);
-        const validData = csvData.filter(d =>
-            d[xAxisInfo.columnName] !== undefined &&
-            !isNaN(+d[xAxisInfo.columnName])
-        );
+        try {
+            const xAxisInfo = parseColumnId(graphConfig.xAxis);
+            const filtered = csvData.filter(d =>
+                d[xAxisInfo.columnName] !== undefined &&
+                !Number.isNaN(+d[xAxisInfo.columnName])
+            );
 
-        if (validData.length === 0) return { min: 0, max: 100 };
+            if (filtered.length === 0) return { min: 0, max: 100 };
 
-        const extent = d3.extent(validData, d => +d[xAxisInfo.columnName]);
-        return { min: extent[0], max: extent[1] };
+            const extent = d3.extent(filtered, d => +d[xAxisInfo.columnName]);
+            return { min: extent[0], max: extent[1] };
+        } catch {
+            return { min: 0, max: 100 };
+        }
     }, [graphConfig.xAxis, csvData]);
 
     const validData = useMemo(() => {
         if (!graphConfig.xAxis || csvData.length === 0) return [];
 
-        const xAxisInfo = parseColumnId(graphConfig.xAxis);
-        return csvData.filter(d =>
-            d[xAxisInfo.columnName] !== undefined &&
-            !isNaN(+d[xAxisInfo.columnName])
-        );
+        try {
+            const xAxisInfo = parseColumnId(graphConfig.xAxis);
+            return csvData.filter(d =>
+                d[xAxisInfo.columnName] !== undefined &&
+                !Number.isNaN(+d[xAxisInfo.columnName])
+            );
+        } catch {
+            return [];
+        }
     }, [graphConfig.xAxis, csvData]);
 
     // Memoize series info for curve fitting
@@ -325,7 +333,6 @@ const GraphApp = () => {
     }, [updateGraphConfig, updateGlobalSettings, handleError, showSuccess]);
 
     const handleGenerateGraph = () => {
-        console.log('Generating graph... ID:', generationId + 1);
         setShowGraph(true);
         setGenerationId(prev => prev + 1);
     };
@@ -341,6 +348,7 @@ const GraphApp = () => {
                             csvFiles={csvFiles}
                             onFileUpload={handleFileUpload}
                             onRemoveFile={removeFile}
+                            onError={handleError}
                         />
 
                         {csvFiles.length > 0 && (
@@ -348,7 +356,7 @@ const GraphApp = () => {
                                 <div className="card">
                                     <div className="card-header">
                                         <h2 className="card-title">Graph Configuration</h2>
-                                        <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                                        <p className="card-subtitle">
                                             Configure your graph settings and data visualization options
                                         </p>
                                     </div>
@@ -363,50 +371,54 @@ const GraphApp = () => {
 
                                     <div className="card-footer">
                                         <div className="graph-controls">
-                                            <button type="button"
-                                                className="btn btn-primary btn-lg"
-                                                onClick={handleGenerateGraph}
-                                                disabled={!canGenerateGraph}
-                                                title={!logoReady ? 'Loading logo...' : !canGenerateGraph ? 'Please select X and Y axes' : ''}
-                                            >
-                                                <BarChart3 size={18} />
-                                                Generate Graph ({generationId})
-                                                {!logoReady && <span className="spinner" />}
-                                            </button>
+                                            <div className="graph-controls__primary">
+                                                <button type="button"
+                                                    className="btn btn-primary btn-lg"
+                                                    onClick={handleGenerateGraph}
+                                                    disabled={!canGenerateGraph}
+                                                    title={!logoReady ? 'Loading logo...' : !canGenerateGraph ? 'Please select X and Y axes' : ''}
+                                                >
+                                                    <BarChart3 size={18} />
+                                                    Generate Graph
+                                                    {!logoReady && <span className="spinner" />}
+                                                </button>
 
-                                            <button
-                                                className="btn btn-secondary" type="button"
-                                                onClick={importConfigFromJSON}
-                                            >
-                                                <Upload size={16} />
-                                                Import Config JSON
-                                            </button>
+                                                <button
+                                                    className="btn btn-outline" type="button"
+                                                    onClick={() => setShowCurveFitting(!showCurveFitting)}
+                                                >
+                                                    <TrendingUp size={16} />
+                                                    {showCurveFitting ? 'Hide' : 'Show'} Curve Fitting
+                                                </button>
+                                            </div>
 
-                                            {showGraph && (
-                                                <>
-                                                    <button className="btn btn-success" type="button" onClick={exportAsPNG}>
-                                                        <Download size={16} />
-                                                        Export as PNG
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-secondary" type="submit"
-                                                        onClick={exportConfigAsJSON}
-                                                        disabled={!canExportConfig}
-                                                        title={!canExportConfig ? 'Load data and select axes to export JSON' : ''}
-                                                    >
-                                                        <FileCode2 size={16} />
-                                                        Export Config JSON
-                                                    </button>
-                                                </>
-                                            )}
+                                            <div className="graph-controls__secondary">
+                                                <button
+                                                    className="btn btn-secondary" type="button"
+                                                    onClick={importConfigFromJSON}
+                                                >
+                                                    <Upload size={16} />
+                                                    Import Config
+                                                </button>
 
-                                            <button
-                                                className="btn btn-secondary" type="button"
-                                                onClick={() => setShowCurveFitting(!showCurveFitting)}
-                                            >
-                                                <TrendingUp size={16} />
-                                                {showCurveFitting ? 'Hide' : 'Show'} Curve Fitting
-                                            </button>
+                                                {showGraph && (
+                                                    <>
+                                                        <button className="btn btn-success" type="button" onClick={exportAsPNG}>
+                                                            <Download size={16} />
+                                                            Export PNG
+                                                        </button>
+                                                        <button
+                                                            className="btn btn-secondary" type="button"
+                                                            onClick={exportConfigAsJSON}
+                                                            disabled={!canExportConfig}
+                                                            title={!canExportConfig ? 'Load data and select axes to export JSON' : ''}
+                                                        >
+                                                            <FileCode2 size={16} />
+                                                            Export Config
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
 
                                         {showCurveFitting && (

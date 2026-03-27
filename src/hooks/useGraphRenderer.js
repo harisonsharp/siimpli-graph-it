@@ -191,12 +191,10 @@ export function useGraphRenderer({
             config
         );
         debugLog('[useGraphRenderer] Creating scales:', xScale, ' yscale: ', yScale);
-        debugLog('[useGraphRenderer] Creating color scale with scheme:', settings.colorScheme);
-        const colorScale = ScaleFactory.createColorScale(
-            validData,
-            colorInfo,
-            settings.colorScheme
-        );
+        // Legacy global colorGrading scale — kept for histogram fallback, null in practice now
+        const colorScale = colorInfo?.columnName
+            ? ScaleFactory.createColorScale(validData, colorInfo)
+            : null;
 
         // Use yAxisInfo.columnName for series color scale
         const seriesNames = seriesInfo.map(s => s.yAxisInfo.columnName).filter(Boolean);
@@ -205,7 +203,9 @@ export function useGraphRenderer({
             ? ScaleFactory.createSeriesColorScale(seriesNames, seriesInfo)
             : null;
 
-        return { xScale, yScale, colorScale, seriesColorScale };
+        const seriesColorScales = ScaleFactory.createSeriesColorScales(validData, seriesInfo);
+
+        return { xScale, yScale, colorScale, seriesColorScale, seriesColorScales };
     }, []);
 
     /**
@@ -359,10 +359,9 @@ export function useGraphRenderer({
      * @param {GraphService} graphService - Graph rendering service
      */
     const renderDataSeries = useCallback((g, validData, scales, columnInfo, config, graphService) => {
-        const { xScale, yScale, colorScale, seriesColorScale } = scales;
+        const { xScale, yScale, colorScale, seriesColorScale, seriesColorScales } = scales;
         const { xAxisInfo, seriesInfo, colorInfo } = columnInfo;
 
-        // Pass all required color parameters
         graphService.drawDataSeries(
             g,
             validData,
@@ -373,7 +372,8 @@ export function useGraphRenderer({
             colorScale,
             colorInfo,
             config,
-            seriesColorScale
+            seriesColorScale,
+            seriesColorScales
         );
     }, []);
 
@@ -430,7 +430,7 @@ export function useGraphRenderer({
      * @param {Object} columnInfo - Parsed column information with seriesInfo
      * @param {GraphService} graphService - Graph rendering service
      */
-    const renderCurveFits = useCallback((g, fits, scales, dimensions, columnInfo, graphService, axisInfo = {}) => {
+    const renderCurveFits = useCallback((g, fits, scales, dimensions, columnInfo, graphService, axisInfo = {}, config = {}) => {
         if (!fits || fits.length === 0) {
             return;
         }
@@ -438,7 +438,7 @@ export function useGraphRenderer({
         const { xScale, yScale } = scales;
         const { width } = dimensions;
 
-        return graphService.drawCurveFits(g, fits, xScale, yScale, width, columnInfo.seriesInfo, axisInfo, dimensions);
+        return graphService.drawCurveFits(g, fits, xScale, yScale, width, columnInfo.seriesInfo, axisInfo, dimensions, config);
     }, []);
 
     /**
@@ -516,6 +516,14 @@ export function useGraphRenderer({
                 settings.graphDimensions
             );
         }
+
+        // Per-series colour grading legends (floating panels in right margin)
+        if (scales.seriesColorScales) {
+            LegendRenderer.drawColorGradingLegends(
+                svg, seriesInfo, scales.seriesColorScales, validData, dimensions
+            );
+        }
+
         // FIXME: uncomment these lines for curve fitting legend
         // if (curve && Array.isArray(curve.legendItems) && curve.legendItems.length > 0) {
         //     const fallbackWidth = (dimensions.width || 0) + (margin.left + margin.right);
@@ -684,7 +692,7 @@ export function useGraphRenderer({
             renderLogo(svg, targetLogoImage, dimensions);
             renderDataSeries(g, validData, scales, columnInfo, targetGraphConfig, graphService);
             const contourLegend = renderContours(g, svg, validData, scales, columnInfo, targetGraphConfig, targetGlobalSettings, graphService) || null;
-            const curveLegend = renderCurveFits(g, targetCurveFits, scales, dimensions, columnInfo, graphService, axisInfo) || { legendItems: [] };
+            const curveLegend = renderCurveFits(g, targetCurveFits, scales, dimensions, columnInfo, graphService, axisInfo, targetGraphConfig) || { legendItems: [] };
 
             // -------------------------------------------------------------------------
             // Render Legends OR Unified Table (mutually exclusive when unified is enabled)
@@ -796,7 +804,7 @@ export function useGraphRenderer({
                 debugWarn('[useGraphRenderer] Canvas sizing failed, using default dimensions:', sizingError);
             }
 
-            if (onSuccess) onSuccess({ success: true, margin: dimensions.margin, finalDimensions });
+            if (onSuccess) onSuccess({ success: true, margin: dimensions.margin, finalDimensions, scales, dimensions });
             return true;
         } catch (error) {
             debugWarn('Failed to generate graph:', error);
