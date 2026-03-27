@@ -18,6 +18,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -30,7 +31,7 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_TOKEN }}
 
       - name: Build and release
         uses: tauri-apps/tauri-action@v0
