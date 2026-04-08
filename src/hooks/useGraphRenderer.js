@@ -150,8 +150,10 @@ export function useGraphRenderer({
         // Clamp margin to reasonable bounds (min 120, max 450)
         rightMargin = Math.max(120, Math.min(450, rightMargin));
 
-        // Adjust top margin for Project Name
-        const topMargin = graphConfig.projectName ? 110 : 80;
+        // Adjust top margin for project name/subtitle header rows.
+        const hasProjectName = Boolean(graphConfig.projectName && String(graphConfig.projectName).trim());
+        const hasSubtitle = Boolean(graphConfig.subtitle && String(graphConfig.subtitle).trim());
+        const topMargin = hasProjectName && hasSubtitle ? 130 : (hasProjectName || hasSubtitle ? 110 : 80);
 
         const margin = { top: topMargin, right: rightMargin, bottom: 100, left: 100 };
 
@@ -216,6 +218,53 @@ export function useGraphRenderer({
      * @param {Object} columnInfo - Parsed column information
      * @param {Object} settings - Global settings
      */
+    const renderProjectName = useCallback((svg, config, dimensions, title) => {
+        const centerX = dimensions.margin.left + dimensions.width / 2;
+        const projectName = (config.projectName || '').trim();
+        const subtitle = (config.subtitle || '').trim();
+        const hasProjectName = projectName.length > 0;
+        const hasSubtitle = subtitle.length > 0;
+
+        if (hasProjectName) {
+            svg.append('text')
+                .attr('x', centerX)
+                .attr('y', 30)
+                .attr('text-anchor', 'middle')
+                .attr('class', 'project-name')
+                .style('font-family', 'sans-serif')
+                .style('font-size', '28px')
+                .style('font-weight', 'bold')
+                .style('fill', '#333')
+                .text(projectName);
+        }
+
+        if (hasSubtitle) {
+            svg.append('text')
+                .attr('x', centerX)
+                .attr('y', hasProjectName ? 55 : 30)
+                .attr('text-anchor', 'middle')
+                .attr('class', 'graph-subtitle')
+                .style('font-family', 'sans-serif')
+                .style('font-size', '16px')
+                .style('font-weight', 'normal')
+                .style('fill', '#555')
+                .text(subtitle);
+        }
+
+        const titleY = hasProjectName ? (hasSubtitle ? 78 : 55) : (hasSubtitle ? 55 : 30);
+
+        svg.append('text')
+            .attr('x', centerX)
+            .attr('y', titleY)
+            .attr('text-anchor', 'middle')
+            .attr('class', 'graph-title')
+            .style('font-family', 'sans-serif')
+            .style('font-size', '20px')
+            .style('font-weight', hasProjectName || hasSubtitle ? 'normal' : 'bold')
+            .style('fill', hasProjectName || hasSubtitle ? '#444' : '#333')
+            .text(title);
+    }, []);
+
     const renderTitle = useCallback((svg, config, columnInfo, settings, dimensions) => {
         const { xAxisInfo, seriesInfo } = columnInfo;
         const title = config.title || generateTitle(
@@ -224,44 +273,8 @@ export function useGraphRenderer({
             xAxisInfo
         );
         debugLog('[useGraphRenderer] Rendering title:', title, ' with settings: ', settings);
-        // Render Project Name (Primary Title)
-        if (config.projectName) {
-            svg.append("text")
-                .attr("x", dimensions.margin.left + dimensions.width / 2)
-                .attr("y", 30)
-                .attr("text-anchor", "middle")
-                .attr("class", "project-name")
-                .style("font-family", "sans-serif")
-                .style("font-size", "28px")
-                .style("font-weight", "bold")
-                .style("fill", "#333")
-                .text(config.projectName);
-
-            // Render Graph Title (Secondary Title)
-            svg.append("text")
-                .attr("x", dimensions.margin.left + dimensions.width / 2)
-                .attr("y", 55)
-                .attr("text-anchor", "middle")
-                .attr("class", "graph-title")
-                .style("font-family", "sans-serif")
-                .style("font-size", "20px")
-                .style("font-weight", "normal")
-                .style("fill", "#444")
-                .text(title);
-        } else {
-            // Render Graph Title (Primary Title)
-            svg.append("text")
-                .attr("x", dimensions.margin.left + dimensions.width / 2)
-                .attr("y", 30)
-                .attr("text-anchor", "middle")
-                .attr("class", "graph-title")
-                .style("font-family", "sans-serif")
-                .style("font-size", "20px")
-                .style("font-weight", "bold")
-                .style("fill", "#333")
-                .text(title);
-        }
-    }, []);
+        renderProjectName(svg, config, dimensions, title);
+    }, [renderProjectName]);
 
     /**
      * Render axes with proper positioning

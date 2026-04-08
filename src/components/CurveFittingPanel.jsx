@@ -22,7 +22,7 @@ import {ScaleFactory} from'@harisonsharp/graph-it-core';
  * @param {Function} props.updateCurveFit - Function to update individual curve parameters
  * @param {Function} props.addCurveFit - Function to add new curve fit configuration
  * @param {Function} props.removeCurveFit - Function to remove curve fit configuration
- * @param {Array} props.seriesInfo - Array of available data series for curve fitting
+ * @param {Object} props.graphConfig - Graph configuration containing configured series
  *
  * @exports default CurveFittingPanel
  */
@@ -189,8 +189,12 @@ const CurveFittingPanel = ({
     updateCurveFit,
     addCurveFit,
     removeCurveFit,
-    seriesInfo = []
+    graphConfig = {}
 }) => {
+    const graphSeries = Array.isArray(graphConfig.series)
+        ? graphConfig.series
+        : (Array.isArray(graphConfig.Series) ? graphConfig.Series : []);
+
     const updateBands = (fitIndex, curveFit, updater) => {
         const prev = curveFit.confidenceBands ?? { enabled: false, bands: [] };
         updateCurveFit(fitIndex, 'confidenceBands', updater(prev));
@@ -288,7 +292,7 @@ const CurveFittingPanel = ({
                                     />
                                 </div>
 
-                                {seriesInfo.length > 0 && (
+                                {graphSeries.length > 0 && (
                                     <div className="curve-fit-field curve-fit-field--grow">
                                         <label className="curve-fit-field__label" htmlFor={`curve-fit-series-${index}`}>Series</label>
                                         <select
@@ -297,9 +301,9 @@ const CurveFittingPanel = ({
                                             onChange={(e) => updateCurveFit(index, 'seriesIndex', parseInt(e.target.value, 10))}
                                             className="form-select"
                                         >
-                                            {seriesInfo.map((series, idx) => (
-                                                <option key={series.yAxisInfo?.columnName ?? `series-${idx}`} value={idx}>
-                                                    Series {idx + 1}: {series.yAxisInfo?.columnName || 'Unnamed'}
+                                            {graphSeries.map((series, idx) => (
+                                                <option key={series.yAxis ?? `series-${idx}`} value={idx}>
+                                                    Series {idx + 1}: {series.titleName || series.yAxis || 'Unnamed'}
                                                 </option>
                                             ))}
                                         </select>
@@ -366,6 +370,22 @@ const CurveFittingPanel = ({
                                         className="form-input"
                                         aria-label={`Curve ${index + 1} maximum X`}
                                     />
+                                </div>
+
+                                <div className="curve-fit-field">
+                                    <label className="curve-fit-field__label" htmlFor={`curve-fit-line-style-${index}`}>Style</label>
+                                    <select
+                                        id={`curve-fit-line-style-${index}`}
+                                        value={curveFit.lineStyle || 'solid'}
+                                        onChange={(e) => updateCurveFit(index, 'lineStyle', e.target.value)}
+                                        className="form-select"
+                                        aria-label={`Curve ${index + 1} line style`}
+                                    >
+                                        <option value="solid">Solid</option>
+                                        <option value="dashed">Dashed</option>
+                                        <option value="dotted">Dotted</option>
+                                        <option value="dash-dot">Dash-Dot</option>
+                                    </select>
                                 </div>
 
                                 <div className="curve-fit-field curve-fit-field--narrow">

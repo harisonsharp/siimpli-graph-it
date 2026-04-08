@@ -72,6 +72,38 @@ function formatAxisNumber(value, thresholdDigits) {
     return String(value);
 }
 
+function getStaticScale(config, axisKey) {
+    const axisScale = config?.staticScales?.[axisKey];
+    if (!axisScale || axisScale.enabled !== true) return null;
+
+    const min = Number.parseFloat(axisScale.min);
+    const max = Number.parseFloat(axisScale.max);
+    const step = Number.parseFloat(axisScale.step);
+
+    if (!Number.isFinite(min) || !Number.isFinite(max) || !Number.isFinite(step)) return null;
+    if (max <= min || step <= 0) return null;
+
+    return { min, max, step };
+}
+
+function buildTickValues(min, max, step, maxTicks = 500) {
+    const ticks = [];
+    let index = 0;
+    let current = min;
+
+    while (current <= max + (step * 1e-6) && index < maxTicks) {
+        ticks.push(Number(current.toFixed(12)));
+        index += 1;
+        current = min + (index * step);
+    }
+
+    if (ticks.length > 0 && ticks[ticks.length - 1] !== max) {
+        ticks.push(max);
+    }
+
+    return ticks;
+}
+
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
@@ -200,6 +232,12 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         // 4. Axis generators for live tick rescaling during zoom
         // ------------------------------------------------------------------
         const config = graphConfigRef.current;
+        const staticXScale = getStaticScale(config, 'x');
+        const staticYScale = getStaticScale(config, 'y');
+        const staticY2Scale = getStaticScale(config, 'y2');
+        const staticXTicks = staticXScale ? buildTickValues(staticXScale.min, staticXScale.max, staticXScale.step) : null;
+        const staticYTicks = staticYScale ? buildTickValues(staticYScale.min, staticYScale.max, staticYScale.step) : null;
+        const staticY2Ticks = staticY2Scale ? buildTickValues(staticY2Scale.min, staticY2Scale.max, staticY2Scale.step) : null;
         const xDomain = xScale.domain();
         const xIsTimeScale = xDomain.length > 0 && xDomain[0] instanceof Date;
         const xAxisGen = d3.axisBottom(xScale)
@@ -209,14 +247,23 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                 : config?.logX
                     ? d => Number(d.toPrecision(4)).toString()
                     : d => formatAxisNumber(d, 6));
+        if (staticXTicks && !xIsTimeScale) {
+            xAxisGen.tickValues(staticXTicks);
+        }
         const yAxisGen = d3.axisLeft(yScale)
             .tickSizeOuter(0)
             .tickFormat(config?.logY
                 ? d => Number(d.toPrecision(4)).toString()
                 : d => formatAxisNumber(d, 8));
+        if (staticYTicks) {
+            yAxisGen.tickValues(staticYTicks);
+        }
         const y2AxisGen = yScale2
             ? d3.axisRight(yScale2).tickSizeOuter(0).tickFormat(d => formatAxisNumber(d, 8))
             : null;
+        if (y2AxisGen && staticY2Ticks) {
+            y2AxisGen.tickValues(staticY2Ticks);
+        }
 
         const xAxisGroup    = plotGroup.select('.x-axis');
         const yAxisGroup    = plotGroup.select('.y-axis-primary');
@@ -256,8 +303,8 @@ export function useGraphZoom(svgRef, graphConfigRef) {
 
                 // Reposition grid lines to follow the rescaled axis ticks
                 if (!guideGroup.empty()) {
-                    const yTicks = rescaledY.ticks ? rescaledY.ticks() : [];
-                    const xTicks = rescaledX.ticks ? rescaledX.ticks() : [];
+                    const yTicks = staticYTicks || (rescaledY.ticks ? rescaledY.ticks() : []);
+                    const xTicks = staticXTicks || (rescaledX.ticks ? rescaledX.ticks() : []);
 
                     // Rebuild horizontal lines from y-ticks
                     guideGroup.selectAll('line.grid-h').remove();

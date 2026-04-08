@@ -1,11 +1,22 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import debugContextPlugin from "./vite-plugins/debug-context.js";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const host = process.env.TAURI_DEV_HOST;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig(async () => ({
+  resolve: {
+    // Always resolve the core package to the sibling workspace path.
+    alias: {
+      "@harisonsharp/graph-it-core": path.resolve(__dirname, "../siimpli-graph-it-core/src/index.js"),
+    },
+  },
+
   plugins: [
     {
       name: 'vite-plugin-debug-context',

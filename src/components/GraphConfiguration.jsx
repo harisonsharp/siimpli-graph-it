@@ -228,6 +228,18 @@ const GraphConfiguration = ({
                     />
                 </div>
 
+                <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                    <label className="form-label" htmlFor="graph-subtitle">Subtitle</label>
+                    <input
+                        id="graph-subtitle"
+                        type="text"
+                        className="form-input"
+                        placeholder="Optional subtitle shown between project name and graph title"
+                        value={graphConfig.subtitle || ''}
+                        onChange={(e) => updateGraphConfig({ subtitle: e.target.value })}
+                    />
+                </div>
+
                 <div className="form-group">
                     <label className="form-label" htmlFor="x-axis-column">
                         X-Axis Column

@@ -158,16 +158,6 @@ const GraphApp = () => {
         }
     }, [graphConfig.xAxis, csvData]);
 
-    // Memoize series info for curve fitting
-    const seriesInfo = useMemo(() => {
-        return graphConfig.series
-            .map(s => ({
-                ...s,
-                yAxisInfo: parseColumnId(s.yAxis)
-            }))
-            .filter(s => s.yAxisInfo.columnName);
-    }, [graphConfig.series]);
-
     const canGenerateGraph = logoReady && graphConfig.xAxis && graphConfig.series.some(s => s.yAxis) && csvData.length > 0;
     const canExportConfig = csvFiles.length > 0 && graphConfig.xAxis && graphConfig.series.some(s => s.yAxis);
 
@@ -429,7 +419,7 @@ const GraphApp = () => {
                                                 updateCurveFit={updateCurveFit}
                                                 addCurveFit={addCurveFit}
                                                 removeCurveFit={removeCurveFit}
-                                                seriesInfo={seriesInfo}
+                                                graphConfig={graphConfig}
                                             />
                                         )}
                                     </div>
