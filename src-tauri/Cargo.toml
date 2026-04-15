@@ -53,6 +53,7 @@ tauri-plugin-dialog = "2.4.0"
 urlencoding = "2.1"
 base64 = "0.22"
 uuid = { version = "1.10", features = ["v4", "serde"] }
+keyring = "2"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

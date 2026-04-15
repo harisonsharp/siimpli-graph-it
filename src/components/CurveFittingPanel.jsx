@@ -31,7 +31,7 @@ import {ScaleFactory} from'@harisonsharp/graph-it-core';
 // Confidence band sub-component
 // ---------------------------------------------------------------------------
 
-const DEFAULT_BAND = { mode: 'stddev', nStdDev: 1, nBins: 8, upperExpr: '', lowerExpr: '', color: '' };
+const DEFAULT_BAND = { mode: 'stddev', nStdDev: 1, nBins: 8, smoothing: 0.15, upperExpr: '', lowerExpr: '', color: '' };
 
 const ConfidenceBandRow = ({ band, bandIdx, curveColor, onChange, onRemove }) => {
     const color = band.color || curveColor;
@@ -109,6 +109,26 @@ const ConfidenceBandRow = ({ band, bandIdx, curveColor, onChange, onRemove }) =>
                         className="form-input curve-fit-band-row__input"
                         placeholder="8"
                         title="Number of x-quantile bins for local std estimation — more bins = finer detail, fewer bins = smoother"
+                    />
+                </div>
+            )}
+
+            {band.mode === 'local_stddev' && (
+                <div className="curve-fit-band-row__field curve-fit-band-row__field--slider">
+                    <label htmlFor={`band-smoothing-${bandIdx}`} className="curve-fit-band-row__label">
+                        Smoothing
+                        <span className="curve-fit-band-row__slider-value">{((band.smoothing ?? 0.15) * 100).toFixed(0)}%</span>
+                    </label>
+                    <input
+                        id={`band-smoothing-${bandIdx}`}
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={band.smoothing ?? 0.15}
+                        onChange={e => onChange('smoothing', parseFloat(e.target.value))}
+                        className="curve-fit-band-row__slider"
+                        title="Kernel bandwidth — low = bands follow local variance closely, high = bands approach global average"
                     />
                 </div>
             )}
@@ -323,6 +343,7 @@ const CurveFittingPanel = ({
                                     >
                                         <option value="polynomial">Polynomial</option>
                                         <option value="power_law">Power law</option>
+                                        <option value="exponential">Exponential</option>
                                         <option value="best_fit">Best fit (auto)</option>
                                         <option value="custom">Custom equation</option>
                                     </select>

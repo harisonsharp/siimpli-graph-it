@@ -145,6 +145,9 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         if (!svgNode || !scales || !plotDims) return;
 
         const { xScale, yScale, yScale2 } = scales;
+        const canRescaleX = typeof xScale?.invert === 'function';
+        const canRescaleY = typeof yScale?.invert === 'function';
+        const canRescaleY2 = yScale2 ? typeof yScale2?.invert === 'function' : false;
         const { width: plotWidth, height: plotHeight } = plotDims;
 
         const svg = d3.select(svgNode);
@@ -235,18 +238,25 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         const staticXScale = getStaticScale(config, 'x');
         const staticYScale = getStaticScale(config, 'y');
         const staticY2Scale = getStaticScale(config, 'y2');
-        const staticXTicks = staticXScale ? buildTickValues(staticXScale.min, staticXScale.max, staticXScale.step) : null;
-        const staticYTicks = staticYScale ? buildTickValues(staticYScale.min, staticYScale.max, staticYScale.step) : null;
-        const staticY2Ticks = staticY2Scale ? buildTickValues(staticY2Scale.min, staticY2Scale.max, staticY2Scale.step) : null;
+        const staticXTicks = canRescaleX && staticXScale ? buildTickValues(staticXScale.min, staticXScale.max, staticXScale.step) : null;
+        const staticYTicks = canRescaleY && staticYScale ? buildTickValues(staticYScale.min, staticYScale.max, staticYScale.step) : null;
+        const staticY2Ticks = canRescaleY2 && staticY2Scale ? buildTickValues(staticY2Scale.min, staticY2Scale.max, staticY2Scale.step) : null;
         const xDomain = xScale.domain();
         const xIsTimeScale = xDomain.length > 0 && xDomain[0] instanceof Date;
+        const xIsBandScale = typeof xScale?.bandwidth === 'function';
+        let xTickFormatter;
+        if (xIsTimeScale) {
+            xTickFormatter = d3.timeFormat('%Y/%m/%d');
+        } else if (xIsBandScale) {
+            xTickFormatter = (d) => String(d);
+        } else if (config?.logX) {
+            xTickFormatter = (d) => Number(d.toPrecision(4)).toString();
+        } else {
+            xTickFormatter = (d) => formatAxisNumber(d, 6);
+        }
         const xAxisGen = d3.axisBottom(xScale)
             .tickSizeOuter(0)
-            .tickFormat(xIsTimeScale
-                ? d3.timeFormat('%Y/%m/%d')
-                : config?.logX
-                    ? d => Number(d.toPrecision(4)).toString()
-                    : d => formatAxisNumber(d, 6));
+            .tickFormat(xTickFormatter);
         if (staticXTicks && !xIsTimeScale) {
             xAxisGen.tickValues(staticXTicks);
         }
@@ -288,8 +298,8 @@ export function useGraphZoom(svgRef, graphConfigRef) {
 
                 dataWrapper.attr('transform', transform);
 
-                const rescaledX = transform.rescaleX(xScale);
-                const rescaledY = transform.rescaleY(yScale);
+                const rescaledX = canRescaleX ? transform.rescaleX(xScale) : xScale;
+                const rescaledY = canRescaleY ? transform.rescaleY(yScale) : yScale;
 
                 if (!xAxisGroup.empty()) {
                     xAxisGroup.call(xAxisGen.scale(rescaledX));
@@ -297,14 +307,14 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                 if (!yAxisGroup.empty()) {
                     yAxisGroup.call(yAxisGen.scale(rescaledY));
                 }
-                if (y2AxisGen && !y2AxisGroup.empty()) {
+                if (y2AxisGen && !y2AxisGroup.empty() && canRescaleY2) {
                     y2AxisGroup.call(y2AxisGen.scale(transform.rescaleY(yScale2)));
                 }
 
                 // Reposition grid lines to follow the rescaled axis ticks
                 if (!guideGroup.empty()) {
-                    const yTicks = staticYTicks || (rescaledY.ticks ? rescaledY.ticks() : []);
-                    const xTicks = staticXTicks || (rescaledX.ticks ? rescaledX.ticks() : []);
+                    const yTicks = canRescaleY ? (staticYTicks || (rescaledY.ticks ? rescaledY.ticks() : [])) : [];
+                    const xTicks = canRescaleX ? (staticXTicks || (rescaledX.ticks ? rescaledX.ticks() : [])) : [];
 
                     // Rebuild horizontal lines from y-ticks
                     guideGroup.selectAll('line.grid-h').remove();
