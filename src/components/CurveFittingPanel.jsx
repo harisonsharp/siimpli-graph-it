@@ -31,7 +31,7 @@ import {ScaleFactory} from'@harisonsharp/graph-it-core';
 // Confidence band sub-component
 // ---------------------------------------------------------------------------
 
-const DEFAULT_BAND = { mode: 'stddev', nStdDev: 1, nBins: 8, smoothing: 0.15, upperExpr: '', lowerExpr: '', color: '' };
+const DEFAULT_BAND = { mode: 'stddev', nStdDev: 1, nBins: 8, adaptiveBandwidth: 0, smoothing: 0, upperExpr: '', lowerExpr: '', color: '' };
 
 const ConfidenceBandRow = ({ band, bandIdx, curveColor, onChange, onRemove }) => {
     const color = band.color || curveColor;
@@ -74,11 +74,12 @@ const ConfidenceBandRow = ({ band, bandIdx, curveColor, onChange, onRemove }) =>
                 >
                     <option value="stddev">Std Dev from residuals (global)</option>
                     <option value="local_stddev">Local Std Dev (tapers with data)</option>
+                    <option value="lowess_stddev">Weighted Std Dev (LOWESS tricube)</option>
                     <option value="expression">Custom expressions</option>
                 </select>
             </div>
 
-            {(band.mode === 'stddev' || band.mode === 'local_stddev') && (
+            {(band.mode === 'stddev' || band.mode === 'local_stddev' || band.mode === 'lowess_stddev') && (
                 <div className="curve-fit-band-row__field">
                     <label htmlFor={nStdId} className="curve-fit-band-row__label">N std</label>
                     <input
@@ -113,24 +114,45 @@ const ConfidenceBandRow = ({ band, bandIdx, curveColor, onChange, onRemove }) =>
                 </div>
             )}
 
-            {band.mode === 'local_stddev' && (
-                <div className="curve-fit-band-row__field curve-fit-band-row__field--slider">
-                    <label htmlFor={`band-smoothing-${bandIdx}`} className="curve-fit-band-row__label">
-                        Smoothing
-                        <span className="curve-fit-band-row__slider-value">{((band.smoothing ?? 0.15) * 100).toFixed(0)}%</span>
-                    </label>
-                    <input
-                        id={`band-smoothing-${bandIdx}`}
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                        value={band.smoothing ?? 0.15}
-                        onChange={e => onChange('smoothing', parseFloat(e.target.value))}
-                        className="curve-fit-band-row__slider"
-                        title="Kernel bandwidth — low = bands follow local variance closely, high = bands approach global average"
-                    />
-                </div>
+            {(band.mode === 'local_stddev' || band.mode === 'lowess_stddev') && (
+                <>
+                    <div className="curve-fit-band-row__field curve-fit-band-row__field--slider">
+                        <label htmlFor={`band-adaptive-${bandIdx}`} className="curve-fit-band-row__label">
+                            {band.mode === 'lowess_stddev' ? 'Neighbourhood' : 'Adaptive BW'}
+                            <span className="curve-fit-band-row__slider-value">{((band.adaptiveBandwidth ?? 0) * 100).toFixed(0)}%</span>
+                        </label>
+                        <input
+                            id={`band-adaptive-${bandIdx}`}
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={band.adaptiveBandwidth ?? 0}
+                            onChange={e => onChange('adaptiveBandwidth', parseFloat(e.target.value))}
+                            className="curve-fit-band-row__slider"
+                            title={band.mode === 'lowess_stddev'
+                                ? 'Fraction of points used as neighbours — low = tight adaptive window tracking local variance, high = global average'
+                                : 'k-NN fraction of bins used for adaptive window — 0 = fixed bandwidth, higher = window adapts to local bin density'}
+                        />
+                    </div>
+                    <div className="curve-fit-band-row__field curve-fit-band-row__field--slider">
+                        <label htmlFor={`band-smoothing-${bandIdx}`} className="curve-fit-band-row__label">
+                            Smoothing
+                            <span className="curve-fit-band-row__slider-value">{((band.smoothing ?? 0) * 100).toFixed(0)}%</span>
+                        </label>
+                        <input
+                            id={`band-smoothing-${bandIdx}`}
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={band.smoothing ?? 0}
+                            onChange={e => onChange('smoothing', parseFloat(e.target.value))}
+                            className="curve-fit-band-row__slider"
+                            title="Post-smooth Gaussian blur — 0 = no smoothing, higher = band edges blurred across a wider x-range"
+                        />
+                    </div>
+                </>
             )}
 
             {band.mode === 'expression' && (
@@ -184,13 +206,36 @@ const CurveResult = ({ result, index }) => {
             {result.confidenceBands?.map((band, bi) => {
                 if (!band) return null;
                 const hasStdPct = band.upperStdPct != null && band.lowerStdPct != null;
+                const ps = band.pointStats;
                 return (
-                    <div key={`band-result-${band.upperStdPct ?? bi}-${band.lowerStdPct ?? 0}`} className="curve-fit-result__detail">
-                        Band {bi + 1}:{' '}
-                        {hasStdPct
-                            ? `Upper σ = ${band.upperStdPct.toFixed(1)}%  |  Lower σ = ${band.lowerStdPct.toFixed(1)}%`
-                            : `${band.upperBandPoints?.length ?? 0} upper pts, ${band.lowerBandPoints?.length ?? 0} lower pts`
-                        }
+                    <div key={`band-result-${band.upperStdPct ?? bi}-${band.lowerStdPct ?? 0}`} className="curve-fit-result__band-block">
+                        <div className="curve-fit-result__detail curve-fit-result__detail--band-title">
+                            Band {bi + 1}:{' '}
+                            {hasStdPct
+                                ? `Upper σ = ${band.upperStdPct.toFixed(1)}%  |  Lower σ = ${band.lowerStdPct.toFixed(1)}%`
+                                : `${band.upperBandPoints?.length ?? 0} upper pts, ${band.lowerBandPoints?.length ?? 0} lower pts`
+                            }
+                        </div>
+                        {ps && ps.total > 0 && (
+                            <div className="curve-fit-result__band-stats">
+                                <div className="curve-fit-result__detail">
+                                    Inside band: {ps.insideCount} / {ps.total} pts ({((ps.insideCount / ps.total) * 100).toFixed(1)}%)
+                                    {' · '}Outside: {ps.outsideCount}
+                                </div>
+                                {ps.aboveFitCount > 0 && (
+                                    <div className="curve-fit-result__detail curve-fit-result__detail--strip">
+                                        ↑ Above fit: {ps.aboveFitCount} pts — {ps.upperStripCount} within upper band
+                                        {' '}({ps.upperStripProportion != null ? (ps.upperStripProportion * 100).toFixed(1) : '—'}%)
+                                    </div>
+                                )}
+                                {ps.belowFitCount > 0 && (
+                                    <div className="curve-fit-result__detail curve-fit-result__detail--strip">
+                                        ↓ Below fit: {ps.belowFitCount} pts — {ps.lowerStripCount} within lower band
+                                        {' '}({ps.lowerStripProportion != null ? (ps.lowerStripProportion * 100).toFixed(1) : '—'}%)
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 );
             })}
