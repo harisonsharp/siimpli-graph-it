@@ -1,5 +1,6 @@
+import { invoke } from '@tauri-apps/api/core';
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { BarChart3, Download, TrendingUp, FileCode2, Upload } from 'lucide-react';
+import { BarChart3, BookmarkPlus, Download, TrendingUp, FileCode2, Upload } from 'lucide-react';
 import * as d3 from 'd3';
 import { parseColumnId, calculateAxisIntercepts, performCurveFitting, useConfig, useError, ExportService } from '@harisonsharp/graph-it-core';
 import { useFileManager } from '../hooks/useFileManager.js';
@@ -47,13 +48,16 @@ import '../App.css';
  * @related All application components and services
  */
 
-const GraphApp = () => {
+const GraphApp = ({ launchPayload = null }) => {
     const [showGraph, setShowGraph] = useState(false);
     const [generationId, setGenerationId] = useState(0);
     const [logoImage, setLogoImage] = useState(null);
     const [logoReady, setLogoReady] = useState(false);
     const [mode, setMode] = useState('manual');
     const [showCurveFitting, setShowCurveFitting] = useState(false);
+    const [templateName, setTemplateName] = useState('');
+    const [showTemplateSave, setShowTemplateSave] = useState(false);
+    const [savingTemplate, setSavingTemplate] = useState(false);
 
     // Create refs for SVG and Canvas for export functionality
     const svgRef = useRef();
@@ -75,6 +79,18 @@ const GraphApp = () => {
         };
         img.src = '/siimpli-graph-it-logo.png';
     }, []);
+
+    // Auto-load the CSV provided by Query-It when launched via "Build Graph"
+    useEffect(() => {
+        if (!launchPayload?.csvPath) return;
+        invoke('read_file_as_text', { path: launchPayload.csvPath })
+            .then(content => {
+                const filename = launchPayload.csvFilename || 'query-data.csv';
+                const file = new File([content], filename, { type: 'text/csv' });
+                return handleFileUpload([file]);
+            })
+            .catch(err => handleError(new Error(String(err)), 'Failed to load query data from Query-It'));
+    }, [launchPayload]);
 
     const colorSchemes = {
         'warm-cool': d3.interpolateRdYlBu,
@@ -161,95 +177,76 @@ const GraphApp = () => {
     const canGenerateGraph = logoReady && graphConfig.xAxis && graphConfig.series.some(s => s.yAxis) && csvData.length > 0;
     const canExportConfig = csvFiles.length > 0 && graphConfig.xAxis && graphConfig.series.some(s => s.yAxis);
 
+    const sanitizeDatasetId = (fileName = '', fallbackIndex = 0) => {
+        const slug = fileName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        return slug || `dataset-${fallbackIndex + 1}`;
+    };
+
+    const buildDatasetBindings = useCallback(() => {
+        if (!columns.length && !csvFiles.length) return [];
+        const grouped = new Map();
+        columns.forEach((col) => {
+            const fileKey = col.file || 'dataset';
+            if (!grouped.has(fileKey)) grouped.set(fileKey, []);
+            grouped.get(fileKey).push({
+                id: col.uniqueId || `${fileKey}::${col.name || 'column'}`,
+                name: col.name || col.uniqueId || 'Column',
+                type: col.type || col.dataType,
+                unit: col.unit || col.units,
+                file: col.file
+            });
+        });
+        csvFiles.forEach((file) => {
+            if (grouped.has(file.name)) return;
+            const headerColumns = (file.headers || []).map((header) => ({
+                id: `${file.name}::${header}`,
+                name: header,
+                file: file.name
+            }));
+            grouped.set(file.name, headerColumns);
+        });
+        return Array.from(grouped.entries()).map(([fileName, cols], index) => ({
+            id: sanitizeDatasetId(fileName, index),
+            file: fileName,
+            columns: cols.filter(Boolean).map((col, colIndex) => ({
+                id: col.id || `${fileName || 'dataset'}::column-${colIndex + 1}`,
+                name: col.name || `Column ${colIndex + 1}`,
+                type: col.type,
+                unit: col.unit
+            }))
+        }));
+    }, [columns, csvFiles]);
+
+    const buildConfigPayload = useCallback((source = 'GraphApp UI') => {
+        const datasetBindings = buildDatasetBindings();
+        return {
+            version: '1.0.0',
+            metadata: { generatedAt: new Date().toISOString(), source },
+            ...(datasetBindings.length ? { dataBindings: { datasets: datasetBindings } } : {}),
+            graph: JSON.parse(JSON.stringify(graphConfig)),
+            global: JSON.parse(JSON.stringify({
+                ...globalSettings,
+                graphDimensions: globalSettings.graphDimensions || { width: 800, height: 600 }
+            })),
+        };
+    }, [buildDatasetBindings, graphConfig, globalSettings]);
+
     const exportConfigAsJSON = useCallback(async () => {
         if (!canExportConfig) {
             handleError(new Error('Incomplete configuration'), 'Load at least one CSV and select axes before exporting JSON');
             return;
         }
-
-        const sanitizeDatasetId = (fileName = '', fallbackIndex = 0) => {
-            const slug = fileName
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '');
-            return slug || `dataset-${fallbackIndex + 1}`;
-        };
-
-        const buildDatasetBindings = () => {
-            if (!columns.length && !csvFiles.length) return [];
-
-            const grouped = new Map();
-
-            columns.forEach((col) => {
-                const fileKey = col.file || 'dataset';
-                if (!grouped.has(fileKey)) {
-                    grouped.set(fileKey, []);
-                }
-                grouped.get(fileKey).push({
-                    id: col.uniqueId || `${fileKey}::${col.name || 'column'}`,
-                    name: col.name || col.uniqueId || 'Column',
-                    type: col.type || col.dataType,
-                    unit: col.unit || col.units,
-                    file: col.file
-                });
-            });
-
-            csvFiles.forEach((file) => {
-                if (grouped.has(file.name)) return;
-                const headerColumns = (file.headers || []).map((header) => ({
-                    id: `${file.name}::${header}`,
-                    name: header,
-                    file: file.name
-                }));
-                grouped.set(file.name, headerColumns);
-            });
-
-            return Array.from(grouped.entries()).map(([fileName, cols], index) => ({
-                id: sanitizeDatasetId(fileName, index),
-                file: fileName,
-                columns: cols.filter(Boolean).map((col, colIndex) => ({
-                    id: col.id || `${fileName || 'dataset'}::column-${colIndex + 1}`,
-                    name: col.name || `Column ${colIndex + 1}`,
-                    type: col.type,
-                    unit: col.unit
-                }))
-            }));
-        };
-
         try {
-            const datasetBindings = buildDatasetBindings();
-            const graphPayload = JSON.parse(JSON.stringify(graphConfig));
-            const globalPayload = JSON.parse(JSON.stringify({
-                ...globalSettings,
-                graphDimensions: globalSettings.graphDimensions || { width: 800, height: 600 }
-            }));
-
-            const configPayload = {
-                version: '1.0.0',
-                metadata: {
-                    generatedAt: new Date().toISOString(),
-                    source: 'GraphApp UI'
-                },
-                ...(datasetBindings.length ? { dataBindings: { datasets: datasetBindings } } : {}),
-                graph: graphPayload,
-                global: globalPayload
-            };
-
+            const configPayload = buildConfigPayload('GraphApp UI');
             const jsonString = JSON.stringify(configPayload, null, 2);
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const filename = `graph-config-${timestamp}.json`;
 
             const supportsFilePicker = typeof window !== 'undefined' && window.showSaveFilePicker;
-
             if (supportsFilePicker) {
                 const handle = await window.showSaveFilePicker({
                     suggestedName: filename,
-                    types: [
-                        {
-                            description: 'JSON Configuration',
-                            accept: { 'application/json': ['.json'] }
-                        }
-                    ]
+                    types: [{ description: 'JSON Configuration', accept: { 'application/json': ['.json'] } }]
                 });
                 const writable = await handle.createWritable();
                 await writable.write(jsonString);
@@ -269,7 +266,27 @@ const GraphApp = () => {
         } catch (error) {
             handleError(error, 'Failed to export configuration JSON');
         }
-    }, [canExportConfig, columns, csvFiles, graphConfig, globalSettings, handleError, showSuccess]);
+    }, [canExportConfig, buildConfigPayload, handleError, showSuccess]);
+
+    const saveAsTemplate = useCallback(async () => {
+        if (!templateName.trim() || !canExportConfig || !launchPayload?.templatesDir) return;
+        setSavingTemplate(true);
+        try {
+            const configPayload = buildConfigPayload('Query-It Integration');
+            await invoke('save_graph_template', {
+                name: templateName.trim(),
+                content: JSON.stringify(configPayload, null, 2),
+                templatesDir: launchPayload.templatesDir,
+            });
+            showSuccess('Template saved — it will appear in Query-It\'s graph jobs');
+            setShowTemplateSave(false);
+            setTemplateName('');
+        } catch (error) {
+            handleError(error, 'Failed to save template');
+        } finally {
+            setSavingTemplate(false);
+        }
+    }, [templateName, canExportConfig, launchPayload, buildConfigPayload, handleError, showSuccess]);
 
     const importConfigFromJSON = useCallback(async () => {
         const supportsFilePicker = typeof window !== 'undefined' && window.showOpenFilePicker;
@@ -406,6 +423,18 @@ const GraphApp = () => {
                                                             <FileCode2 size={16} />
                                                             Export Config
                                                         </button>
+
+                                                        {launchPayload?.templatesDir && (
+                                                            <button
+                                                                className="btn btn-success" type="button"
+                                                                onClick={() => setShowTemplateSave(true)}
+                                                                disabled={!canExportConfig}
+                                                                title={!canExportConfig ? 'Select axes first' : 'Save config as a reusable template in Query-It'}
+                                                            >
+                                                                <BookmarkPlus size={16} />
+                                                                Save as Template
+                                                            </button>
+                                                        )}
                                                     </>
                                                 )}
                                             </div>
@@ -460,6 +489,48 @@ const GraphApp = () => {
                     <FilenameDecoder />
                 )}
             </main>
+
+            {showTemplateSave && (
+                <div className="gi-overlay" role="presentation">
+                    <div className="gi-overlay-backdrop" onClick={() => setShowTemplateSave(false)} />
+                    <div className="card gi-dialog" role="dialog" aria-modal="true" aria-labelledby="gi-tmpl-title">
+                        <div className="card-header">
+                            <h2 className="card-title" id="gi-tmpl-title">Save as Template</h2>
+                            <p className="card-subtitle">
+                                Saves this graph configuration to Query-It so you can generate this chart from any matching query.
+                            </p>
+                        </div>
+                        <div className="card-body">
+                            <div className="form-group">
+                                <label className="form-label" htmlFor="gi-tmpl-name">Template name</label>
+                                <input
+                                    id="gi-tmpl-name"
+                                    type="text"
+                                    className="form-input"
+                                    placeholder="e.g. Production vs Depth"
+                                    value={templateName}
+                                    onChange={(e) => setTemplateName(e.target.value)}
+                                    onKeyDown={(e) => { if (e.key === 'Enter' && templateName.trim()) saveAsTemplate(); if (e.key === 'Escape') setShowTemplateSave(false); }}
+                                    autoFocus
+                                />
+                            </div>
+                        </div>
+                        <div className="card-footer" style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                            <button className="btn btn-outline" type="button" onClick={() => setShowTemplateSave(false)}>
+                                Cancel
+                            </button>
+                            <button
+                                className="btn btn-success" type="button"
+                                disabled={!templateName.trim() || savingTemplate}
+                                onClick={saveAsTemplate}
+                            >
+                                <BookmarkPlus size={16} />
+                                {savingTemplate ? 'Saving…' : 'Save Template'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
