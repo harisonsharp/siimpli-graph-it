@@ -45,6 +45,7 @@ const AXIS_CLASSES = new Set([
     'x-axis', 'y-axis', 'y-axis-primary', 'y-axis-secondary',
     'x-axis-label', 'y-axis-label', 'y-axis-label-primary', 'y-axis-label-secondary',
     'guide-lines',
+    'histogram-stats-table', // lives in bottom margin — must not enter the clip region
 ]);
 
 function isAxisOrLabel(el) {
@@ -163,9 +164,10 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         //    DOM structure after setup:
         //      g (plotGroup)
         //        ├── .x-axis / .y-axis-* / .guide-lines  (fixed)
-        //        ├── rect.zoom-capture                    (event target)
-        //        └── g.plot-clip  [clip-path=url(#zoom-clip)]
+        //        └── g.plot-clip  [clip-path=url(#zoom-clip), zoom behavior]
+        //              ├── rect.zoom-capture              (hit surface for empty space, fixed)
         //              └── g.plot-data  [transform=zoomTransform]
+        //                    ├── rect.overlay             (DataTable events, if active)
         //                    └── … all data elements
         // ------------------------------------------------------------------
         plotGroup.select('g.plot-clip').remove(); // clean up if re-running
@@ -195,7 +197,21 @@ export function useGraphZoom(svgRef, graphConfigRef) {
             .attr('class', 'plot-clip')
             .attr('clip-path', `url(#${clipId})`);
 
-        // Inner group that receives the zoom transform
+        // Invisible hit-surface rect — direct child of clipGroup (NOT inside dataWrapper)
+        // so it stays fixed in clip space while dataWrapper receives the zoom transform.
+        // Covers the full plot area to capture pointer events on empty chart space.
+        // dataWrapper is appended after this rect, so data elements paint above it.
+        const captureEl = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        d3.select(captureEl)
+            .attr('class', 'zoom-capture')
+            .attr('x', 0).attr('y', 0)
+            .attr('width', plotWidth).attr('height', plotHeight)
+            .attr('fill', 'none')
+            .attr('pointer-events', 'all');
+        clipGroup.node().appendChild(captureEl);
+
+        // Inner group that receives the zoom transform — appended after zoom-capture
+        // so data elements are topmost within the clip region.
         const dataWrapper = clipGroup.append('g').attr('class', 'plot-data');
 
         // Reparent all non-axis children into the inner wrapper
@@ -206,22 +222,16 @@ export function useGraphZoom(svgRef, graphConfigRef) {
             }
         });
 
-        // ------------------------------------------------------------------
-        // 3. Invisible capture rect — confines wheel/drag to the data region.
-        //    Insert directly before clipGroup using the DOM node as reference
-        //    to avoid a selector-based lookup that can fail if the element has
-        //    moved during the reparent step above.
-        // ------------------------------------------------------------------
-        plotGroup.select('.zoom-capture').remove();
-        const captureEl = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        plotGroup.node().insertBefore(captureEl, clipGroup.node());
-        d3.select(captureEl)
-            .attr('class', 'zoom-capture')
-            .attr('x', 0).attr('y', 0)
-            .attr('width', plotWidth).attr('height', plotHeight)
-            .attr('fill', 'none')
-            .attr('pointer-events', 'all');
+        // Move the overlay (if present) to be the FIRST child of dataWrapper so that
+        // all data elements (dots, lines, bars) paint above it in SVG z-order.
+        const overlayEl = dataWrapper.select('rect.overlay').node();
+        if (overlayEl && dataWrapper.node().firstChild !== overlayEl) {
+            dataWrapper.node().insertBefore(overlayEl, dataWrapper.node().firstChild);
+        }
 
+        // ------------------------------------------------------------------
+        // 3. Guide-lines group owned by zoom
+        // ------------------------------------------------------------------
         // Fresh guide-lines group owned by zoom — inserted before clipGroup so it
         // renders behind data but above the axis lines.
         plotGroup.select('.guide-lines').remove();
@@ -285,10 +295,6 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         // ------------------------------------------------------------------
         const zoom = d3.zoom()
             .scaleExtent([MIN_ZOOM, MAX_ZOOM])
-            .translateExtent([
-                [-plotWidth  * 0.5, -plotHeight * 0.5],
-                [ plotWidth  * 1.5,  plotHeight * 1.5],
-            ])
             .on('start', (event) => {
                 if (event.sourceEvent?.type === 'mousedown') setIsPanning(true);
             })
@@ -302,19 +308,53 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                 const rescaledY = canRescaleY ? transform.rescaleY(yScale) : yScale;
 
                 if (!xAxisGroup.empty()) {
+                    if (staticXTicks && !xIsTimeScale) {
+                        const [xMin, xMax] = rescaledX.domain();
+                        const visibleXTicks = staticXTicks.filter(t => t >= xMin && t <= xMax);
+                        xAxisGen.tickValues(visibleXTicks.length >= 2 ? visibleXTicks : null);
+                    }
                     xAxisGroup.call(xAxisGen.scale(rescaledX));
                 }
                 if (!yAxisGroup.empty()) {
+                    if (staticYTicks) {
+                        const [yMin, yMax] = rescaledY.domain().sort((a, b) => a - b);
+                        const visibleYTicks = staticYTicks.filter(t => t >= yMin && t <= yMax);
+                        yAxisGen.tickValues(visibleYTicks.length >= 2 ? visibleYTicks : null);
+                    }
                     yAxisGroup.call(yAxisGen.scale(rescaledY));
                 }
                 if (y2AxisGen && !y2AxisGroup.empty() && canRescaleY2) {
-                    y2AxisGroup.call(y2AxisGen.scale(transform.rescaleY(yScale2)));
+                    const rescaledY2 = transform.rescaleY(yScale2);
+                    if (staticY2Ticks) {
+                        const [y2Min, y2Max] = rescaledY2.domain().sort((a, b) => a - b);
+                        const visibleY2Ticks = staticY2Ticks.filter(t => t >= y2Min && t <= y2Max);
+                        y2AxisGen.tickValues(visibleY2Ticks.length >= 2 ? visibleY2Ticks : null);
+                    }
+                    y2AxisGroup.call(y2AxisGen.scale(rescaledY2));
                 }
 
                 // Reposition grid lines to follow the rescaled axis ticks
                 if (!guideGroup.empty()) {
-                    const yTicks = canRescaleY ? (staticYTicks || (rescaledY.ticks ? rescaledY.ticks() : [])) : [];
-                    const xTicks = canRescaleX ? (staticXTicks || (rescaledX.ticks ? rescaledX.ticks() : [])) : [];
+                    let yTicks = [];
+                    if (canRescaleY) {
+                        if (staticYTicks) {
+                            const [yMin, yMax] = rescaledY.domain().sort((a, b) => a - b);
+                            yTicks = staticYTicks.filter(t => t >= yMin && t <= yMax);
+                        } else {
+                            yTicks = rescaledY.ticks ? rescaledY.ticks() : [];
+                        }
+                    }
+                    let xTicks = [];
+                    if (canRescaleX && !xIsTimeScale) {
+                        if (staticXTicks) {
+                            const [xMin, xMax] = rescaledX.domain();
+                            xTicks = staticXTicks.filter(t => t >= xMin && t <= xMax);
+                        } else {
+                            xTicks = rescaledX.ticks ? rescaledX.ticks() : [];
+                        }
+                    } else if (canRescaleX) {
+                        xTicks = rescaledX.ticks ? rescaledX.ticks() : [];
+                    }
 
                     // Rebuild horizontal lines from y-ticks
                     guideGroup.selectAll('line.grid-h').remove();
@@ -349,16 +389,17 @@ export function useGraphZoom(svgRef, graphConfigRef) {
             })
             .on('end', () => setIsPanning(false));
 
-        const captureRect = d3.select(captureEl);
-        captureRect.call(zoom);
+        // Attach zoom behavior to clipGroup — wheel/drag events on any child
+        // (dots, overlay, empty data area) bubble up here naturally.
+        clipGroup.call(zoom);
         // Suppress double-click zoom — conflicts with data-point click interactions
-        captureRect.on('dblclick.zoom', null);
+        clipGroup.on('dblclick.zoom', null);
 
         // Draw initial grid at identity transform (no zoom yet)
-        captureRect.call(zoom.transform, d3.zoomIdentity);
+        clipGroup.call(zoom.transform, d3.zoomIdentity);
 
         zoomBehaviorRef.current = zoom;
-        zoomTargetRef.current   = captureRect;
+        zoomTargetRef.current   = clipGroup;
     }, [svgRef, graphConfigRef]);
 
     // ------------------------------------------------------------------
