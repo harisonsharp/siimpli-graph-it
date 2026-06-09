@@ -451,7 +451,18 @@ export function useGraphRenderer({
         const { xScale, yScale } = scales;
         const { width } = dimensions;
 
-        return graphService.drawCurveFits(g, fits, xScale, yScale, width, columnInfo.seriesInfo, axisInfo, dimensions, config);
+        // Custom equations can produce large-but-finite y values (e.g. (x-1.1)/x at
+        // small x) that map to pixel coordinates thousands of pixels outside the plot.
+        // getBBox() on the SVG picks up unclipped geometry, so CanvasSizer inflates
+        // the graph height to match.  Clamping the scale constrains path coordinates
+        // to the plot range before they enter the SVG, keeping getBBox reasonable.
+        // yScale may be a {primary, secondary} dual-axis object — clamp both branches.
+        const isDualAxis = yScale && typeof yScale === 'object' && yScale.primary && yScale.secondary;
+        const clampedYScale = isDualAxis
+            ? { primary: yScale.primary.copy().clamp(true), secondary: yScale.secondary.copy().clamp(true) }
+            : yScale.copy().clamp(true);
+
+        return graphService.drawCurveFits(g, fits, xScale, clampedYScale, width, columnInfo.seriesInfo, axisInfo, dimensions, config);
     }, []);
 
     /**

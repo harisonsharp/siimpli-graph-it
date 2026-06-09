@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($localAppDataPath = \"$env:LOCALAPPDATA\\\\com.siimpl.siimpli-graph-it\"; if \\(Test-Path $localAppDataPath\\) { Get-ChildItem $localAppDataPath -ErrorAction SilentlyContinue | Select-Object Name, LastWriteTime, Attributes } else { Write-Output \"Directory does not exist: $localAppDataPath\" })",
+      "Read(//c/Users/Chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tauri-2.9.5/src/**)",
+      "PowerShell(Get-ChildItem \"$env:LOCALAPPDATA\\\\SiimpliGraphIt\" -ErrorAction SilentlyContinue -Recurse | Select-Object FullName, Attributes | Select-Object -First 20)",
+      "Bash(ls \"C:/Users/Chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/\" | grep wry)",
+      "Read(//c/Users/Chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/**)",
+      "Bash(find \"c:/Users/Chris/siimpli/siimpli-graph-it/node_modules/@harisonsharp/graph-it-core\" -name \"*.js\" | head -20)",
+      "Read(//c/Users/Chris/siimpli/siimpli-graph-it-core/**)"
+    ]
+  }
+}

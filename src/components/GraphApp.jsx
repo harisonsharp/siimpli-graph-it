@@ -63,7 +63,7 @@ const GraphApp = ({ launchPayload = null }) => {
     const svgRef = useRef();
     const canvasRef = useRef();
 
-    const { graphConfig, curveFits, globalSettings, updateGraphConfig, updateCurveFit, updateGlobalSettings, addCurveFit, removeCurveFit } = useConfig();
+    const { graphConfig, curveFits, globalSettings, updateGraphConfig, updateCurveFit, loadCurveFits, updateGlobalSettings, addCurveFit, removeCurveFit } = useConfig();
     const { handleError, showSuccess } = useError();
     const { csvFiles, csvData, columns, removeFile, handleFileUpload } = useFileManager(graphConfig, updateGraphConfig);
 
@@ -219,17 +219,19 @@ const GraphApp = ({ launchPayload = null }) => {
 
     const buildConfigPayload = useCallback((source = 'GraphApp UI') => {
         const datasetBindings = buildDatasetBindings();
+        const curveFitsForExport = curveFits.map(({ result, ...fit }) => fit);
         return {
             version: '1.0.0',
             metadata: { generatedAt: new Date().toISOString(), source },
             ...(datasetBindings.length ? { dataBindings: { datasets: datasetBindings } } : {}),
+            curveFits: curveFitsForExport,
             graph: JSON.parse(JSON.stringify(graphConfig)),
             global: JSON.parse(JSON.stringify({
                 ...globalSettings,
                 graphDimensions: globalSettings.graphDimensions || { width: 800, height: 600 }
             })),
         };
-    }, [buildDatasetBindings, graphConfig, globalSettings]);
+    }, [buildDatasetBindings, graphConfig, globalSettings, curveFits]);
 
     const exportConfigAsJSON = useCallback(async () => {
         if (!canExportConfig) {
@@ -336,8 +338,11 @@ const GraphApp = ({ launchPayload = null }) => {
 
         updateGraphConfig(config.graph);
         updateGlobalSettings(config.global);
+        if (Array.isArray(config.curveFits) && config.curveFits.length > 0) {
+            loadCurveFits(config.curveFits);
+        }
         showSuccess('Configuration imported successfully');
-    }, [updateGraphConfig, updateGlobalSettings, handleError, showSuccess]);
+    }, [updateGraphConfig, updateGlobalSettings, loadCurveFits, handleError, showSuccess]);
 
     const handleGenerateGraph = () => {
         setShowGraph(true);

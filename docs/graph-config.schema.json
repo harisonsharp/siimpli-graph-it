@@ -30,6 +30,13 @@
         }
       }
     },
+    "curveFits": {
+      "type": "array",
+      "description": "Curve fit configurations to restore on import. The result field is omitted; fits are recomputed when data is loaded.",
+      "items": {
+        "$ref": "#/$defs/curveFit"
+      }
+    },
     "graph": {
       "$ref": "#/$defs/graphConfig"
     },
@@ -421,6 +428,117 @@
         },
         "y2": {
           "$ref": "#/$defs/axisStaticScale"
+        }
+      }
+    },
+    "confidenceBand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["stddev", "local_stddev", "lowess_stddev", "expression"],
+          "description": "Algorithm used to compute the confidence envelope."
+        },
+        "nStdDev": {
+          "type": "number",
+          "description": "Width of the band expressed in standard deviations."
+        },
+        "nBins": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of x-quantile bins for local_stddev mode."
+        },
+        "adaptiveBandwidth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "k-NN neighbourhood fraction for lowess_stddev mode."
+        },
+        "smoothing": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Post-smooth Gaussian blur fraction."
+        },
+        "upperExpr": {
+          "type": "string",
+          "description": "Upper bound expression for expression mode (e.g. \"y * 1.1\")."
+        },
+        "lowerExpr": {
+          "type": "string",
+          "description": "Lower bound expression for expression mode (e.g. \"y * 0.9\")."
+        },
+        "color": {
+          "type": "string",
+          "description": "CSS color applied to the band fill."
+        }
+      }
+    },
+    "curveFit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether this curve fit is active."
+        },
+        "seriesIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index of the series this fit is applied to."
+        },
+        "xMin": {
+          "type": ["string", "number"],
+          "description": "Lower x bound for the fit range. Empty string means use data minimum."
+        },
+        "xMax": {
+          "type": ["string", "number"],
+          "description": "Upper x bound for the fit range. Empty string means use data maximum."
+        },
+        "fitType": {
+          "type": "string",
+          "enum": ["polynomial", "power_law", "exponential", "best_fit", "custom"],
+          "description": "Regression algorithm to apply."
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "description": "Polynomial degree, used when fitType is polynomial."
+        },
+        "strokeWidth": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Line width in pixels."
+        },
+        "lineStyle": {
+          "type": "string",
+          "enum": ["solid", "dashed", "dotted", "dash-dot"],
+          "description": "Stroke dash pattern for the curve line."
+        },
+        "customEquation": {
+          "type": "string",
+          "description": "User-supplied equation string for custom fit type (e.g. \"30.65 * x^0.2286\")."
+        },
+        "color": {
+          "type": "string",
+          "description": "CSS color applied to the fit line."
+        },
+        "confidenceBands": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "bands": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/confidenceBand"
+              }
+            }
+          }
         }
       }
     },
