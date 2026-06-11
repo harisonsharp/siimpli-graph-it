@@ -1,7 +1,7 @@
 {
   "name": "siimpli-graph-it",
   "private": true,
-  "version": "0.3.70",
+  "version": "0.3.71",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -27,6 +27,8 @@
   "devDependencies": {
     "@tauri-apps/cli": "^2",
     "@vitejs/plugin-react": "^4.6.0",
-    "vite": "^7.0.4"
+    "nyc": "^18.0.0",
+    "vite": "^7.0.4",
+    "vite-plugin-istanbul": "^9.0.1"
   }
 }
