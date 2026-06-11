@@ -1,0 +1,3 @@
+- TODO: Investigate difference between graphConfig and globalSettings, and see if everything can be put under graphConfig (removing globalSettings)
+- Trying to fix the unified table renderer so it renders distinct colour gradient types.
+- Adding "ignore values" to unified table as an option

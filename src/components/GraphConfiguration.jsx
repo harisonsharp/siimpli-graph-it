@@ -1117,19 +1117,35 @@ const GraphConfiguration = ({
                                 </div>
                                 <p className="form-hint form-hint--indented">Persistent table below legend. Click graph or enter value to update.</p>
 
+                                {/* FIXME: added jank with ignore values*/}
                                 {globalSettings.showStaticTable && (
-                                    <label className="form-label checkbox-label" htmlFor="show-unified-table" style={{ marginTop: 'var(--spacing-sm)', marginLeft: '24px' }}>
-                                        <input
-                                            id="show-unified-table"
-                                            type="checkbox"
-                                            checked={globalSettings.showUnifiedTable || false}
-                                            onChange={(e) => updateGlobalSettings({ showUnifiedTable: e.target.checked })}
-                                        />
-                                        <span>Unified Table (Legend + Values)</span>
-                                    </label>
+                                    
+                                    <>
+                                        <label className="form-label checkbox-label" htmlFor="show-unified-table" style={{ marginTop: 'var(--spacing-sm)', marginLeft: '24px' }}>
+                                            <input
+                                                id="show-unified-table"
+                                                type="checkbox"
+                                                checked={graphConfig.showUnifiedTable || false}
+                                                onChange={(e) => updateGraphConfig({ showUnifiedTable: e.target.checked })}
+                                            />
+                                            <span>Unified Table (Legend + Values)</span>
+                                        </label>
+                                        {
+                                        <label className="form-label checkbox-label" htmlFor="ignore-values" style={{ marginTop: 'var(--spacing-sm)', marginLeft: '24px' }}>
+                                            <input
+                                                id="ignore-unified-values"
+                                                type="checkbox"
+                                                checked={graphConfig.ignoreUnifiedValues || false}
+                                                onChange={(e) => updateGraphConfig({ ignoreUnifiedValues: e.target.checked })}
+                                            />
+                                            <span>Ignore Values</span>
+                                        </label>
+                                        }
+                                    </>
+
                                 )}
 
-                                {globalSettings.showStaticTable && globalSettings.showUnifiedTable && (
+                                {globalSettings.showStaticTable && graphConfig.showUnifiedTable && (
                                     <div style={{ marginTop: 'var(--spacing-sm)', marginLeft: '24px' }}>
                                         <label className="form-label checkbox-label" htmlFor="show-bias-table">
                                             <input

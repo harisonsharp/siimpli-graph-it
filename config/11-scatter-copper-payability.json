@@ -1,0 +1,297 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "generatedAt": "2026-06-09T23:01:36.219Z",
+    "source": "GraphApp UI"
+  },
+  "dataBindings": {
+    "datasets": [
+      {
+        "id": "data-1781030162351-csv",
+        "file": "data-1781030162351.csv",
+        "columns": [
+          {
+            "id": "report_id::data-1781030162351.csv",
+            "name": "report_id"
+          },
+          {
+            "id": "summary::data-1781030162351.csv",
+            "name": "summary"
+          },
+          {
+            "id": "payable_percent::data-1781030162351.csv",
+            "name": "payable_percent"
+          },
+          {
+            "id": "grade_deduction_percent::data-1781030162351.csv",
+            "name": "grade_deduction_percent"
+          },
+          {
+            "id": "spill_loss_factor_percent::data-1781030162351.csv",
+            "name": "spill_loss_factor_percent"
+          },
+          {
+            "id": "concentrate_grade_percent::data-1781030162351.csv",
+            "name": "concentrate_grade_percent"
+          },
+          {
+            "id": "concentrate_type::data-1781030162351.csv",
+            "name": "concentrate_type"
+          },
+          {
+            "id": "concentrate_grade_pct::data-1781030162351.csv",
+            "name": "concentrate_grade_pct"
+          },
+          {
+            "id": "final_payability_pct::data-1781030162351.csv",
+            "name": "final_payability_pct"
+          }
+        ]
+      }
+    ]
+  },
+  "curveFits": [
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "0",
+      "color": "#ff6b6b",
+      "xMax": "15",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "(x-1.1)/x * 100",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "16",
+      "color": "#ff6b6b",
+      "xMax": "20",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "(x-0.9)/x * 100",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "15",
+      "color": "#ff6b6b",
+      "xMax": "16",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "1.708333 * x + 67.041667",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "21",
+      "color": "#ff6b6b",
+      "xMax": "25",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "(x-0.7)/x * 100",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "20",
+      "color": "#ff6b6b",
+      "xMax": "21",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "1.1667 * x + 72.1667",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "26",
+      "color": "#ff6b6b",
+      "xMax": "30",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "(x-0.5)/x * 100",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "25",
+      "color": "#ff6b6b",
+      "xMax": "26",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "0.87692308 * x + 75.276923",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "31",
+      "color": "#ff6b6b",
+      "xMax": "100",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "(x-0.3)/x * 100",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    },
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "30",
+      "color": "#ff6b6b",
+      "xMax": "31",
+      "fitType": "custom",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "0.69892473 * x + 77.36559143",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    }
+  ],
+  "graph": {
+    "xAxis": "concentrate_grade_pct::data-1781030162351.csv",
+    "informativeFields": [
+      "report_id::data-1781030162351.csv",
+      "concentrate_type::data-1781030162351.csv"
+    ],
+    "pdfLinking": {
+      "enabled": false,
+      "folderPath": "",
+      "nameField": "",
+      "fileType": "pdf"
+    },
+    "series": [
+      {
+        "yAxis": "final_payability_pct::data-1781030162351.csv",
+        "graphType": "scatter",
+        "axisAssignment": "primary",
+        "titleName": "",
+        "color": "",
+        "strokeWidth": 2,
+        "colorGrading": {
+          "enabled": true,
+          "mode": "distinct",
+          "column": "concentrate_type::data-1781030162351.csv",
+          "scheme": "warm-cool",
+          "categoryColors": {}
+        },
+        "filter": true,
+        "filterColumn": "concentrate_type::data-1781030162351.csv"
+      }
+    ],
+    "contouring": "",
+    "graphType": "scatter",
+    "barMode": "group",
+    "title": "Copper Payability vs Concentrate Grade",
+    "subtitle": "",
+    "dualUnits": false,
+    "scaleFactor": 1,
+    "fromUnits": "",
+    "toUnits": "",
+    "xAxisLabel": "Copper Concentrate Grade (%)",
+    "yAxisLabel": "Copper Payability (%)",
+    "yAxisLabel2": "",
+    "axisIntercept": "origin",
+    "customIntercept": {
+      "x": 0,
+      "y": 0
+    },
+    "staticScales": {
+      "x": {
+        "enabled": false,
+        "min": "",
+        "max": "",
+        "step": ""
+      },
+      "y": {
+        "enabled": false,
+        "min": "",
+        "max": "",
+        "step": ""
+      },
+      "y2": {
+        "enabled": false,
+        "min": "",
+        "max": "",
+        "step": ""
+      }
+    },
+    "dualYAxis": false,
+    "yAxis2": "",
+    "widthMultiplier": 1.2
+  },
+  "global": {
+    "colorScheme": "green-red",
+    "axisIntercept": "origin",
+    "customIntercept": {
+      "x": 0,
+      "y": 0
+    },
+    "graphDimensions": {
+      "width": 800,
+      "height": 600
+    },
+    "showGuideLines": true,
+    "showDataTable": false,
+    "showStaticTable": true,
+    "selectedXValue": null,
+    "showUnifiedTable": true
+  }
+}
