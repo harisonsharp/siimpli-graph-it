@@ -1,0 +1,111 @@
+# Ported from .github/workflows/release.yml as part of the migration to
+# self-hosted Gitea. See mine_analytics/.gitea/workflows/release.yml for the
+# same category of changes (windows-dev runner, Gitea-hosted sibling
+# checkout, Gitea npm registry). The GitHub-Releases-specific step
+# (tauri-apps/tauri-action's built-in release upload, gated on
+# TAURI_SIGNING_PRIVATE_KEY*) has the same unresolved-decision flag as
+# mine_analytics's softprops/action-gh-release step — left pointed at GitHub
+# Releases for now.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [core-published]
+
+jobs:
+  release:
+    runs-on: windows-dev
+    permissions:
+      contents: write
+      packages: read
+      issues: write
+
+    steps:
+      - name: Checkout siimpli-graph-it-copy
+        uses: actions/checkout@v4
+        with:
+          path: siimpli-graph-it-copy
+
+      - name: Checkout siimpli-graph-it-core
+        uses: actions/checkout@v4
+        with:
+          repository: siimpli/siimpli-graph-it-core
+          ref: ${{ github.event.client_payload.core_version || '' }}
+          path: siimpli-graph-it-core
+          token: ${{ secrets.GITEA_CROSS_REPO_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://<mesh-hostname>:8443/api/packages/siimpli/npm/'
+          scope: '@harisonsharp'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './siimpli-graph-it-copy/src-tauri -> target'
+
+      - name: Install frontend dependencies
+        working-directory: siimpli-graph-it-copy
+        run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITEA_NPM_TOKEN }}
+
+      # Dispatch path: build only to verify compatibility with the new core version.
+      - name: Build (compatibility check)
+        if: github.event_name == 'repository_dispatch'
+        working-directory: siimpli-graph-it-copy
+        run: npm run tauri build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITEA_NPM_TOKEN }}
+
+      # TODO (unresolved migration decision, see header comment): tauri-action
+      # uploads to GitHub Releases via GITHUB_TOKEN — still pointed there
+      # pending a decision on the long-term distribution channel.
+      - name: Build and release
+        if: github.event_name != 'repository_dispatch'
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITEA_CROSS_REPO_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITEA_NPM_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: ./siimpli-graph-it-copy
+          tagName: v__VERSION__
+          releaseName: SiimpliGraphIt v__VERSION__
+          releaseBody: |
+            See the full changelog for details.
+          releaseDraft: false
+          prerelease: false
+          updaterJsonPreferNsis: true
+
+      # actions/github-script's bundled Octokit talks to api.github.com and
+      # is not Gitea-compatible — replaced with a direct Gitea API call,
+      # flagged for live-instance verification like every other curl/API
+      # call introduced in this migration.
+      - name: Notify on failure
+        if: failure()
+        env:
+          GITEA_DISPATCH_TOKEN: ${{ secrets.GITEA_DISPATCH_TOKEN }}
+        run: |
+          $isCascade = "${{ github.event_name }}" -eq "repository_dispatch"
+          if ($isCascade) {
+            $trigger = "cascade compat check (core: ${{ github.event.client_payload.core_version }})"
+          } else {
+            $trigger = "release ${{ github.ref }}"
+          }
+          $body = "The build workflow failed for **$trigger**.`n`nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          $payload = @{ title = "Build failed: $trigger"; body = $body; labels = @("build-failure") } | ConvertTo-Json
+          Invoke-RestMethod -Method Post `
+            -Uri "https://<mesh-hostname>:8443/api/v1/repos/${{ github.repository }}/issues" `
+            -Headers @{ Authorization = "token $env:GITEA_DISPATCH_TOKEN" } `
+            -ContentType "application/json" -Body $payload
