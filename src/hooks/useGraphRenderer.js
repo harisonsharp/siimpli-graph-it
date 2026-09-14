@@ -49,7 +49,8 @@ import {
     DataTableRenderer,
     LegendRenderer,
     UnifiedTableRenderer,
-    BiasTableRenderer
+    BiasTableRenderer,
+    BaseChartRenderer
 } from '@harisonsharp/graph-it-core';
 
 
@@ -605,6 +606,9 @@ export function useGraphRenderer({
             // Initialize SVG
             const svg = d3.select(svgRef.current);
             svg.selectAll("*").remove();
+            // The hover-dim class sits on the SVG root, so clearing children doesn't reset it.
+            // Drop it here or a re-render that interrupts an active hover draws every dot dimmed.
+            svg.classed(BaseChartRenderer.HOVER_DIM_CLASS, false);
 
             // Parse column information first to enable dimension calculation
             const columnInfo = parseColumnInformation(targetGraphConfig);

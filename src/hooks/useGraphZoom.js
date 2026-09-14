@@ -105,6 +105,31 @@ function buildTickValues(min, max, step, maxTicks = 500) {
     return ticks;
 }
 
+// Tick positions for a log₁₀-transformed axis domain, in log space.
+// Wide spans tick at decades only; narrower spans subdivide (1-2-5, then every
+// digit) so zooming/panning always has labelled ticks in view.
+// Mirrors axisUtils.js logTickValues from @harisonsharp/graph-it-core.
+function logTickValues(logMin, logMax) {
+    const span = logMax - logMin;
+    const mantissas = span >= 3 ? [1]
+        : span >= 1.5 ? [1, 2, 5]
+        : [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const ticks = [];
+    for (let k = Math.floor(logMin); k <= Math.ceil(logMax); k++) {
+        for (const m of mantissas) {
+            const t = k + Math.log10(m);
+            if (t >= logMin && t <= logMax) ticks.push(t);
+        }
+    }
+    return ticks;
+}
+
+// Back-transform a log-space tick to its real value for labelling.
+// toPrecision strips float noise (10 ** log10(2) = 1.9999…) before formatting.
+function formatLogTick(d) {
+    return formatAxisNumber(Number((10 ** d).toPrecision(6)), 6);
+}
+
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
@@ -248,7 +273,9 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         const staticXScale = getStaticScale(config, 'x');
         const staticYScale = getStaticScale(config, 'y');
         const staticY2Scale = getStaticScale(config, 'y2');
-        const staticXTicks = canRescaleX && staticXScale ? buildTickValues(staticXScale.min, staticXScale.max, staticXScale.step) : null;
+        // For logX the scale domain is log₁₀-space, so raw static tick values would
+        // land at wrong positions — leave null and let the log-tick branches handle it.
+        const staticXTicks = canRescaleX && staticXScale && !config?.logX ? buildTickValues(staticXScale.min, staticXScale.max, staticXScale.step) : null;
         const staticYTicks = canRescaleY && staticYScale ? buildTickValues(staticYScale.min, staticYScale.max, staticYScale.step) : null;
         const staticY2Ticks = canRescaleY2 && staticY2Scale ? buildTickValues(staticY2Scale.min, staticY2Scale.max, staticY2Scale.step) : null;
         const xDomain = xScale.domain();
@@ -260,15 +287,23 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         } else if (xIsBandScale) {
             xTickFormatter = (d) => String(d);
         } else if (config?.logX) {
-            xTickFormatter = (d) => Number(d.toPrecision(4)).toString();
+            // Mirrors axisUtils.js drawXAxis: scale domain is log₁₀-transformed,
+            // so label decade ticks with the REAL value (1, 10, 100…) not the exponent.
+            xTickFormatter = formatLogTick;
         } else {
             xTickFormatter = (d) => formatAxisNumber(d, 6);
         }
         const xAxisGen = d3.axisBottom(xScale)
             .tickSizeOuter(0)
             .tickFormat(xTickFormatter);
+        const xIsLogScale = config?.logX && !xIsTimeScale && !xIsBandScale;
         if (staticXTicks && !xIsTimeScale) {
             xAxisGen.tickValues(staticXTicks);
+        } else if (xIsLogScale) {
+            const ticks = logTickValues(...xScale.domain());
+            if (ticks.length > 0) {
+                xAxisGen.tickValues(ticks);
+            }
         }
         const yAxisGen = d3.axisLeft(yScale)
             .tickSizeOuter(0)
@@ -302,6 +337,15 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                 const { transform } = event;
                 setZoomLevel(Math.round(transform.k * 100) / 100);
 
+                // Suspend hit-testing on the data layer while the gesture is actually moving:
+                // the transform slides points under the cursor, so leaving them interactive
+                // fires per-point mouseenter/mouseleave hover work on nearly every frame.
+                // Gated here rather than in 'start' — 'start' fires on every mousedown, and
+                // dropping hit-testing there breaks plain clicks on points (mousedown and
+                // mouseup would hit different targets, so no click is synthesized). Restored
+                // in 'end'. The fixed zoom-capture rect keeps receiving wheel/drag events.
+                dataWrapper.style('pointer-events', 'none');
+
                 dataWrapper.attr('transform', transform);
 
                 const rescaledX = canRescaleX ? transform.rescaleX(xScale) : xScale;
@@ -312,6 +356,11 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                         const [xMin, xMax] = rescaledX.domain();
                         const visibleXTicks = staticXTicks.filter(t => t >= xMin && t <= xMax);
                         xAxisGen.tickValues(visibleXTicks.length >= 2 ? visibleXTicks : null);
+                    } else if (xIsLogScale) {
+                        // Recompute from the rescaled domain so panning/zooming
+                        // beyond the initial extent keeps producing ticks.
+                        const ticks = logTickValues(...rescaledX.domain());
+                        xAxisGen.tickValues(ticks.length > 0 ? ticks : null);
                     }
                     xAxisGroup.call(xAxisGen.scale(rescaledX));
                 }
@@ -349,6 +398,8 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                         if (staticXTicks) {
                             const [xMin, xMax] = rescaledX.domain();
                             xTicks = staticXTicks.filter(t => t >= xMin && t <= xMax);
+                        } else if (xIsLogScale) {
+                            xTicks = logTickValues(...rescaledX.domain());
                         } else {
                             xTicks = rescaledX.ticks ? rescaledX.ticks() : [];
                         }
@@ -387,7 +438,10 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                     });
                 }
             })
-            .on('end', () => setIsPanning(false));
+            .on('end', () => {
+                setIsPanning(false);
+                dataWrapper.style('pointer-events', null);
+            });
 
         // Attach zoom behavior to clipGroup — wheel/drag events on any child
         // (dots, overlay, empty data area) bubble up here naturally.

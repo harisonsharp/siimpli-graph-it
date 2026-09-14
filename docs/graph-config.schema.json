@@ -5,7 +5,12 @@
   "description": "Schema describing the JSON payload exported from the Siimpli GraphApp UI. It captures graph settings, dataset bindings, and global rendering toggles so that headless pipelines can recreate any graph without the interactive UI.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "metadata", "graph", "global"],
+  "required": [
+    "version",
+    "metadata",
+    "graph",
+    "global"
+  ],
   "properties": {
     "version": {
       "type": "string",
@@ -18,7 +23,9 @@
     "dataBindings": {
       "type": "object",
       "description": "Optional declaration of CSV datasets and their columns to help downstream tooling resolve identifiers.",
-      "required": ["datasets"],
+      "required": [
+        "datasets"
+      ],
       "additionalProperties": false,
       "properties": {
         "datasets": {
@@ -48,7 +55,10 @@
     "metadata": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["generatedAt", "source"],
+      "required": [
+        "generatedAt",
+        "source"
+      ],
       "properties": {
         "generatedAt": {
           "type": "string",
@@ -69,7 +79,11 @@
     "datasetBinding": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "file", "columns"],
+      "required": [
+        "id",
+        "file",
+        "columns"
+      ],
       "properties": {
         "id": {
           "type": "string",
@@ -93,7 +107,10 @@
     "datasetColumn": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name"],
+      "required": [
+        "id",
+        "name"
+      ],
       "properties": {
         "id": {
           "$ref": "#/$defs/columnReference"
@@ -116,7 +133,10 @@
     "graphConfig": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["xAxis", "series"],
+      "required": [
+        "xAxis",
+        "series"
+      ],
       "properties": {
         "projectName": {
           "type": "string",
@@ -171,12 +191,21 @@
         },
         "graphType": {
           "type": "string",
-          "enum": ["scatter", "line", "bar", "histogram"],
+          "enum": [
+            "scatter",
+            "line",
+            "bar",
+            "histogram"
+          ],
           "description": "Legacy chart type toggle. Individual series types take precedence."
         },
         "barMode": {
           "type": "string",
-          "enum": ["group", "stack", "stack-proportional"],
+          "enum": [
+            "group",
+            "stack",
+            "stack-proportional"
+          ],
           "description": "Layout mode applied to bar series."
         },
         "colorGrading": {
@@ -194,7 +223,11 @@
         },
         "colorScheme": {
           "type": "string",
-          "enum": ["green-red", "warm-cool", "rainbow"],
+          "enum": [
+            "green-red",
+            "warm-cool",
+            "rainbow"
+          ],
           "description": "Preferred palette for color grading and contours."
         },
         "widthMultiplier": {
@@ -209,7 +242,11 @@
         },
         "axisIntercept": {
           "type": "string",
-          "enum": ["origin", "minimum", "custom"],
+          "enum": [
+            "origin",
+            "minimum",
+            "custom"
+          ],
           "description": "Determines where the axes intersect when rendering."
         },
         "customIntercept": {
@@ -236,7 +273,14 @@
             },
             {
               "type": "string",
-              "enum": ["USD$/dmt", "USD$/lbs", "USD$/oz"]
+              "enum": [
+                "USD$/dmt",
+                "USD$/lbs",
+                "USD$/oz",
+                "USD/t",
+                "USD/lb",
+                "USD/oz"
+              ]
             }
           ]
         },
@@ -249,20 +293,84 @@
             },
             {
               "type": "string",
-              "enum": ["USD$/dmt", "USD$/lbs", "USD$/oz"]
+              "enum": [
+                "USD$/dmt",
+                "USD$/lbs",
+                "USD$/oz",
+                "USD/t",
+                "USD/lb",
+                "USD/oz"
+              ]
             }
           ]
         },
         "selectedXValue": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "description": "Last X value selected via the interaction layer."
+        },
+        "unifiedValueMode": {
+          "type": "string",
+          "enum": [
+            "value",
+            "median",
+            "fitAtX"
+          ],
+          "description": "What the unified table’s value column holds. \"value\" (default) is the Y at the selected or most-recent X; \"median\" is each row’s own median over its data, which summarises a category instead of showing one point from it; \"fitAtX\" fits each category’s own line and reads it AT selectedXValue, adding a column for the fit’s formula and one for the rows behind it, and falling back to \"median\" when no X is selected."
+        },
+        "unifiedFitForm": {
+          "type": "string",
+          "enum": [
+            "linear",
+            "median"
+          ],
+          "description": "Which form unifiedValueMode \"fitAtX\" fits per category: \"linear\" is a least-squares slope through the origin, \"median\" a rolling median. Mirror whatever reference line the chart already draws, or the two are not comparable. Defaults to \"median\"."
+        },
+        "unifiedCategoryHeader": {
+          "type": "string",
+          "description": "Heading over the unified table’s category column, in place of the underlying column’s own name — \"Deposit type\" over a column named DepositCode."
+        },
+        "unifiedColumnHeaders": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Headings over the two qualifier columns unifiedValueMode \"fitAtX\" adds.",
+          "properties": {
+            "formula": {
+              "type": "string",
+              "description": "Heading over the fit-shape column. Default \"formula\"."
+            },
+            "count": {
+              "type": "string",
+              "description": "Heading over the row-count column. Default \"number of data\"."
+            }
+          }
+        },
+        "unifiedFitColumns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "formula",
+              "count"
+            ]
+          },
+          "description": "Which of the two qualifier columns unifiedValueMode \"fitAtX\" draws. Omit to draw whichever the rows carry; narrow it where one would only restate the other — a rolling-median fit’s formula is its window, and the window is derived from the row count sitting beside it."
+        },
+        "keepSeriesColumn": {
+          "type": "boolean",
+          "description": "Forces the unified table’s Series column to render even when every categorical row repeats the same series name (it collapses into the category column by default)."
         }
       }
     },
     "seriesConfig": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["graphType", "yAxis"],
+      "required": [
+        "graphType",
+        "yAxis"
+      ],
       "properties": {
         "yAxis": {
           "$ref": "#/$defs/columnReference",
@@ -270,12 +378,20 @@
         },
         "axisAssignment": {
           "type": "string",
-          "enum": ["primary", "secondary"],
+          "enum": [
+            "primary",
+            "secondary"
+          ],
           "description": "Determines which axis (left/right) renders the series."
         },
         "graphType": {
           "type": "string",
-          "enum": ["scatter", "line", "bar", "histogram"],
+          "enum": [
+            "scatter",
+            "line",
+            "bar",
+            "histogram"
+          ],
           "description": "Visualization style for the series."
         },
         "titleName": {
@@ -287,7 +403,10 @@
           "description": "CSS color, named color, or HEX value applied to the series."
         },
         "strokeWidth": {
-          "type": ["number", "string"],
+          "type": [
+            "number",
+            "string"
+          ],
           "description": "Stroke/point size expressed in pixels."
         },
         "showConfidenceInterval": {
@@ -315,7 +434,12 @@
         },
         "lineStyle": {
           "type": "string",
-          "enum": ["solid", "dashed", "dotted", "dash-dot"],
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted",
+            "dash-dot"
+          ],
           "description": "Stroke dash pattern for line charts."
         },
         "showPoints": {
@@ -332,18 +456,34 @@
         },
         "filterType": {
           "type": "string",
-          "enum": ["equals", "not-equals", "greater-than", "less-than", "unique"],
+          "enum": [
+            "equals",
+            "not-equals",
+            "greater-than",
+            "less-than",
+            "unique"
+          ],
           "description": "Filter operator applied before plotting the series."
         },
         "filterValue": {
           "description": "Comparison value used by non-unique filters.",
-          "type": ["string", "number", "boolean", "null"]
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
         },
         "uniqueValues": {
           "type": "array",
           "description": "Distinct values extracted when the \"unique\" filter mode is selected.",
           "items": {
-            "type": ["string", "number", "boolean", "null"]
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
           }
         },
         "symbolMap": {
@@ -356,6 +496,64 @@
         "excludeEmptyValues": {
           "type": "boolean",
           "description": "Removes blank values when using the unique filter mode."
+        },
+        "visibleCategories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Allow-list of filterColumn values to PLOT. Categories outside it stay in the data — same symbols, same colours, same axes, and a full house of rows in the legend/value table — but are not drawn. Omit to plot every category."
+        },
+        "endMarkers": {
+          "description": "Draws a hollow dot at each end of a line series, marking where its own data starts and stops. true for the defaults, or an object overriding them. For reference lines drawn wider than the rows behind them.",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "radius": {
+                  "type": "number",
+                  "description": "Marker radius in px. Default 4."
+                },
+                "strokeWidth": {
+                  "type": "number",
+                  "description": "Marker stroke width in px. Default 2."
+                }
+              }
+            }
+          ]
+        },
+        "sideLabels": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "What falling above / below this line MEANS, written along the line itself at its own angle and in its own colour. For a reference line a reader measures their own value against, where a legend swatch cannot carry the reading. Keep both short — a long phrase on a steep line runs off the plot.",
+          "properties": {
+            "above": {
+              "type": "string",
+              "description": "The reading for a point above the line."
+            },
+            "below": {
+              "type": "string",
+              "description": "The reading for a point below the line."
+            },
+            "at": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Where along the line to anchor them, as a fraction of its x extent. Default 0.7."
+            }
+          }
+        },
+        "unifiedFormula": {
+          "type": "string",
+          "description": "What this series’ line IS, for the unified table’s formula column under unifiedValueMode \"fitAtX\". Stated rather than derived, for a line fitted elsewhere and plotted per row."
+        },
+        "unifiedCount": {
+          "type": "number",
+          "description": "How many rows this series’ line was fitted on, for the unified table’s row-count column. Without it the table counts the series’ own plotted rows — wrong for a line fitted on one category but plotted across every row so it can be read at any x."
         }
       }
     },
@@ -407,10 +605,16 @@
                 "const": true
               }
             },
-            "required": ["enabled"]
+            "required": [
+              "enabled"
+            ]
           },
           "then": {
-            "required": ["min", "max", "step"]
+            "required": [
+              "min",
+              "max",
+              "step"
+            ]
           }
         }
       ],
@@ -437,7 +641,12 @@
       "properties": {
         "mode": {
           "type": "string",
-          "enum": ["stddev", "local_stddev", "lowess_stddev", "expression"],
+          "enum": [
+            "stddev",
+            "local_stddev",
+            "lowess_stddev",
+            "expression"
+          ],
           "description": "Algorithm used to compute the confidence envelope."
         },
         "nStdDev": {
@@ -489,16 +698,28 @@
           "description": "Index of the series this fit is applied to."
         },
         "xMin": {
-          "type": ["string", "number"],
+          "type": [
+            "string",
+            "number"
+          ],
           "description": "Lower x bound for the fit range. Empty string means use data minimum."
         },
         "xMax": {
-          "type": ["string", "number"],
+          "type": [
+            "string",
+            "number"
+          ],
           "description": "Upper x bound for the fit range. Empty string means use data maximum."
         },
         "fitType": {
           "type": "string",
-          "enum": ["polynomial", "power_law", "exponential", "best_fit", "custom"],
+          "enum": [
+            "polynomial",
+            "power_law",
+            "exponential",
+            "best_fit",
+            "custom"
+          ],
           "description": "Regression algorithm to apply."
         },
         "order": {
@@ -514,7 +735,12 @@
         },
         "lineStyle": {
           "type": "string",
-          "enum": ["solid", "dashed", "dotted", "dash-dot"],
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted",
+            "dash-dot"
+          ],
           "description": "Stroke dash pattern for the curve line."
         },
         "customEquation": {
@@ -557,7 +783,10 @@
     "graphDimensions": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["width", "height"],
+      "required": [
+        "width",
+        "height"
+      ],
       "properties": {
         "width": {
           "type": "number",
@@ -575,22 +804,44 @@
       "type": "object",
       "description": "Flexible record extracted from a CSV row.",
       "additionalProperties": {
-        "type": ["string", "number", "boolean", "null"]
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "null"
+        ]
       }
     },
     "globalSettings": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["colorScheme", "axisIntercept", "customIntercept", "graphDimensions", "showGuideLines", "showDataTable", "showStaticTable", "selectedXValue"],
+      "required": [
+        "colorScheme",
+        "axisIntercept",
+        "customIntercept",
+        "graphDimensions",
+        "showGuideLines",
+        "showDataTable",
+        "showStaticTable",
+        "selectedXValue"
+      ],
       "properties": {
         "colorScheme": {
           "type": "string",
-          "enum": ["green-red", "warm-cool", "rainbow"],
+          "enum": [
+            "green-red",
+            "warm-cool",
+            "rainbow"
+          ],
           "description": "Palette used for color gradients when the graph config does not override it."
         },
         "axisIntercept": {
           "type": "string",
-          "enum": ["origin", "minimum", "custom"],
+          "enum": [
+            "origin",
+            "minimum",
+            "custom"
+          ],
           "description": "Default intercept behavior for the interactive canvas."
         },
         "customIntercept": {
@@ -612,7 +863,10 @@
           "description": "Locks a static data table beneath the legend/export output."
         },
         "selectedXValue": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "description": "Current X coordinate used by the static table."
         },
         "joinXAxis": {
@@ -621,7 +875,11 @@
         },
         "barType": {
           "type": "string",
-          "enum": ["group", "stack", "stack-proportional"],
+          "enum": [
+            "group",
+            "stack",
+            "stack-proportional"
+          ],
           "description": "Default rendering for bar charts when no per-graph override exists."
         },
         "showUnifiedTable": {
@@ -642,6 +900,46 @@
         "biasTableFile": {
           "type": "string",
           "description": "File name of the bias table source."
+        },
+        "biasTableTitle": {
+          "type": "string",
+          "description": "Heading above the bias table. Defaults to \"Bias Analysis\" when absent."
+        },
+        "biasTableNote": {
+          "description": "Free text rendered as a wrapped footer inside the bias table, stating what being above or below the chart’s guidance line means. An array element is a hard line break; each element then wraps on its own.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "biasTableSignColors": {
+          "type": "string",
+          "enum": [
+            "up-good",
+            "down-good",
+            "direction",
+            "neutral"
+          ],
+          "description": "Which sign of a numeric bias cell reads as good. Defaults to \"up-good\". Use \"neutral\" where neither direction is a win — e.g. a mass-pull deviation, where above the line is a dirtier concentrate."
+        },
+        "biasTableSignColumn": {
+          "type": "string",
+          "description": "Header of the one bias-table column the sign colouring applies to. Without it every numeric column past the first is coloured, which is wrong once the table carries a plain measurement beside a deviation."
+        },
+        "biasTableOffsetMode": {
+          "type": "string",
+          "enum": [
+            "ratio",
+            "points"
+          ],
+          "description": "How a category’s distance from the guidance line is expressed: \"ratio\" multiplies the line, \"points\" adds to it. Consumers that draw a per-category line read this to know which."
         }
       }
     }
