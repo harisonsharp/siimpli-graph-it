@@ -751,6 +751,43 @@ const GraphConfiguration = ({
                                                             </select>
                                                         </div>
                                                     )}
+                                                    {(series.colorGrading?.mode || 'continuous') === 'continuous' && (
+                                                        <div className="form-group">
+                                                            <label className="form-label" htmlFor={`series-grading-scale-${index}`}>Scale</label>
+                                                            <select
+                                                                id={`series-grading-scale-${index}`}
+                                                                className="form-select"
+                                                                value={series.colorGrading?.scale || 'linear'}
+                                                                onChange={(e) => updateSeries(index, {
+                                                                    colorGrading: { ...series.colorGrading, scale: e.target.value }
+                                                                })}
+                                                            >
+                                                                <option value="linear">Linear</option>
+                                                                <option value="quantile">Equal Counts (Quantiles)</option>
+                                                                <option value="log">Logarithmic</option>
+                                                                <option value="pretty">Pretty Breaks</option>
+                                                                <option value="stddev">Standard Deviations</option>
+                                                            </select>
+                                                        </div>
+                                                    )}
+                                                    {(series.colorGrading?.mode || 'continuous') === 'continuous' &&
+                                                        ['quantile', 'pretty'].includes(series.colorGrading?.scale) && (
+                                                        <div className="form-group">
+                                                            <label className="form-label" htmlFor={`series-grading-classes-${index}`}>Classes</label>
+                                                            <input
+                                                                id={`series-grading-classes-${index}`}
+                                                                type="number"
+                                                                className="form-input"
+                                                                min={ScaleFactory.MIN_GRADING_CLASSES}
+                                                                max={ScaleFactory.MAX_GRADING_CLASSES}
+                                                                step={1}
+                                                                value={series.colorGrading?.classes ?? ScaleFactory.DEFAULT_GRADING_CLASSES}
+                                                                onChange={(e) => updateSeries(index, {
+                                                                    colorGrading: { ...series.colorGrading, classes: e.target.value === '' ? '' : Number(e.target.value) }
+                                                                })}
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </>
                                             )}
                                         </div>

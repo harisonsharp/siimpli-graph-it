@@ -124,6 +124,38 @@ function logTickValues(logMin, logMax) {
     return ticks;
 }
 
+// Data-space point the axes cross at, or null per axis when that axis sits on the
+// plot edge. Mirrors axisUtils.js drawAxes from @harisonsharp/graph-it-core: an
+// intercept only takes effect when it lies inside the rendered domain, log axes
+// take custom values in data units (and have no origin), and histograms keep the
+// y-axis flush left.
+function getAxisIntercept(config, xScale, yScale) {
+    const mode = config?.axisIntercept;
+    if (mode !== 'origin' && mode !== 'custom') return { x: null, y: null };
+    if (mode === 'custom' && !config.customIntercept) return { x: null, y: null };
+
+    const resolve = (raw, isLog) => {
+        if (mode === 'origin') return isLog ? null : 0;
+        const value = Number.parseFloat(raw) || 0;
+        if (!isLog) return value;
+        return value > 0 ? Math.log10(value) : null;
+    };
+    const within = (value, scale) => {
+        if (value === null || typeof scale?.invert !== 'function') return null;
+        const [lo, hi] = scale.domain().slice().sort((a, b) => a - b);
+        return value >= lo && value <= hi ? value : null;
+    };
+
+    const isHistogram = config.graphType === 'histogram' ||
+        config.series?.some(s => s.graphType === 'histogram');
+    const xIsTimeScale = xScale?.domain?.()[0] instanceof Date;
+
+    return {
+        x: isHistogram || xIsTimeScale ? null : within(resolve(config.customIntercept?.x, config.logX), xScale),
+        y: within(resolve(config.customIntercept?.y, config.logY), yScale),
+    };
+}
+
 // Back-transform a log-space tick to its real value for labelling.
 // toPrecision strips float noise (10 ** log10(2) = 1.9999…) before formatting.
 function formatLogTick(d) {
@@ -324,6 +356,8 @@ export function useGraphZoom(svgRef, graphConfigRef) {
         const yAxisGroup    = plotGroup.select('.y-axis-primary');
         const y2AxisGroup   = plotGroup.select('.y-axis-secondary');
         const guideGroup    = d3.select(guideGroupEl);
+        const intercept     = getAxisIntercept(config, xScale, yScale);
+        const clamp = (v, max) => Math.max(0, Math.min(max, v));
 
         // ------------------------------------------------------------------
         // 5. D3 zoom behavior
@@ -363,6 +397,11 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                         xAxisGen.tickValues(ticks.length > 0 ? ticks : null);
                     }
                     xAxisGroup.call(xAxisGen.scale(rescaledX));
+                    // Keep the axis line on its intercept; pin to the nearest plot
+                    // edge once the intercept scrolls out of view.
+                    if (intercept.y !== null) {
+                        xAxisGroup.attr('transform', `translate(0,${clamp(rescaledY(intercept.y), plotHeight)})`);
+                    }
                 }
                 if (!yAxisGroup.empty()) {
                     if (staticYTicks) {
@@ -371,6 +410,9 @@ export function useGraphZoom(svgRef, graphConfigRef) {
                         yAxisGen.tickValues(visibleYTicks.length >= 2 ? visibleYTicks : null);
                     }
                     yAxisGroup.call(yAxisGen.scale(rescaledY));
+                    if (intercept.x !== null) {
+                        yAxisGroup.attr('transform', `translate(${clamp(rescaledX(intercept.x), plotWidth)},0)`);
+                    }
                 }
                 if (y2AxisGen && !y2AxisGroup.empty() && canRescaleY2) {
                     const rescaledY2 = transform.rescaleY(yScale2);

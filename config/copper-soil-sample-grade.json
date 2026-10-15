@@ -1,0 +1,203 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "generatedAt": "2026-10-01T18:28:51.546Z",
+    "source": "GraphApp UI"
+  },
+  "dataBindings": {
+    "datasets": [
+      {
+        "id": "kutcho-1990-acme-90-2567-soils-csv",
+        "file": "Kutcho_1990_Acme_90-2567_soils.csv",
+        "columns": [
+          {
+            "id": "Sample ID::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Sample ID"
+          },
+          {
+            "id": "Grid line::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Grid line"
+          },
+          {
+            "id": "Station::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Station"
+          },
+          {
+            "id": "Suffix::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Suffix"
+          },
+          {
+            "id": "Line (m, E+/W-)::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Line (m, E+/W-)"
+          },
+          {
+            "id": "Station (m, N+/S-)::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Station (m, N+/S-)"
+          },
+          {
+            "id": "Cu ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Cu ppm"
+          },
+          {
+            "id": "Zn ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Zn ppm"
+          },
+          {
+            "id": "As ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "As ppm"
+          },
+          {
+            "id": "Ag ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Ag ppm"
+          },
+          {
+            "id": "Ba ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Ba ppm"
+          },
+          {
+            "id": "Bi ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Bi ppm"
+          },
+          {
+            "id": "Au ppb::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Au ppb"
+          },
+          {
+            "id": "Pb ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Pb ppm"
+          },
+          {
+            "id": "Cd ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Cd ppm"
+          },
+          {
+            "id": "Sb ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Sb ppm"
+          },
+          {
+            "id": "Mo ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Mo ppm"
+          },
+          {
+            "id": "Au ICP ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "Au ICP ppm"
+          },
+          {
+            "id": "PDF page::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "PDF page"
+          },
+          {
+            "id": "ID check::Kutcho_1990_Acme_90-2567_soils.csv",
+            "name": "ID check"
+          }
+        ]
+      }
+    ]
+  },
+  "curveFits": [
+    {
+      "enabled": true,
+      "seriesIndex": 0,
+      "xMin": "",
+      "color": "#ff6b6b",
+      "xMax": "",
+      "fitType": "best_fit",
+      "order": 2,
+      "strokeWidth": 2,
+      "lineStyle": "solid",
+      "customEquation": "",
+      "confidenceBands": {
+        "enabled": false,
+        "bands": []
+      },
+      "bounds": []
+    }
+  ],
+  "graph": {
+    "xAxis": "Line (m, E+/W-)::Kutcho_1990_Acme_90-2567_soils.csv",
+    "informativeFields": [],
+    "pdfLinking": {
+      "enabled": false,
+      "folderPath": "",
+      "nameField": "",
+      "fileType": "pdf"
+    },
+    "series": [
+      {
+        "yAxis": "Station (m, N+/S-)::Kutcho_1990_Acme_90-2567_soils.csv",
+        "graphType": "scatter",
+        "axisAssignment": "primary",
+        "titleName": "North (m)",
+        "color": "",
+        "strokeWidth": 2,
+        "colorGrading": {
+          "enabled": true,
+          "mode": "continuous",
+          "column": "Cu ppm::Kutcho_1990_Acme_90-2567_soils.csv",
+          "scheme": "warm-cool",
+          "scale": "log",
+          "classes": 5,
+          "categoryColors": {}
+        }
+      }
+    ],
+    "contouring": "",
+    "graphType": "scatter",
+    "barMode": "group",
+    "title": "Copper Soil Sample Grade (ppm)",
+    "subtitle": "",
+    "provenanceNote": "",
+    "dualUnits": false,
+    "scaleFactor": 1,
+    "fromUnits": "",
+    "toUnits": "",
+    "xAxisLabel": "East (m)",
+    "yAxisLabel": "",
+    "yAxisLabel2": "",
+    "axisIntercept": "custom",
+    "customIntercept": {
+      "x": 0,
+      "y": 0
+    },
+    "staticScales": {
+      "x": {
+        "enabled": true,
+        "min": -1500,
+        "max": 1500,
+        "step": 500
+      },
+      "y": {
+        "enabled": true,
+        "min": -1000,
+        "max": 2000,
+        "step": 500
+      },
+      "y2": {
+        "enabled": false,
+        "min": "",
+        "max": "",
+        "step": ""
+      }
+    },
+    "dualYAxis": false,
+    "yAxis2": "",
+    "showUnifiedTable": false,
+    "ignoreUnifiedValues": false
+  },
+  "global": {
+    "colorScheme": "green-red",
+    "axisIntercept": "origin",
+    "customIntercept": {
+      "x": 0,
+      "y": 0
+    },
+    "graphDimensions": {
+      "width": 800,
+      "height": 600
+    },
+    "showGuideLines": true,
+    "showDataTable": false,
+    "showStaticTable": false,
+    "selectedXValue": null
+  }
+}

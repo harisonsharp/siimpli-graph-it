@@ -394,6 +394,22 @@ Color data points based on a third variable (heatmap effect).
 - Color Grading: Humidity
 - Points colored red (low humidity) to blue (high humidity)
 
+**Scale (continuous mode):**
+
+Each series' Colour Grading panel has a "Scale" option controlling how values map onto the colour scheme:
+
+| Scale | Behaviour | Use when |
+|-------|-----------|----------|
+| **Linear** | Smooth gradient from the minimum to the maximum value (default) | Values are spread evenly |
+| **Equal Counts (Quantiles)** | Classes each holding the same number of points | A few extreme values wash out the rest |
+| **Logarithmic** | Smooth gradient spaced by order of magnitude. Zero and negative values are drawn grey | Values span several orders of magnitude |
+| **Pretty Breaks** | Classes on round numbers (0–5, 5–10, 10–15) | You want a legend that is easy to read off |
+| **Standard Deviations** | One-standard-deviation bands either side of the mean | You want to see how far values sit from typical |
+
+Equal Counts and Pretty Breaks have a "Classes" setting (2–10, default 5). For Pretty Breaks it is a target: the exact number depends on where the round numbers fall. Classed scales show one legend row per class with its value range.
+
+If the data cannot support the chosen scale (for example every value is identical, or Logarithmic with no positive values), grading falls back to Linear.
+
 ### Dual-Axis Graphs
 
 Plot two variables with different scales on left and right axes.

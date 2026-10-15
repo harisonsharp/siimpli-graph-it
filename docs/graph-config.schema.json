@@ -402,6 +402,62 @@
           "type": "string",
           "description": "CSS color, named color, or HEX value applied to the series."
         },
+        "colorGrading": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Per-series color grading: colors each point, line segment or bar by the value of another column.",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether color grading is applied to the series."
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "continuous",
+                "distinct"
+              ],
+              "description": "continuous grades numeric values along a palette; distinct assigns one color per category."
+            },
+            "column": {
+              "type": "string",
+              "description": "Column identifier whose values drive the color."
+            },
+            "scheme": {
+              "type": "string",
+              "enum": [
+                "green-red",
+                "warm-cool",
+                "rainbow"
+              ],
+              "description": "Palette used in continuous mode."
+            },
+            "scale": {
+              "type": "string",
+              "enum": [
+                "linear",
+                "quantile",
+                "log",
+                "pretty",
+                "stddev"
+              ],
+              "description": "How values map onto the palette in continuous mode. linear: smooth min to max (default). quantile: classes holding equal numbers of points. log: smooth, log-spaced; zero and negative values are drawn in the neutral missing-value color. pretty: classes on round-number breaks. stddev: one-standard-deviation bands either side of the mean, open-ended beyond 3."
+            },
+            "classes": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 10,
+              "description": "Number of classes for the quantile scale, or the target number for pretty breaks. Defaults to 5."
+            },
+            "categoryColors": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Distinct mode color overrides keyed by category value."
+            }
+          }
+        },
         "strokeWidth": {
           "type": [
             "number",
